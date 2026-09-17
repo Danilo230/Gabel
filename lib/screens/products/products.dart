@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/custom_pagination.dart';
@@ -23,25 +23,27 @@ class ProductsScreen extends StatelessWidget {
               ProductCard(
                 nombre: 'Shampoo Revitalizante',
                 sku: 'SKU: SH-1029',
-                precio: '\$24.50',
+                precio: '\C24o.00',
                 icono: Icons.shopping_bag_rounded,
               ),
+
               SizedBox(height: 12),
               ProductCard(
                 nombre: 'Acondicionador Color\nProtec',
                 sku: 'SKU: AC-2041',
-                precio: '\$26.00',
+                precio: '\C260.00',
                 icono: Icons.shopping_bag_rounded,
               ),
+
               SizedBox(height: 12),
               ProductCard(
                 nombre: 'Mascarilla Hidratación\nProfunda',
-                precio: '\$32.00',
+                precio: '\C200.00',
                 icono: Icons.shopping_bag_rounded,
                 sinStock: true,
               ),
               SizedBox(height: 20),
-              // Paginación Global
+             
               CustomPagination(paginaActual: 6),
               SizedBox(height: 10),
             ],
