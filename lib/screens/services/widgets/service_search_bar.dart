@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'service_modal.dart';
 
 class ServiceSearchBar extends StatelessWidget {
   const ServiceSearchBar({super.key});
@@ -39,15 +40,19 @@ class ServiceSearchBar extends StatelessWidget {
             ),
           ),
         ),
+        
         const SizedBox(width: 10),
-        Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: moradoPrincipal,
-            borderRadius: BorderRadius.circular(12),
+        GestureDetector(
+          onTap: () => NewServiceModal.show(context),
+          child: Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: moradoPrincipal,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Icons.add, color: Colors.white, size: 24),
           ),
-          child: const Icon(Icons.add, color: Colors.white, size: 24),
         ),
       ],
     );
