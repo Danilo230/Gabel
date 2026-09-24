@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'edit_service_modal.dart';
 import 'delete_service.dart';
+import 'service_detail_modal.dart';
 
 
 class ServiceCard extends StatelessWidget {
@@ -112,8 +113,15 @@ class ServiceCard extends StatelessWidget {
 
               Row(
                 children: [
-                  const Icon(Icons.visibility_outlined, color: iconoAccion, size: 20),
-                  const SizedBox(width: 16),
+                  
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  icon: const Icon(Icons.visibility_outlined, color: Color(0xFF5C2483), size: 20),
+                  onPressed: () {
+                     ServiceDetailModal.show(context);
+                    },
+                  ),
 
                   IconButton(
                     padding: EdgeInsets.zero,
@@ -132,7 +140,7 @@ class ServiceCard extends StatelessWidget {
                     onPressed: () {
                       DeleteService.show(context);
                     },
-                    
+
                   )
                 ],
               ),

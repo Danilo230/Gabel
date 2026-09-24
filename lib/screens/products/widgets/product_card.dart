@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'edit_product_modal.dart';
 import 'delete_product.dart';
+import 'product_detail_modal.dart';
 
 class ProductCard extends StatelessWidget {
   final String nombre;
@@ -128,9 +129,15 @@ class ProductCard extends StatelessWidget {
                 ],
               ),
               Row(
-                children: [
-                  const Icon(Icons.visibility_outlined, color: iconoAccion, size: 20),
-                  const SizedBox(width: 16),
+                children: [    
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(Icons.visibility_outlined, color: Color(0xFF5C2483), size: 20),
+                    onPressed: () {
+                      ProductDetailModal.show(context);
+                    },
+                  ),
 
                   IconButton(
                     padding: EdgeInsets.zero,
