@@ -1,4 +1,7 @@
 ﻿import 'package:flutter/material.dart';
+import 'edit_service_modal.dart';
+import 'delete_service.dart';
+
 
 class ServiceCard extends StatelessWidget {
   final String nombre;
@@ -106,13 +109,31 @@ class ServiceCard extends StatelessWidget {
                   ),
                 ],
               ),
+
               Row(
-                children: const [
-                  Icon(Icons.visibility_outlined, color: iconoAccion, size: 20),
-                  SizedBox(width: 16),
-                  Icon(Icons.edit_outlined, color: iconoAccion, size: 20),
-                  SizedBox(width: 16),
-                  Icon(Icons.delete_outline_rounded, color: iconoEliminar, size: 20),
+                children: [
+                  const Icon(Icons.visibility_outlined, color: iconoAccion, size: 20),
+                  const SizedBox(width: 16),
+
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(Icons.edit_outlined, color: Color(0xFF5C2483), size: 20),
+                    onPressed: () {
+                      EditServiceModal.show(context);
+                    },
+                  ),
+
+                  const SizedBox(width: 16),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(Icons.delete_outline_rounded, color: Color(0xFFDC2626), size: 20),
+                    onPressed: () {
+                      DeleteService.show(context);
+                    },
+                    
+                  )
                 ],
               ),
             ],
