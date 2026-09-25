@@ -44,7 +44,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: GestureDetector(
-            onTap: onProfileTap,
+            onTap: () {
+              // Más adelante navegaremos al perfil
+            },
             child: const Icon(
               Icons.account_circle_outlined,
               color: Color(0xFF424242),

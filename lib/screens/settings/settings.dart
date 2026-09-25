@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../widgets/app_header.dart';
 import 'widgets/settings_option.dart';
 import 'widgets/settings_section.dart';
 
@@ -17,7 +18,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F2FA),
-
+      appBar: const AppHeader(title: 'Configuración'),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
@@ -28,32 +29,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ENCABEZADO
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Configuración',
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF5C2483),
-                    ),
-                  ),
-
-                  IconButton(
-                    onPressed: () {
-                      // Más adelante navegaremos al perfil
-                    },
-                    icon: const Icon(
-                      Icons.account_circle_outlined,
-                      size: 32,
-                      color: Color(0xFF424242),
-                    ),
-                  ),
-                ],
-              ),
-
               const Text(
                 'Gestiona tu cuenta y preferencias del sistema.',
                 style: TextStyle(
@@ -64,7 +39,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               const SizedBox(height: 25),
 
-              // CUENTA
               SettingsSection(
                 qualification: 'CUENTA',
                 options: [
@@ -81,7 +55,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               const SizedBox(height: 24),
 
-              // PREFERENCIAS
               SettingsSection(
                 qualification: 'PREFERENCIAS',
                 options: [

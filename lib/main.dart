@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 
 import 'screens/customers/customers.dart';
+import 'screens/porfile/porfile.dart';
 import 'screens/dashboard/dashboard.dart';
 import 'screens/inventory/inventory.dart';
 import 'screens/login/login.dart';
@@ -15,7 +16,7 @@ import 'theme/app_colors.dart';
 void main() {
   runApp(
     MaterialApp(
-      home: const SettingsScreen(),
+      home: const ProfileScreen(),
     ),
   );
 }
