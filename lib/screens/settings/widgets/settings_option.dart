@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class SettingsOption extends StatelessWidget {
-  final IconData icono;
-  final String titulo;
-  final String subtitulo;
+  final IconData icon;
+  final String qualification;
+  final String caption;
   final Widget? trailing;
   final VoidCallback? onTap;
 
   const SettingsOption({
     super.key,
-    required this.icono,
-    required this.titulo,
-    required this.subtitulo,
+    required this.icon,
+    required this.qualification,
+    required this.caption,
     this.trailing,
     this.onTap,
   });
@@ -34,7 +34,7 @@ class SettingsOption extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
-                icono,
+                icon,
                 color: const Color(0xFF5C2483),
                 size: 22,
               ),
@@ -48,7 +48,7 @@ class SettingsOption extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    titulo,
+                    qualification,
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -59,7 +59,7 @@ class SettingsOption extends StatelessWidget {
                   const SizedBox(height: 3),
 
                   Text(
-                    subtitulo,
+                    caption,
                     style: const TextStyle(
                       fontSize: 11,
                       color: Colors.grey,

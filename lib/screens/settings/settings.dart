@@ -66,25 +66,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               // CUENTA
               SettingsSection(
-                titulo: 'CUENTA',
-                opciones: [
+                qualification: 'CUENTA',
+                options: [
                   SettingsOption(
-                    icono: Icons.person_outline,
-                    titulo: 'Mi perfil',
-                    subtitulo: 'Datos personales',
+                    icon: Icons.person_outline,
+                    qualification: 'Mi perfil',
+                    caption: 'Datos personales',
                     onTap: () {
                       // Más adelante navegaremos al perfil
                     },
-                  ),
-
-                  SettingsOption(
-                    icono: Icons.lock_outline,
-                    titulo: 'Cambiar contraseña',
-                    subtitulo: 'Seguridad de la cuenta',
-                    onTap: () {
-                      // Más adelante navegaremos
-                    },
-                  ),
+                  ),                
                 ],
               ),
 
@@ -92,12 +83,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               // PREFERENCIAS
               SettingsSection(
-                titulo: 'PREFERENCIAS',
-                opciones: [
+                qualification: 'PREFERENCIAS',
+                options: [
                   SettingsOption(
-                    icono: Icons.dark_mode_outlined,
-                    titulo: 'Modo oscuro',
-                    subtitulo: 'Ajusta la apariencia visual',
+                    icon: Icons.dark_mode_outlined,
+                    qualification: 'Modo oscuro',
+                    caption: 'Ajusta la apariencia visual',
 
                     trailing: Switch(
                       value: modoOscuro,
@@ -111,9 +102,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
 
                   SettingsOption(
-                    icono: Icons.notifications_none,
-                    titulo: 'Notificaciones',
-                    subtitulo: 'Configura las alertas de la aplicación',
+                    icon: Icons.notifications_none,
+                    qualification: 'Notificaciones',
+                    caption: 'Configura las alertas de la aplicación',
 
                     trailing: Switch(
                       value: notificaciones,
@@ -127,9 +118,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
 
                   SettingsOption(
-                    icono: Icons.text_fields,
-                    titulo: 'Tamaño de letra',
-                    subtitulo: 'Ajusta la escala de lectura',
+                    icon: Icons.text_fields,
+                    qualification: 'Tamaño de letra',
+                    caption: 'Ajusta la escala de lectura',
 
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,

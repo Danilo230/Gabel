@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class SettingsSection extends StatelessWidget {
-  final String titulo;
-  final List<Widget> opciones;
+  final String qualification;
+  final List<Widget> options;
 
   const SettingsSection({
     super.key,
-    required this.titulo,
-    required this.opciones,
+    required this.qualification,
+    required this.options,
   });
 
   @override
@@ -17,7 +17,7 @@ class SettingsSection extends StatelessWidget {
       children: [
         // Título de la sección
         Text(
-          titulo,
+          qualification,
           style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
@@ -53,10 +53,10 @@ class SettingsSection extends StatelessWidget {
   List<Widget> _crearOpcionesConDivisores() {
     List<Widget> elementos = [];
 
-    for (int i = 0; i < opciones.length; i++) {
-      elementos.add(opciones[i]);
+    for (int i = 0; i < options.length; i++) {
+      elementos.add(options[i]);
 
-      if (i < opciones.length - 1) {
+      if (i < options.length - 1) {
         elementos.add(
           const Divider(height: 24),
         );

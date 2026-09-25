@@ -12,7 +12,7 @@ class ServicesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F2FA),
-      appBar: const AppHeader(titulo: 'Catálogo de Servicios'),
+      appBar: const AppHeader(title: 'Catálogo de Servicios'),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
@@ -35,13 +35,13 @@ class ServicesScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               
-              CustomPagination(paginaActual: 6),
+              CustomPagination(currentPage: 6),
               SizedBox(height: 10),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavBar(pestanaActiva: 'Servicios'),
+      bottomNavigationBar: const CustomBottomNavBar(activeTab: 'Servicios'),
     );
   }
 }

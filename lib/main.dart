@@ -15,7 +15,7 @@ import 'theme/app_colors.dart';
 void main() {
   runApp(
     MaterialApp(
-      home: const DashboardScreen(),
+      home: const SettingsScreen(),
     ),
   );
 }
