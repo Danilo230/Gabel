@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../theme/app_colors.dart';
 
 class CustomerCard extends StatelessWidget {
   final String customerName;
@@ -13,12 +14,6 @@ class CustomerCard extends StatelessWidget {
     required this.customerEmail,
     required this.customerPhone,
   });
-
-  static const Color primaryColor = Color(0xFF5C2483);
-  static const Color bgIconColo = Color(0xFFEFE8F6);
-  static const Color secondaryText = Color(0xFF757575);
-  static const Color actionIcon = Color(0xFF5C2483);
-  static const Color deleteIcon = Color(0xFFB24C5D);
 
   @override
   Widget build(BuildContext context) {
@@ -51,15 +46,19 @@ class CustomerCard extends StatelessWidget {
                 children: const [
                   Icon(
                     Icons.visibility_off_outlined,
-                    color: actionIcon,
+                    color: AppColors.actionIcon,
                     size: 20,
                   ),
                   SizedBox(width: 16),
-                  Icon(Icons.edit_outlined, color: actionIcon, size: 20),
+                  Icon(
+                    Icons.edit_outlined,
+                    color: AppColors.actionIcon,
+                    size: 20,
+                  ),
                   SizedBox(width: 16),
                   Icon(
                     Icons.delete_outline_rounded,
-                    color: deleteIcon,
+                    color: AppColors.deleteIcon,
                     size: 20,
                   ),
                 ],
