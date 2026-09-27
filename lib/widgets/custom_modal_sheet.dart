@@ -34,45 +34,74 @@ class CustomModalSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final double maxHeight = MediaQuery.of(context).size.height * 0.88;
 
-    return Container(
-      constraints: BoxConstraints(maxHeight: maxHeight),
-      decoration: const BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+    // Altura ocupada por el teclado.
+    final double keyboardHeight =
+        MediaQuery.of(context).viewInsets.bottom;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: keyboardHeight,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 18, 12, 14),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      color: AppColors.primaryPurple,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+      child: Container(
+        constraints: BoxConstraints(
+          maxHeight: maxHeight,
+        ),
+        decoration: const BoxDecoration(
+          color: AppColors.background,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(22),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                20,
+                18,
+                12,
+                14,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        color: AppColors.primaryPurple,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(Icons.close,
-                      size: 24, color: AppColors.textPrimary),
-                ),
-              ],
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(
+                      Icons.close,
+                      size: 24,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Divider(height: 1, thickness: 1, color: AppColors.borderGrey),
-          Flexible(
-            child: SingleChildScrollView(
-              padding: padding,
-              child: child,
+
+            const Divider(
+              height: 1,
+              thickness: 1,
+              color: AppColors.borderGrey,
             ),
-          ),
-        ],
+
+            Flexible(
+              child: SingleChildScrollView(
+                padding: padding,
+                child: child,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

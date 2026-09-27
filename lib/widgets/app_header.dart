@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
+import '../screens/settings/settings.dart';
 
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showMenu;
   final Color backgroundColor;
   final VoidCallback? onMenuTap;
-  final VoidCallback? onProfileTap;
 
   const AppHeader({
     super.key,
@@ -15,7 +15,6 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
     this.showMenu = false,
     this.backgroundColor = Colors.white,
     this.onMenuTap,
-    this.onProfileTap,
   });
 
   @override
@@ -25,13 +24,18 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
       surfaceTintColor: backgroundColor,
       elevation: 0.5,
       centerTitle: showMenu,
+
       leading: showMenu
           ? IconButton(
               onPressed: onMenuTap,
-              icon: const Icon(Icons.menu,
-                  color: AppColors.textPrimary, size: 26),
+              icon: const Icon(
+                Icons.menu,
+                color: AppColors.textPrimary,
+                size: 26,
+              ),
             )
           : null,
+
       title: Text(
         title,
         style: const TextStyle(
@@ -40,11 +44,19 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           fontSize: 18,
         ),
       ),
+
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: GestureDetector(
-            onTap: onProfileTap,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingsScreen(),
+                ),
+              );
+            },
             child: const Icon(
               Icons.account_circle_outlined,
               color: Color(0xFF424242),
