@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/app_colors.dart';
+import 'edit_porfile_modal.dart';
 import 'widgets/profile_info_row.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/custom_button.dart';
@@ -137,7 +138,7 @@ class ProfileScreen extends StatelessWidget {
                 text: 'Editar perfil',
                 icon: Icons.edit_outlined,
                 onPressed: () {
-                  // Próximo paso: EditProfileScreen
+                  EditProfileModal.show(context);
                 },
               ),
             ],

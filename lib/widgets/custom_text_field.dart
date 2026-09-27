@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 
-// campo de texto
-
 class CustomTextField extends StatelessWidget {
   final String label;
   final String hintText;
@@ -11,6 +9,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final int maxLines;
   final ValueChanged<String>? onChanged;
+  final bool obscureText;
 
   const CustomTextField({
     super.key,
@@ -20,6 +19,7 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.maxLines = 1,
     this.onChanged,
+    this.obscureText = false,
   });
 
   @override
@@ -40,8 +40,12 @@ class CustomTextField extends StatelessWidget {
           controller: controller,
           keyboardType: keyboardType,
           maxLines: maxLines,
+          obscureText: obscureText,
           onChanged: onChanged,
-          style: const TextStyle(fontSize: 15, color: AppColors.textPrimary),
+          style: const TextStyle(
+            fontSize: 15,
+            color: AppColors.textPrimary,
+          ),
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: const TextStyle(
@@ -50,20 +54,28 @@ class CustomTextField extends StatelessWidget {
             ),
             filled: true,
             fillColor: AppColors.white,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 14,
+            ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.borderGrey),
+              borderSide: const BorderSide(
+                color: AppColors.borderGrey,
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide:
-                  const BorderSide(color: AppColors.primaryPurple, width: 1.4),
+              borderSide: const BorderSide(
+                color: AppColors.primaryPurple,
+                width: 1.4,
+              ),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.borderGrey),
+              borderSide: const BorderSide(
+                color: AppColors.borderGrey,
+              ),
             ),
           ),
         ),
