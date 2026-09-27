@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../theme/app_colors.dart';
-import '../../widgets/custom_button.dart';
-import '../../widgets/custom_modal_sheet.dart';
-import '../../widgets/custom_text_field.dart';
+import '../../../theme/app_colors.dart';
+import '../../../widgets/custom_button.dart';
+import '../../../widgets/custom_modal_sheet.dart';
+import '../../../widgets/custom_text_field.dart';
 
 class EditProfileModal extends StatelessWidget {
   const EditProfileModal({super.key});

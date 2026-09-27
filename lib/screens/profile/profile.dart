@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/app_colors.dart';
-import 'edit_porfile_modal.dart';
+import 'widgets/edit_profile_modal.dart';
 import 'widgets/profile_info_row.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/custom_button.dart';

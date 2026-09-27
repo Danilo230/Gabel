@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/app_header.dart';
 import 'widgets/settings_option.dart';
 import 'widgets/settings_section.dart';
-
+import 'package:gabel/screens/profile/profile.dart';
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -47,7 +47,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     qualification: 'Mi perfil',
                     caption: 'Datos personales',
                     onTap: () {
-                      // Más adelante navegaremos al perfil
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileScreen(),
+                      ),
+                    );
                     },
                   ),                
                 ],
