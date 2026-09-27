@@ -20,62 +20,57 @@ class EditProfileModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const CustomTextField(
-            label: 'Nombre de Usuario',
-            hintText: 'Ej. Juan Pérez',
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const CustomTextField(
+          label: 'Nombre de Usuario',
+          hintText: 'Ej. Juan Pérez',
+        ),
 
-          const SizedBox(height: 16),
+        const SizedBox(height: 16),
 
-          const CustomTextField(
-            label: 'Identificación',
-            hintText: 'Ej. 0412910071003D',
-          ),
+        const CustomTextField(
+          label: 'Identificación',
+          hintText: 'Ej. 0412910071003D',
+        ),
 
-          const SizedBox(height: 16),
+        const SizedBox(height: 16),
 
-          _campoEstado(
-            label: 'Estado',
-            hint: 'Seleccionar estado',
-            onTap: () {},
-          ),
+        _campoEstado(
+          label: 'Estado',
+          hint: 'Seleccionar estado',
+          onTap: () {},
+        ),
 
-          const SizedBox(height: 16),
+        const SizedBox(height: 16),
 
-          const CustomTextField(
-            label: 'Contraseña',
-            hintText: 'Cambiar contraseña',
-            keyboardType: TextInputType.visiblePassword,
-            obscureText: true,
-          ),
+        const CustomTextField(
+          label: 'Contraseña',
+          hintText: 'Cambiar contraseña',
+          keyboardType: TextInputType.visiblePassword,
+          obscureText: true,
+        ),
 
-          const SizedBox(height: 16),
+        const SizedBox(height: 16),
 
-          const CustomTextField(
-            label: 'Confirmar Contraseña',
-            hintText: 'Reingrese la contraseña',
-            keyboardType: TextInputType.visiblePassword,
-            obscureText: true,
-          ),
+        const CustomTextField(
+          label: 'Confirmar Contraseña',
+          hintText: 'Reingrese la contraseña',
+          keyboardType: TextInputType.visiblePassword,
+          obscureText: true,
+        ),
 
-          const SizedBox(height: 24),
+        const SizedBox(height: 24),
 
-          CustomButton(
-            text: 'Guardar cambios',
-            icon: Icons.save_outlined,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
+        CustomButton(
+          text: 'Guardar cambios',
+          icon: Icons.save_outlined,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 
