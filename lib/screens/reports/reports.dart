@@ -26,6 +26,7 @@ class ReportsScreen extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: CustomBottomNavBar(),
     );
   }
 }

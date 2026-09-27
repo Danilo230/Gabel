@@ -1,35 +1,55 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+
+import '../theme/app_colors.dart';
 
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
-  final String titulo;
+  final String title;
+  final bool showMenu;
+  final Color backgroundColor;
+  final VoidCallback? onMenuTap;
+  final VoidCallback? onProfileTap;
 
   const AppHeader({
     super.key,
-    required this.titulo,
+    required this.title,
+    this.showMenu = false,
+    this.backgroundColor = Colors.white,
+    this.onMenuTap,
+    this.onProfileTap,
   });
-
-  static const Color moradoPrincipal = Color(0xFF5C2483);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor,
+      surfaceTintColor: backgroundColor,
       elevation: 0.5,
+      centerTitle: showMenu,
+      leading: showMenu
+          ? IconButton(
+              onPressed: onMenuTap,
+              icon: const Icon(Icons.menu,
+                  color: AppColors.textPrimary, size: 26),
+            )
+          : null,
       title: Text(
-        titulo,
+        title,
         style: const TextStyle(
-          color: moradoPrincipal,
+          color: AppColors.primaryPurple,
           fontWeight: FontWeight.bold,
           fontSize: 18,
         ),
       ),
-      actions: const [
+      actions: [
         Padding(
-          padding: EdgeInsets.only(right: 16.0),
-          child: Icon(
-            Icons.account_circle_outlined,
-            color: Color(0xFF424242),
-            size: 28,
+          padding: const EdgeInsets.only(right: 16.0),
+          child: GestureDetector(
+            onTap: onProfileTap,
+            child: const Icon(
+              Icons.account_circle_outlined,
+              color: Color(0xFF424242),
+              size: 28,
+            ),
           ),
         ),
       ],

@@ -15,6 +15,8 @@ class AppColors {
   static const Color textPrimary = Color(0xFF1A1A1A);
   static const Color textSecondary = Color(0xFF5B5B66);
   static const Color textTertiary = Color(0xFF8A8A96);
+  static const Color bgtextColor = Color(0xFFF6F2FA);
+  static const Color cardTextSecondary = Color(0xFF757575);
 
   static const Color lightGrey = Color(0xFFEDEDF0);
   static const Color borderGrey = Color(0xFFE6E0EC);
@@ -26,4 +28,10 @@ class AppColors {
   static const Color redBorder = Color(0xFFF6CFCF);
   static const Color paleRed = Color(0xFFFEF6F5);
   static const Color dangerIconBg = Color(0xFFFBD8D8);
+  static const Color searchIcon = Color(0xFF9E9E9E);
+  static const Color bgIconColor = Color(0xFFEFE8F6);
+  static const Color actionIcon = Color(0xFF5C2483);
+  static const Color deleteIcon = Color(0xFFB24C5D);
+
+  static const Color boxShadowColor = Color(0x0A000000);
 }
