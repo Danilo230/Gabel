@@ -32,6 +32,7 @@ class AppColors {
   static const Color bgIconColor = Color(0xFFEFE8F6);
   static const Color actionIcon = Color(0xFF5C2483);
   static const Color deleteIcon = Color(0xFFB24C5D);
+  static const Color BlackIcon = Color(0xFF2C2C2C);
 
   static const Color boxShadowColor = Color(0x0A000000);
 }

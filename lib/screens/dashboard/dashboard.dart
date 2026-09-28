@@ -76,7 +76,7 @@ class DashboardScreen extends StatelessWidget {
                 ),
                 StatCard(
                   icon: Icons.warning_amber_rounded,
-                  label: 'Productos con bajo stock',
+                  label: 'Bajo stock',
                   value: '32',
                   style: StatStyle.danger,
                 ),
