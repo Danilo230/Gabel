@@ -25,7 +25,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
 
-      initialRoute: AppRoutes.dashboard,
+      initialRoute: AppRoutes.login,
 
       routes: {
         AppRoutes.dashboard:
