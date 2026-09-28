@@ -27,55 +27,59 @@ class CustomerDetailModal extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 20),
+          _field(label: 'Nombre', value: customer.customerName),
+          const SizedBox(height: 16),
+          _field(label: 'Apellido', value: customer.customerLastName),
+          const SizedBox(height: 16),
+          _field(label: 'Correo', value: customer.customerEmail),
+          const SizedBox(height: 16),
+          _field(label: 'Teléfono', value: customer.customerPhone),
+          const SizedBox(height: 16),
+          const Text(
+            'Estado',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 8),
           _chip(
             customer.customerStatus,
             background: AppColors.mediumPurple,
             textColor: AppColors.white,
           ),
-
-          SizedBox(height: 20),
-          Text(
-            customer.customerName,
-            style: const TextStyle(
-              fontSize: 27,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-              height: 1.2,
-            ),
-          ),
-          SizedBox(height: 20),
-          Text(
-            customer.customerLastName,
-            style: const TextStyle(
-              fontSize: 27,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-              height: 1.2,
-            ),
-          ),
-          SizedBox(height: 20),
-          Text(
-            customer.customerEmail,
-            style: const TextStyle(
-              fontSize: 27,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-              height: 1.2,
-            ),
-          ),
-          SizedBox(height: 20),
-          Text(
-            customer.customerPhone,
-            style: const TextStyle(
-              fontSize: 27,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-              height: 1.2,
-            ),
-          ),
         ],
       ),
+    );
+  }
+
+  Widget _field({required String label, required String value}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            border: Border.all(color: AppColors.borderGrey),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            value,
+            style: const TextStyle(fontSize: 15, color: AppColors.textPrimary),
+          ),
+        ),
+      ],
     );
   }
 
