@@ -20,7 +20,7 @@ class MoreOptionsModal extends StatelessWidget {
       child: Column(
         children: [
           _option(
-            icon: Icons.inventory_2_outlined,
+            icon: Icons.sanitizer_outlined,
             title: 'Productos',
             subtitle: 'Catálogo de productos',
             onTap: () {
@@ -94,12 +94,11 @@ class MoreOptionsModal extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: AppColors.paleLavender,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
                 icon,
-                color: AppColors.primaryPurple,
+                color: AppColors.BlackIcon,
                 size: 23,
               ),
             ),

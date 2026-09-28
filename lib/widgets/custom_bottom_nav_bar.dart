@@ -46,7 +46,7 @@ class CustomBottomNavBar extends StatelessWidget {
           ),
 
           _navItem(
-            Icons.shopping_cart_outlined,
+            Icons.shopping_bag,
             'Compras',
             onTap: () {
               Navigator.pushNamedAndRemoveUntil(context, AppRoutes.purchaseHistory.toString(), (route) => false);
@@ -54,7 +54,7 @@ class CustomBottomNavBar extends StatelessWidget {
           ),
 
           _navItem(
-            Icons.receipt_long_outlined,
+            Icons.shopping_cart,
             'Ventas',
             onTap: () {
               Navigator.pushNamedAndRemoveUntil(context, AppRoutes.saleHistory.toString(), (route) => false);
@@ -83,7 +83,7 @@ class CustomBottomNavBar extends StatelessWidget {
 
     final Color color = selected
         ? AppColors.primaryPurple
-        : const Color(0xFF2C2C2C);
+        : AppColors.BlackIcon;
 
     return Expanded(
       child: GestureDetector(
