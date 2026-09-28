@@ -16,7 +16,7 @@ import 'theme/app_colors.dart';
 void main() {
   runApp(
     MaterialApp(
-      home: const SalesScreen(),
+      home: const DashboardScreen(),
     ),
   );
 }
