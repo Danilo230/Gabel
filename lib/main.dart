@@ -7,6 +7,7 @@ import 'screens/saleshistory/saleshistory.dart';
 import 'screens/login/login.dart';
 import 'screens/logs/logs.dart';
 import 'screens/products/products.dart';
+import 'screens/purchaseshistory/purchaseshistory.dart';
 import 'screens/reports/reports.dart';
 import 'screens/services/services.dart';
 import 'screens/settings/settings.dart';
@@ -16,7 +17,7 @@ import 'theme/app_colors.dart';
 void main() {
   runApp(
     MaterialApp(
-      home: const SalesScreen(),
+      home: const PurchaseHistoryScreen(),
     ),
   );
 }
