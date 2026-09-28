@@ -50,7 +50,6 @@ class DashboardScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       appBar: const AppHeader(
         title: 'Dashboard',
-        backgroundColor: AppColors.background,
       ),
       bottomNavigationBar: CustomBottomNavBar(
         activeTab: 'Dashboard',
