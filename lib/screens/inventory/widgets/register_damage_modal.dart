@@ -34,40 +34,12 @@ class _RegisterDamageModalState extends State<RegisterDamageModal> {
   final TextEditingController _reasonController = TextEditingController();
   final TextEditingController _stylistController = TextEditingController();
 
-  String? _error;
-
   @override
   void dispose() {
     _quantityController.dispose();
     _reasonController.dispose();
     _stylistController.dispose();
     super.dispose();
-  }
-
-  void _confirm() {
-    final int? quantity = int.tryParse(_quantityController.text.trim());
-    final String reason = _reasonController.text.trim();
-
-    if (quantity == null || quantity <= 0) {
-      setState(() => _error = 'Ingresa una cantidad valida');
-      return;
-    }
-    if (quantity > widget.product.stock) {
-      setState(() => _error = 'La cantidad supera el stock actual');
-      return;
-    }
-    if (reason.isEmpty) {
-      setState(() => _error = 'El motivo del daño es requerido');
-      return;
-    }
-
-    Navigator.of(context).pop(
-      DamageRecord(
-        quantity: quantity,
-        reason: reason,
-        stylist: _stylistController.text.trim(),
-      ),
-    );
   }
 
   @override
@@ -90,7 +62,6 @@ class _RegisterDamageModalState extends State<RegisterDamageModal> {
             hintText: '0',
             controller: _quantityController,
             keyboardType: TextInputType.number,
-            onChanged: (_) => setState(() => _error = null),
           ),
           const SizedBox(height: 18),
           CustomTextField(
@@ -98,7 +69,6 @@ class _RegisterDamageModalState extends State<RegisterDamageModal> {
             hintText: 'Describa el motivo',
             controller: _reasonController,
             maxLines: 4,
-            onChanged: (_) => setState(() => _error = null),
           ),
           const SizedBox(height: 18),
           CustomTextField(
@@ -106,23 +76,12 @@ class _RegisterDamageModalState extends State<RegisterDamageModal> {
             hintText: 'Nombre del estilista',
             controller: _stylistController,
           ),
-          if (_error != null) ...[
-            const SizedBox(height: 14),
-            Text(
-              _error!,
-              style: const TextStyle(
-                fontSize: 13,
-                color: AppColors.strongRed,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
           const SizedBox(height: 26),
           CustomButton(
             text: 'Confirmar Perdida',
             type: ButtonType.danger,
             icon: Icons.disabled_by_default_outlined,
-            onPressed: _confirm,
+            onPressed: null,
           ),
           const SizedBox(height: 12),
           CustomButton(
