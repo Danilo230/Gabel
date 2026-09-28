@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../models/customer.dart';
+import '../../customers/widgets/customer_modal.dart';
 
 class CustomerCard extends StatelessWidget {
   final Customer customer;
-  final VoidCallback? onViewDetail;
 
-  const CustomerCard({super.key, required this.customer, this.onViewDetail});
+  const CustomerCard({super.key, required this.customer});
 
   @override
   Widget build(BuildContext context) {
@@ -30,27 +30,22 @@ class CustomerCard extends StatelessWidget {
               ),
               const SizedBox(height: 8.0),
               Text(
-                customer.customerEmail,
-                style: const TextStyle(fontSize: 14.0),
-              ),
-              const SizedBox(height: 8.0),
-              Text(
                 customer.customerPhone,
                 style: const TextStyle(fontSize: 14.0),
               ),
-              Text(
-                customer.customerStatus,
-                style: const TextStyle(fontSize: 14.0),
-              ),
               const SizedBox(height: 8.0),
-              const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
-                  Icon(
-                    Icons.visibility_off_outlined,
-                    color: AppColors.actionIcon,
-                    size: 20,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      CustomerDetailModal.show(context, customer);
+                    },
+                    icon: const Icon(
+                      Icons.visibility_outlined,
+                      color: AppColors.actionIcon,
+                      size: 18,
+                    ),
                   ),
                   SizedBox(width: 16),
                   Icon(

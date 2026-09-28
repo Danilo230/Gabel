@@ -18,14 +18,14 @@ class CustomersScreen extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
           child: Column(
-            children: const [
+            children: [
               CustomSearchBar(),
               SizedBox(height: 12),
               CustomerCard(
-                customer: Customer(
+                customer: const Customer(
                   customerName: 'Juan',
                   customerLastName: 'Pérez',
-                  customerEmail: 'juan.perez@example.com',
+                  customerEmail: 'juan.perez@exmple.com',
                   customerPhone: '+505 88923213',
                   customerStatus: 'Activo',
                 ),
@@ -40,6 +40,7 @@ class CustomersScreen extends StatelessWidget {
                   customerStatus: 'Activo',
                 ),
               ),
+
               SizedBox(height: 12),
               CustomerCard(
                 customer: Customer(

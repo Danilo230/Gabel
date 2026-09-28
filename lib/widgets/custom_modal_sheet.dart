@@ -59,18 +59,18 @@ class CustomModalSheet extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(Icons.close,
-                      size: 24, color: AppColors.textPrimary),
+                  icon: const Icon(
+                    Icons.close,
+                    size: 24,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ],
             ),
           ),
           const Divider(height: 1, thickness: 1, color: AppColors.borderGrey),
           Flexible(
-            child: SingleChildScrollView(
-              padding: padding,
-              child: child,
-            ),
+            child: SingleChildScrollView(padding: padding, child: child),
           ),
         ],
       ),
