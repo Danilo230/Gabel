@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'app_routes.dart';
 import '../theme/app_colors.dart';
 import 'custom_modal_sheet.dart';
 
@@ -23,7 +23,9 @@ class MoreOptionsModal extends StatelessWidget {
             icon: Icons.inventory_2_outlined,
             title: 'Productos',
             subtitle: 'Catálogo de productos',
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.products.toString(), (route) => false);
+            },
           ),
 
           const SizedBox(height: 10),
@@ -32,7 +34,9 @@ class MoreOptionsModal extends StatelessWidget {
             icon: Icons.content_cut_rounded,
             title: 'Servicios',
             subtitle: 'Catálogo de servicios',
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.services.toString(), (route) => false);
+            },
           ),
 
           const SizedBox(height: 10),
@@ -41,7 +45,9 @@ class MoreOptionsModal extends StatelessWidget {
             icon: Icons.people_outline_rounded,
             title: 'Clientes',
             subtitle: 'Catálogo de clientes',
-            onTap: () {},
+            onTap: () {
+             // Navigator.pushNamedAndRemoveUntil(context, AppRoutes.customers.toString(), (route) => false);
+            },
           ),
 
           const SizedBox(height: 10),
@@ -50,7 +56,9 @@ class MoreOptionsModal extends StatelessWidget {
             icon: Icons.show_chart_rounded,
             title: 'Reportes',
             subtitle: 'Reportes y estadísticas',
-            onTap: () {},
+            onTap: () {
+             // Navigator.pushNamedAndRemoveUntil(context, AppRoutes.reports.toString(), (route) => false);
+            },
           ),
 
           const SizedBox(height: 8),

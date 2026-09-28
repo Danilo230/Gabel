@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'app_routes.dart';
 import '../theme/app_colors.dart';
 import 'more_options_modal.dart';
 
@@ -32,21 +32,33 @@ class CustomBottomNavBar extends StatelessWidget {
           _navItem(
             Icons.grid_view_rounded,
             'Dashboard',
+            onTap: () {
+              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.dashboard.toString(), (route) => false);
+            },
           ),
 
           _navItem(
             Icons.inventory_2_outlined,
             'Inventario',
+            onTap: () {
+              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.inventory.toString(), (route) => false);
+            },
           ),
 
           _navItem(
             Icons.shopping_cart_outlined,
             'Compras',
+            onTap: () {
+              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.purchaseHistory.toString(), (route) => false);
+            },
           ),
 
           _navItem(
             Icons.receipt_long_outlined,
             'Ventas',
+            onTap: () {
+              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.saleHistory.toString(), (route) => false);
+            },
           ),
 
           _navItem(
