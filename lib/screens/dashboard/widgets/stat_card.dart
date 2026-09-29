@@ -58,7 +58,7 @@ class StatCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: _cardBackground,
           borderRadius: BorderRadius.circular(16),
@@ -75,7 +75,7 @@ class StatCard extends StatelessWidget {
                 color: _iconBackground,
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, size: 22, color: _iconColor),
+              child: Icon(icon, size: 20, color: _iconColor),
             ),
             const SizedBox(height: 18),
             Text(

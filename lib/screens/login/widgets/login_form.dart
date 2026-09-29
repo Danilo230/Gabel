@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../widgets/app_routes.dart';
 
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
@@ -73,6 +74,7 @@ class LoginForm extends StatelessWidget {
 
         ElevatedButton(
           onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.dashboard.toString(), (route) => false);
           },
           style: ElevatedButton.styleFrom(
             minimumSize: const Size(double.infinity, 50),

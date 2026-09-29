@@ -132,7 +132,6 @@ class ServiceCard extends StatelessWidget {
                     },
                   ),
 
-                  const SizedBox(width: 16),
                   IconButton(
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
