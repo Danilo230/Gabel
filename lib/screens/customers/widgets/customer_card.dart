@@ -13,9 +13,10 @@ class CustomerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 150.0,
+      height: 135.0,
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: const [
           BoxShadow(
@@ -36,7 +37,7 @@ class CustomerCard extends StatelessWidget {
               color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 8.0),
+          const SizedBox(height: 7.0),
           Text(
             customer.customerPhone,
             style: const TextStyle(
@@ -44,7 +45,7 @@ class CustomerCard extends StatelessWidget {
               color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 8.0),
+          const SizedBox(height: 2.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -60,7 +61,7 @@ class CustomerCard extends StatelessWidget {
                   CustomerDetailModal.show(context, customer);
                 },
               ),
-              SizedBox(width: 16),
+              SizedBox(width: 14),
               IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
