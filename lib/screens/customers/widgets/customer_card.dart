@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../models/customer.dart';
 import '../../customers/widgets/customer_modal.dart';
+import '../../customers/widgets/customer_edit_modal.dart';
 
 class CustomerCard extends StatelessWidget {
   final Customer customer;
@@ -10,60 +11,84 @@ class CustomerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: double.infinity,
       height: 150.0,
-      child: Card(
-        elevation: 4.0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: const [
+          BoxShadow(
+            color: AppColors.boxShadowColor,
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${customer.customerName} ${customer.customerLastName}',
+            style: const TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 8.0),
+          Text(
+            customer.customerPhone,
+            style: const TextStyle(
+              fontSize: 14.0,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: 8.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
-                '${customer.customerName} ${customer.customerLastName}',
-                style: const TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
+              IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                icon: const Icon(
+                  Icons.visibility_outlined,
+                  color: AppColors.actionIcon,
+                  size: 20,
                 ),
+                onPressed: () {
+                  CustomerDetailModal.show(context, customer);
+                },
               ),
-              const SizedBox(height: 8.0),
-              Text(
-                customer.customerPhone,
-                style: const TextStyle(fontSize: 14.0),
+              SizedBox(width: 16),
+              IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                icon: const Icon(
+                  Icons.edit_outlined,
+                  color: AppColors.actionIcon,
+                  size: 20,
+                ),
+                onPressed: () {
+                  CustomerEditModal.show(context, customer);
+                },
               ),
-              const SizedBox(height: 8.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      CustomerDetailModal.show(context, customer);
-                    },
-                    icon: const Icon(
-                      Icons.visibility_outlined,
-                      color: AppColors.actionIcon,
-                      size: 18,
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  Icon(
-                    Icons.edit_outlined,
-                    color: AppColors.actionIcon,
-                    size: 20,
-                  ),
-                  SizedBox(width: 16),
-                  Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColors.deleteIcon,
-                    size: 20,
-                  ),
-                ],
+              SizedBox(width: 16),
+              IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                icon: const Icon(
+                  Icons.delete_outline_rounded,
+                  color: AppColors.deleteIcon,
+                  size: 20,
+                ),
+                onPressed: () {
+                  // Aquí se conecta el aviso de eliminar.
+                },
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
