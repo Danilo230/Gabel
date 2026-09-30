@@ -34,8 +34,6 @@ class SalesCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          // Nombre del cliente y total
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -50,7 +48,9 @@ class SalesCard extends StatelessWidget {
                         color: AppColors.textSecondary,
                       ),
                     ),
+
                     const SizedBox(height: 4),
+
                     Text(
                       sale.customerName,
                       style: const TextStyle(
@@ -73,7 +73,9 @@ class SalesCard extends StatelessWidget {
                       color: AppColors.textSecondary,
                     ),
                   ),
+
                   const SizedBox(height: 4),
+
                   Text(
                     sale.totalPrice,
                     style: const TextStyle(
@@ -96,17 +98,8 @@ class SalesCard extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          // Fecha y botón para ver detalle
           Row(
             children: [
-              const Icon(
-                Icons.calendar_today_outlined,
-                size: 17,
-                color: AppColors.textSecondary,
-              ),
-
-              const SizedBox(width: 7),
-
               Text(
                 sale.saleDate,
                 style: const TextStyle(
