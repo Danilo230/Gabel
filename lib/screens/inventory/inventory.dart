@@ -29,7 +29,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
       purchasePrice: 9.10,
       margin: 39,
       damagedStock: 1,
-      lastPurchase: '12 May 2026',
+      lastPurchase: '12 May 2024',
     ),
     Product(
       name: 'Acondicionador Color Care',
@@ -37,15 +37,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
       salePrice: 18.50,
       purchasePrice: 11.30,
       margin: 39,
-      lastPurchase: '02 Jun 2026',
+      lastPurchase: '02 Jun 2024',
     ),
     Product(
-      name: 'Mascarilla Hidratacion Profunda',
+      name: 'Mascarilla Hidratación Profunda',
       stock: 12,
       salePrice: 22.00,
       purchasePrice: 13.40,
       margin: 39,
-      lastPurchase: '28 Abr 2026',
+      lastPurchase: '28 Abr 2024',
     ),
     Product(
       name: 'Tinte Profesional Castaño Oscuro',
@@ -54,7 +54,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
       purchasePrice: 5.20,
       margin: 42,
       damagedStock: 2,
-      lastPurchase: '12 May 2026',
+      lastPurchase: '12 May 2024',
     ),
   ];
 
@@ -96,46 +96,40 @@ class _InventoryScreenState extends State<InventoryScreen> {
         activeTab: 'Inventario',
         onItemTap: widget.onTabChange,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 20, 16, 18),
-            child: CustomSearchBar(
-              hintText: 'Buscar productos...',
-            ),
-          ),
-          Expanded(
-            child: products.isEmpty
-                ? const Center(
-                    child: Text(
-                      'No se encontraron productos.',
-                      style: TextStyle(color: AppColors.textSecondary),
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
-                    itemCount: products.length,
-                    itemBuilder: (context, index) {
-                      final Product product = products[index];
-                      return ProductInventoryCard(
-                        product: product,
-                        onViewDetail: () => _openDetail(product),
-                        onRegisterDamage: () => _openDamageForm(product),
-                      );
-                    },
-                  ),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: Center(
-              child: CustomPagination(
-                currentPage: 3,
-                totalPages: 7,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const CustomSearchBar(
+                hintText: 'Buscar productos...',
               ),
-            ),
+              const SizedBox(height: 18),
+              if (products.isEmpty)
+                const Center(
+                  child: Text(
+                    'No se encontraron productos.',
+                    style: TextStyle(color: AppColors.textSecondary),
+                  ),
+                )
+              else
+                for (final product in products)
+                  ProductInventoryCard(
+                    product: product,
+                    onViewDetail: () => _openDetail(product),
+                    onRegisterDamage: () => _openDamageForm(product),
+                  ),
+              const SizedBox(height: 6),
+              const Center(
+                child: CustomPagination(
+                  currentPage: 3,
+                  totalPages: 7,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
