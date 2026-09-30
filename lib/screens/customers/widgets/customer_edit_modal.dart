@@ -87,7 +87,7 @@ class _CustomerEditModalState extends State<CustomerEditModal> {
             height: 48,
             child: ElevatedButton.icon(
               onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.add, color: AppColors.white, size: 20),
+              icon: const Icon(Icons.edit, color: AppColors.white, size: 20),
               label: const Text(
                 'Editar cliente',
                 style: TextStyle(

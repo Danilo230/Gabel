@@ -4,9 +4,11 @@ import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../theme/app_colors.dart';
 import '../dashboard/widgets/category_distribution_chart.dart';
 import '../dashboard/widgets/monthly_sales_chart.dart';
+import '../../widgets/custom_date_filter.dart';
 
 class ReportScreen extends StatelessWidget {
   const ReportScreen({super.key});
+
   static const List<MonthlySale> _sales = [
     MonthlySale('Ene', 42),
     MonthlySale('Feb', 58),
@@ -33,21 +35,17 @@ class ReportScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bgtextColor,
-
       appBar: const AppHeader(title: 'Reportes'),
-
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
-
           child: Column(
             children: [
+              const CustomDateFilter(),
+              const SizedBox(height: 20),
               const MonthlySalesChart(data: _sales, highlightedMonth: 'Abr'),
-
               const SizedBox(height: 18),
-
               const CategoryDistributionChart(categories: _categories),
-
               const SizedBox(height: 20),
             ],
           ),

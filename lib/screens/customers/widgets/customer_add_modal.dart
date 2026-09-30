@@ -68,7 +68,7 @@ class NewCustomerModal extends StatelessWidget {
               height: 48,
               child: ElevatedButton.icon(
                 onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.add, color: AppColors.white, size: 20),
+                icon: const Icon(Icons.save, color: AppColors.white, size: 20),
                 label: const Text(
                   'Guardar cliente',
                   style: TextStyle(
