@@ -38,7 +38,7 @@ class ProductInventoryCard extends StatelessWidget {
                 Text(
                   product.name,
                   style: const TextStyle(
-                    fontSize: 19,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                     height: 1.25,
@@ -85,13 +85,13 @@ class ProductInventoryCard extends StatelessWidget {
             onPressed: onViewDetail,
             tooltip: 'Ver detalle',
             icon: const Icon(Icons.remove_red_eye_outlined,
-                size: 24, color: AppColors.primaryPurple),
+                size: 23, color: AppColors.primaryPurple),
           ),
           IconButton(
             onPressed: onRegisterDamage,
             tooltip: 'Registrar daño',
             icon: const Icon(Icons.warning_amber_rounded,
-                size: 26, color: AppColors.strongRed),
+                size: 23, color: AppColors.strongRed),
           ),
         ],
       ),

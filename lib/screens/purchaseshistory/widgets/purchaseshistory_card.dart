@@ -16,7 +16,7 @@ class PurchaseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
@@ -52,7 +52,7 @@ class PurchaseCard extends StatelessWidget {
                     Text(
                       purchase.supplierName,
                       style: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 17,
                         fontWeight: FontWeight.bold,
                         color: AppColors.textPrimary,
                       ),
@@ -75,7 +75,7 @@ class PurchaseCard extends StatelessWidget {
                   Text(
                     'C\$${purchase.totalAmount.toStringAsFixed(2)}',
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 17,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryPurple,
                     ),
@@ -112,7 +112,7 @@ class PurchaseCard extends StatelessWidget {
                 tooltip: 'Ver detalle',
                 icon: const Icon(
                   Icons.visibility_outlined,
-                  size: 24,
+                  size: 23,
                   color: AppColors.primaryPurple,
                 ),
               ),
