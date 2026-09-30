@@ -20,10 +20,7 @@ class CustomBottomNavBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
-          top: BorderSide(
-            color: Colors.grey.shade300,
-            width: 0.8,
-          ),
+          top: BorderSide(color: Colors.grey.shade300, width: 0.8),
         ),
       ),
       child: Row(
@@ -33,7 +30,11 @@ class CustomBottomNavBar extends StatelessWidget {
             Icons.grid_view_rounded,
             'Dashboard',
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.dashboard.toString(), (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.dashboard.toString(),
+                (route) => false,
+              );
             },
           ),
 
@@ -41,7 +42,11 @@ class CustomBottomNavBar extends StatelessWidget {
             Icons.inventory_2_outlined,
             'Inventario',
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.inventory.toString(), (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.inventory.toString(),
+                (route) => false,
+              );
             },
           ),
 
@@ -49,7 +54,11 @@ class CustomBottomNavBar extends StatelessWidget {
             Icons.shopping_bag,
             'Compras',
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.purchaseHistory.toString(), (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.purchaseHistory.toString(),
+                (route) => false,
+              );
             },
           ),
 
@@ -57,7 +66,11 @@ class CustomBottomNavBar extends StatelessWidget {
             Icons.shopping_cart,
             'Ventas',
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.saleHistory.toString(), (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.saleHistory.toString(),
+                (route) => false,
+              );
             },
           ),
 
@@ -73,13 +86,8 @@ class CustomBottomNavBar extends StatelessWidget {
     );
   }
 
-  Widget _navItem(
-    IconData icon,
-    String label, {
-    VoidCallback? onTap,
-  }) {
-    final bool selected =
-        label.toLowerCase() == activeTab.toLowerCase();
+  Widget _navItem(IconData icon, String label, {VoidCallback? onTap}) {
+    final bool selected = label.toLowerCase() == activeTab.toLowerCase();
 
     final Color color = selected
         ? AppColors.primaryPurple
@@ -89,19 +97,12 @@ class CustomBottomNavBar extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
 
-        onTap: onTap ??
-            (onItemTap == null
-                ? null
-                : () => onItemTap!(label)),
+        onTap: onTap ?? (onItemTap == null ? null : () => onItemTap!(label)),
 
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              color: color,
-              size: 22,
-            ),
+            Icon(icon, color: color, size: 22),
 
             const SizedBox(height: 3),
 
@@ -111,8 +112,7 @@ class CustomBottomNavBar extends StatelessWidget {
               style: TextStyle(
                 color: color,
                 fontSize: 10,
-                fontWeight:
-                    selected ? FontWeight.bold : FontWeight.w500,
+                fontWeight: selected ? FontWeight.bold : FontWeight.w500,
               ),
             ),
           ],

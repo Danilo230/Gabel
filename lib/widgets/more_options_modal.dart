@@ -7,10 +7,7 @@ class MoreOptionsModal extends StatelessWidget {
   const MoreOptionsModal({super.key});
 
   static void show(BuildContext context) {
-    CustomModalSheet.show(
-      context: context,
-      child: const MoreOptionsModal(),
-    );
+    CustomModalSheet.show(context: context, child: const MoreOptionsModal());
   }
 
   @override
@@ -24,7 +21,11 @@ class MoreOptionsModal extends StatelessWidget {
             title: 'Productos',
             subtitle: 'Catálogo de productos',
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.products.toString(), (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.products.toString(),
+                (route) => false,
+              );
             },
           ),
 
@@ -35,7 +36,11 @@ class MoreOptionsModal extends StatelessWidget {
             title: 'Servicios',
             subtitle: 'Catálogo de servicios',
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.services.toString(), (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.services.toString(),
+                (route) => false,
+              );
             },
           ),
 
@@ -46,7 +51,11 @@ class MoreOptionsModal extends StatelessWidget {
             title: 'Clientes',
             subtitle: 'Catálogo de clientes',
             onTap: () {
-             // Navigator.pushNamedAndRemoveUntil(context, AppRoutes.customers.toString(), (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.customers.toString(),
+                (route) => false,
+              );
             },
           ),
 
@@ -57,7 +66,11 @@ class MoreOptionsModal extends StatelessWidget {
             title: 'Reportes',
             subtitle: 'Reportes y estadísticas',
             onTap: () {
-             // Navigator.pushNamedAndRemoveUntil(context, AppRoutes.reports.toString(), (route) => false);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                AppRoutes.reports.toString(),
+                (route) => false,
+              );
             },
           ),
 
@@ -77,16 +90,11 @@ class MoreOptionsModal extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(14),
       child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 14,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: AppColors.borderGrey,
-          ),
+          border: Border.all(color: AppColors.borderGrey),
         ),
         child: Row(
           children: [
@@ -96,11 +104,7 @@ class MoreOptionsModal extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
-                icon,
-                color: AppColors.BlackIcon,
-                size: 23,
-              ),
+              child: Icon(icon, color: AppColors.BlackIcon, size: 23),
             ),
 
             const SizedBox(width: 14),

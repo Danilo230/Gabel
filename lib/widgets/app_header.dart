@@ -44,7 +44,6 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           fontSize: 18,
         ),
       ),
-
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
@@ -52,9 +51,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const SettingsScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => const SettingsScreen()),
               );
             },
             child: const Icon(

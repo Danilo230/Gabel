@@ -35,33 +35,21 @@ class CustomModalSheet extends StatelessWidget {
     final double maxHeight = MediaQuery.of(context).size.height * 0.88;
 
     // Altura ocupada por el teclado.
-    final double keyboardHeight =
-        MediaQuery.of(context).viewInsets.bottom;
+    final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
     return Padding(
-      padding: EdgeInsets.only(
-        bottom: keyboardHeight,
-      ),
+      padding: EdgeInsets.only(bottom: keyboardHeight),
       child: Container(
-        constraints: BoxConstraints(
-          maxHeight: maxHeight,
-        ),
+        constraints: BoxConstraints(maxHeight: maxHeight),
         decoration: const BoxDecoration(
           color: AppColors.background,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(22),
-          ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(
-                20,
-                18,
-                12,
-                14,
-              ),
+              padding: const EdgeInsets.fromLTRB(20, 18, 12, 14),
               child: Row(
                 children: [
                   Expanded(
@@ -88,17 +76,10 @@ class CustomModalSheet extends StatelessWidget {
               ),
             ),
 
-            const Divider(
-              height: 1,
-              thickness: 1,
-              color: AppColors.borderGrey,
-            ),
+            const Divider(height: 1, thickness: 1, color: AppColors.borderGrey),
 
             Flexible(
-              child: SingleChildScrollView(
-                padding: padding,
-                child: child,
-              ),
+              child: SingleChildScrollView(padding: padding, child: child),
             ),
           ],
         ),
