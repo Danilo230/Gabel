@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 
 class NewCustomerModal extends StatelessWidget {
-  const NewCustomerModal({super.Key});
+  const NewCustomerModal({super.key});
 
   static void show(BuildContext context) {
     showModalBottomSheet(
@@ -28,14 +28,14 @@ class NewCustomerModal extends StatelessWidget {
       ),
       child: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  '+',
+                  'Nuevo cliente',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -44,31 +44,50 @@ class NewCustomerModal extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close_rounded, color: AppColors.iconGrey),
-                  splashRadius: 20,
+                  icon: const Icon(
+                    Icons.close_rounded,
+                    color: AppColors.iconGrey,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-              _field(
-              label: 'Nombre del cliente',
-              hint: 'Ej. Marie',
-            ),
+            _field(label: 'Nombre del cliente', hint: 'Ej. Marie'),
             const SizedBox(height: 16),
-              _field(
-              label: 'Apellido del cliente',
-              hint: 'Ej. Lopez',
-            ),
+            _field(label: 'Apellido del cliente', hint: 'Ej. Lopez'),
             const SizedBox(height: 14),
             _field(
-              label: 'Email',
+              label: 'Correo electrónico',
               hint: 'Ej. MarieLopez@example.com',
-              maxLines: 3,
             ),
             const SizedBox(height: 14),
-
-          ),
+            _field(label: 'Número telefónico', hint: 'Ej. 80789678'),
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton.icon(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.add, color: AppColors.white, size: 20),
+                label: const Text(
+                  'Guardar Producto',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.white,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primaryPurple,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
   }
 }
