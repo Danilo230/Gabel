@@ -61,7 +61,6 @@ class CustomerCard extends StatelessWidget {
                   CustomerDetailModal.show(context, customer);
                 },
               ),
-              SizedBox(width: 14),
               IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -74,7 +73,6 @@ class CustomerCard extends StatelessWidget {
                   CustomerEditModal.show(context, customer);
                 },
               ),
-              SizedBox(width: 16),
               IconButton(
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
-import 'customer_add_modal.dart';
 
 class CustomerSearchBar extends StatelessWidget {
   const CustomerSearchBar({super.key});
@@ -36,21 +35,6 @@ class CustomerSearchBar extends StatelessWidget {
                 ),
                 Icon(Icons.tune, color: AppColors.primaryPurple, size: 20),
               ],
-            ),
-          ),
-        ),
-
-        const SizedBox(width: 10),
-        Material(
-          color: AppColors.primaryPurple,
-          borderRadius: BorderRadius.circular(12),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(12),
-            onTap: () => NewCustomerModal.show(context),
-            child: const SizedBox(
-              width: 48,
-              height: 48,
-              child: Icon(Icons.add, color: Colors.white, size: 24),
             ),
           ),
         ),
