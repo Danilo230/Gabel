@@ -70,7 +70,7 @@ class NewCustomerModal extends StatelessWidget {
                 onPressed: () => Navigator.pop(context),
                 icon: const Icon(Icons.add, color: AppColors.white, size: 20),
                 label: const Text(
-                  'Guardar Producto',
+                  'Guardar cliente',
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
