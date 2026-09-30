@@ -32,7 +32,7 @@ class NewCustomerModal extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAligment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
                   '+',
@@ -42,12 +42,33 @@ class NewCustomerModal extends StatelessWidget {
                     color: AppColors.primaryPurple,
                   ),
                 ),
-                
-              ];
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: const Icon(Icons.close_rounded, color: AppColors.iconGrey),
+                  splashRadius: 20,
+                ),
+              ],
             ),
-          ],
+            const SizedBox(height: 16),
+              _field(
+              label: 'Nombre del cliente',
+              hint: 'Ej. Marie',
+            ),
+            const SizedBox(height: 16),
+              _field(
+              label: 'Apellido del cliente',
+              hint: 'Ej. Lopez',
+            ),
+            const SizedBox(height: 14),
+            _field(
+              label: 'Email',
+              hint: 'Ej. MarieLopez@example.com',
+              maxLines: 3,
+            ),
+            const SizedBox(height: 14),
+
+          ),
         ),
-      ),
-    );
+      );
   }
 }
