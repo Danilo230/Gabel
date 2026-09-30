@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/custom_pagination.dart';
-import '../../widgets/custom_search_bar.dart';
+import '../../screens/customers/widgets/customer_search_bar.dart';
 import 'models/customer.dart';
 import '../../theme/app_colors.dart';
 import 'widgets/customer_card.dart';
@@ -19,7 +19,7 @@ class CustomersScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
           child: Column(
             children: [
-              CustomSearchBar(),
+              CustomerSearchBar(),
               SizedBox(height: 12),
               CustomerCard(
                 customer: const Customer(

@@ -62,6 +62,7 @@ class NewCustomerModal extends StatelessWidget {
             ),
             const SizedBox(height: 14),
             _field(label: 'Número telefónico', hint: 'Ej. 80789678'),
+            const SizedBox(height: 14),
             SizedBox(
               width: double.infinity,
               height: 48,

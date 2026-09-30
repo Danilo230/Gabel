@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gabel/theme/app_colors.dart';
-import 'customer_modal.dart';
+import '../../../theme/app_colors.dart';
+import 'customer_add_modal.dart';
 
 class CustomerSearchBar extends StatelessWidget {
   const CustomerSearchBar({super.key});
@@ -30,7 +30,7 @@ class CustomerSearchBar extends StatelessWidget {
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Buscar productos...',
+                    'Buscar cliente...',
                     style: TextStyle(color: Color(0xFF9E9E9E), fontSize: 14),
                   ),
                 ),
