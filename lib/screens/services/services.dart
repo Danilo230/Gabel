@@ -1,8 +1,10 @@
 ﻿import 'package:flutter/material.dart';
+import '../../theme/app_colors.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/custom_pagination.dart';
-import 'widgets/service_search_bar.dart';
+import '../services/widgets/service_modal.dart';
+import '../../widgets/custom_search_bar.dart'; 
 import 'widgets/service_card.dart';
 
 class ServicesScreen extends StatelessWidget {
@@ -11,32 +13,53 @@ class ServicesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F2FA),
+      backgroundColor:AppColors.bgtextColor,
       appBar: const AppHeader(title: 'Catálogo de Servicios'),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
           child: Column(
-            children: const [
-              ServiceSearchBar(),
-              SizedBox(height: 16),
-              ServiceCard(
-                nombre: 'Corte de Cabello y Estilo',
-                productoUtilizado: 'Shampoo Revitalizante',
-                precio: '\C18.00',
-                icono: Icons.content_cut_rounded,
+            children: [
+
+              Row(
+                children: [
+                  const Expanded(
+                    child: CustomSearchBar(),
+                  ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () => NewServiceModal.show(context),
+                    child: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryPurple,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+
+                      child: const Icon(Icons.add, color: AppColors.white, size: 24),
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 12),
-              ServiceCard(
-                nombre: 'Tinte y Tratamiento Capilar',
-                productoUtilizado: 'Acondicionador Color Protect',
-                precio: '\$45.00',
-                icono: Icons.brush_outlined,
+             const SizedBox(height: 16),
+
+             const ServiceCard(
+                name: 'Corte de Cabello y Estilo',
+                price: '\C18.00',
+                icon: Icons.content_cut_rounded,
               ),
-              SizedBox(height: 20),
+             const SizedBox(height: 12),
+
+              const ServiceCard(
+                name: 'Tinte y Tratamiento Capilar',
+                price: '\$45.00',
+                icon: Icons.brush_outlined,
+              ),
+             const SizedBox(height: 20),
               
-              CustomPagination(currentPage: 6),
-              SizedBox(height: 10),
+             const CustomPagination(currentPage: 6),
+              const SizedBox(height: 10),
             ],
           ),
         ),
