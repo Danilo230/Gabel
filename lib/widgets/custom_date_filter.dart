@@ -60,6 +60,7 @@ class CustomDateFilter extends StatelessWidget {
         CustomButton(
           text: 'Filtrar',
           icon: Icons.filter_alt_outlined,
+          type: ButtonType.primary,
           onPressed: onFilterTap,
         ),
       ],

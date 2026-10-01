@@ -25,12 +25,11 @@ class SettingsOption extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 6),
         child: Row(
           children: [
-            // Icono
             Container(
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: const Color(0xFFEFE8F6),
+                color: const Color( 0xFFF6F2FA),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -42,7 +41,6 @@ class SettingsOption extends StatelessWidget {
 
             const SizedBox(width: 12),
 
-            // Título y subtítulo
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +67,6 @@ class SettingsOption extends StatelessWidget {
               ),
             ),
 
-            // Elemento de la derecha
             trailing ??
                 const Icon(
                   Icons.chevron_right,

@@ -1,46 +1,65 @@
 import 'package:flutter/material.dart';
 
+import '../../../theme/app_colors.dart';
+
 class LoginHeader extends StatelessWidget {
   const LoginHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
-        CircleAvatar(
-          radius: 50,
-          backgroundImage: AssetImage(
-            'assets/images/Logo.jpeg',
+         const SizedBox(height: 30),
+
+        Container(
+          padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: AppColors.lightPurple,
+              width: 2,
+            ),
+          ),
+          child: const CircleAvatar(
+            radius: 60,
+            backgroundImage: AssetImage(
+              'assets/images/Logo.jpeg',
+            ),
           ),
         ),
 
-        SizedBox(height: 5),
+        const SizedBox(height: 14),
 
-        Text(
+        const Text(
           'Gabel',
           style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF7557AC),
+            color: AppColors.primaryPurple,
           ),
         ),
 
-        SizedBox(height: 5),
+        const SizedBox(height: 12),
 
-        Text(
+        const Text(
           'Bienvenido de nuevo',
+          textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Color(0xFF7557AC),
+            color: AppColors.textPrimary,
           ),
         ),
 
-        Text(
+        const SizedBox(height: 5),
+
+        const Text(
           'Ingresa tus credenciales para acceder',
+          textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 16,
-            color: Colors.grey,
+            fontSize: 14,
+            color: AppColors.textSecondary,
           ),
         ),
       ],

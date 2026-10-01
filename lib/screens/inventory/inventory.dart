@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
+import '../../widgets/custom_botton_navbar_sales.dart';
 import '../../widgets/custom_modal_sheet.dart';
 import '../../widgets/custom_pagination.dart';
 import '../../widgets/custom_search_bar.dart';
@@ -13,8 +14,13 @@ import 'widgets/register_damage_modal.dart';
 
 class InventoryScreen extends StatefulWidget {
   final ValueChanged<String>? onTabChange;
+  final bool isSalesperson;
 
-  const InventoryScreen({super.key, this.onTabChange});
+  const InventoryScreen({
+    super.key,
+    this.onTabChange,
+    this.isSalesperson = false,
+  });
 
   @override
   State<InventoryScreen> createState() => _InventoryScreenState();
@@ -92,13 +98,20 @@ class _InventoryScreenState extends State<InventoryScreen> {
       appBar: const AppHeader(
         title: 'Inventario',
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        activeTab: 'Inventario',
-        onItemTap: widget.onTabChange,
-      ),
+      bottomNavigationBar: widget.isSalesperson
+          ? const CustomBottomNavBarSales(
+              activeTab: 'Inventario',
+            )
+          : CustomBottomNavBar(
+              activeTab: 'Inventario',
+              onItemTap: widget.onTabChange,
+            ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 20.0,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -110,7 +123,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 const Center(
                   child: Text(
                     'No se encontraron productos.',
-                    style: TextStyle(color: AppColors.textSecondary),
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                 )
               else

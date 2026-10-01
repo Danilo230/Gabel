@@ -12,7 +12,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.bgtextColor,
 
       appBar: const AppHeader(
         title: 'Mi perfil',
@@ -31,7 +31,7 @@ class ProfileScreen extends StatelessWidget {
                       width: 90,
                       height: 90,
                       decoration: const BoxDecoration(
-                        color: AppColors.bgtextColor,
+                        color: AppColors.lightPurple,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(

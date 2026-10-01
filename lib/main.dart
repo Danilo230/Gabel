@@ -4,6 +4,7 @@ import './widgets/app_routes.dart';
 
 import 'screens/customers/customers.dart';
 import 'screens/dashboard/dashboard.dart';
+import 'screens/salesperson/widget/salesperson.dart';
 import 'screens/inventory/inventory.dart';
 import 'screens/saleshistory/saleshistory.dart';
 import 'screens/login/login.dart';
@@ -31,6 +32,7 @@ class MainApp extends StatelessWidget {
         AppRoutes.dashboard: (context) => const DashboardScreen(),
 
         AppRoutes.inventory: (context) => const InventoryScreen(),
+        AppRoutes.salespersonInventory: (context) => const InventoryScreen(isSalesperson: true,),
 
         AppRoutes.purchaseHistory: (context) => const PurchaseHistoryScreen(),
 
@@ -47,6 +49,8 @@ class MainApp extends StatelessWidget {
         AppRoutes.settings: (context) => const SettingsScreen(),
 
         AppRoutes.login: (context) => const LoginScreen(),
+
+        AppRoutes.salesperson: (context) => const SalespersonScreen(),
       },
     );
   }
