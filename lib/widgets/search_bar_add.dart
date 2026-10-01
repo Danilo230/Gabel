@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../../theme/app_colors.dart';
-import 'customer_add_modal.dart';
+import '../theme/app_colors.dart';
 
-class CustomerSearchBar extends StatelessWidget {
-  const CustomerSearchBar({super.key});
+class SearchBarAdd extends StatelessWidget {
+  final String hintText;
+  final VoidCallback? onAddPressed;
+
+  const SearchBarAdd({
+    super.key,
+    this.hintText = 'Buscar...',
+    this.onAddPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,28 +31,34 @@ class CustomerSearchBar extends StatelessWidget {
               ],
             ),
             child: Row(
-              children: const [
-                Icon(Icons.search, color: Color(0xFF9E9E9E), size: 22),
-                SizedBox(width: 8),
+              children: [
+                const Icon(Icons.search, color: Color(0xFF9E9E9E), size: 22),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Buscar cliente...',
-                    style: TextStyle(color: Color(0xFF9E9E9E), fontSize: 14),
+                    hintText,
+                    style: const TextStyle(
+                      color: Color(0xFF9E9E9E),
+                      fontSize: 14,
+                    ),
                   ),
                 ),
-                Icon(Icons.tune, color: AppColors.primaryPurple, size: 20),
+                const Icon(
+                  Icons.tune,
+                  color: AppColors.primaryPurple,
+                  size: 20,
+                ),
               ],
             ),
           ),
         ),
-
         const SizedBox(width: 10),
         Material(
           color: AppColors.primaryPurple,
           borderRadius: BorderRadius.circular(12),
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
-            onTap: () => NewCustomerModal.show(context),
+            onTap: onAddPressed,
             child: const SizedBox(
               width: 48,
               height: 48,

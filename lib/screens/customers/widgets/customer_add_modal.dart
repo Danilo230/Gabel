@@ -109,7 +109,7 @@ Widget _field({required String label, required String hint}) {
       TextField(
         decoration: InputDecoration(
           hintText: hint,
-          hintStyle: const TextStyle(color: AppColors.textPrimary),
+          hintStyle: const TextStyle(color: AppColors.iconGrey),
           filled: true,
           fillColor: AppColors.white,
           contentPadding: const EdgeInsets.symmetric(
