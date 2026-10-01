@@ -1,138 +1,124 @@
 import 'package:flutter/material.dart';
+import '../../../theme/app_colors.dart';
+import '../../../widgets/custom_confirm_dialog.dart'; // 👈 Diálogo Global de Confirmación
+import '../../../widgets/custom_modal_sheet.dart';   // 👈 Modal Global
 
 class EditProductModal extends StatelessWidget {
   const EditProductModal({super.key});
 
   static void show(BuildContext context) {
-    showModalBottomSheet(
+    CustomModalSheet.show(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const EditProductModal(),
+      child: const EditProductModal(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    const morado = Color(0xFF5C2483);
+    return CustomModalSheet(
+      title: 'Editar Producto',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildTextField(
+            label: 'Nombre del producto',
+            hint: 'Ej. Shampoo Keratina',
+          ),
+          const SizedBox(height: 14),
 
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      padding: EdgeInsets.only(
-        left: 20,
-        right: 20,
-        top: 20,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-           
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Editar Producto',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: morado,
+          _buildTextField(
+            label: 'Descripción',
+            hint: 'Detalles del producto...',
+            maxLines: 3,
+          ),
+          const SizedBox(height: 14),
+
+          _buildSelectField(
+            label: 'Unidad de Medida',
+            hint: 'Seleccionar unidad',
+            onTap: () {},
+          ),
+          const SizedBox(height: 14),
+
+          _buildSelectField(
+            label: 'Categoría',
+            hint: 'Seleccionar categoría',
+            onTap: () {},
+          ),
+          const SizedBox(height: 14),
+
+          _buildSelectField(
+            label: 'Proveedor',
+            hint: 'Seleccionar proveedor',
+            onTap: () {},
+          ),
+          const SizedBox(height: 14),
+
+          _buildSelectField(
+            label: 'Marca',
+            hint: 'Seleccionar marca',
+            onTap: () {},
+          ),
+          const SizedBox(height: 14),
+
+          _buildSelectField(
+            label: 'Estado',
+            hint: 'Seleccionar estado',
+            onTap: () {},
+          ),
+          const SizedBox(height: 24),
+
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) => CustomConfirmDialog(
+                    titulo: '¿Deseas guardar los cambios?',
+                    mensaje: 'La información del producto será actualizado.',
+                    confirmText: 'Guardar',
+                    cancelText: 'Cancelar',
+                    onConfirm: () {
+                      Navigator.of(dialogContext).pop();
+                      Navigator.of(context).pop();      
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('¡Cambios guardados exitosamente!'),
+                          backgroundColor: AppColors.primaryPurple,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    },
                   ),
+                );
+              },
+              icon: const Icon(Icons.check, color: AppColors.white, size: 20),
+              label: const Text(
+                'Guardar Cambios',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.white,
                 ),
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close_rounded, color: Colors.grey),
-                  splashRadius: 20,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-           
-            _campoTexto(
-              label: 'Nombre del producto',
-              hint: 'Ej. Shampoo Keratina',
-            ),
-            const SizedBox(height: 14),
-
-            _campoTexto(
-              label: 'Descripción',
-              hint: 'Detalles del producto...',
-              maxLines: 3,
-            ),
-            const SizedBox(height: 14),
-
-            _campoSeleccionar(
-              label: 'Unidad de Medida',
-              hint: 'Seleccionar unidad',
-              onTap: () {},
-            ),
-            const SizedBox(height: 14),
-
-            _campoSeleccionar(
-              label: 'Categoría',
-              hint: 'Seleccionar categoría',
-              onTap: () {},
-            ),
-            const SizedBox(height: 14),
-
-            _campoSeleccionar(
-              label: 'Proveedor',
-              hint: 'Seleccionar proveedor',
-              onTap: () {},
-            ),
-            const SizedBox(height: 14),
-
-            _campoSeleccionar(
-              label: 'Marca',
-              hint: 'Seleccionar marca',
-              onTap: () {},
-            ),
-            const SizedBox(height: 24),
-
-            
-            _campoSeleccionar(
-              label: 'Estado',
-              hint: 'Seleccionar estado',
-              onTap: () {},
-            ),
-            const SizedBox(height: 24),
-
-            SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: ElevatedButton.icon(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.check, color: Colors.white, size: 20),
-                label: const Text(
-                  'Guardar Cambios',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: morado,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryPurple,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _campoTexto({
+  Widget _buildTextField({
     required String label,
     required String hint,
     int maxLines = 1,
@@ -145,7 +131,7 @@ class EditProductModal extends StatelessWidget {
           style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF4A4A4A),
+            color: AppColors.textPrimary,
           ),
         ),
         const SizedBox(height: 6),
@@ -153,33 +139,28 @@ class EditProductModal extends StatelessWidget {
           maxLines: maxLines,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(color: Color(0xFFB0B0B0), fontSize: 13),
+            hintStyle: const TextStyle(
+              color: AppColors.textTertiary,
+              fontSize: 13,
+            ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             filled: true,
-            fillColor: const Color(0xFFF9F9FB),
-
+            fillColor: AppColors.white,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFE5E5EA)),
+              borderSide: const BorderSide(color: AppColors.borderGrey),
             ),
-
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFE5E5EA)),
-            ),
-
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFF5C2483)),
+              borderSide: const BorderSide(color: AppColors.primaryPurple),
             ),
-
           ),
         ),
       ],
     );
   }
 
-  Widget _campoSeleccionar({
+  Widget _buildSelectField({
     required String label,
     required String hint,
     required VoidCallback onTap,
@@ -192,7 +173,7 @@ class EditProductModal extends StatelessWidget {
           style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF4A4A4A),
+            color: AppColors.textSecondary,
           ),
         ),
         const SizedBox(height: 6),
@@ -202,9 +183,9 @@ class EditProductModal extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
             decoration: BoxDecoration(
-              color: const Color(0xFFF9F9FB),
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: const Color(0xFFE5E5EA)),
+              border: Border.all(color: AppColors.borderGrey),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -212,13 +193,13 @@ class EditProductModal extends StatelessWidget {
                 Text(
                   hint,
                   style: const TextStyle(
-                    color: Color(0xFFB0B0B0),
+                    color: AppColors.textTertiary,
                     fontSize: 13,
                   ),
                 ),
                 const Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  color: Color(0xFF757575),
+                  color: AppColors.iconGrey,
                   size: 22,
                 ),
               ],

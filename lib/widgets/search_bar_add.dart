@@ -1,10 +1,15 @@
-﻿import 'package:flutter/material.dart';
-import 'product_modal.dart';
+import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 
-class ProductSearchBar extends StatelessWidget {
-  const ProductSearchBar({super.key});
+class SearchBarAdd extends StatelessWidget {
+  final String hintText;
+  final VoidCallback? onAddPressed;
 
-  static const Color moradoPrincipal = Color(0xFF5C2483);
+  const SearchBarAdd({
+    super.key,
+    this.hintText = 'Buscar...',
+    this.onAddPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,29 +31,34 @@ class ProductSearchBar extends StatelessWidget {
               ],
             ),
             child: Row(
-              children: const [
-                Icon(Icons.search, color: Color(0xFF9E9E9E), size: 22),
-                SizedBox(width: 8),
+              children: [
+                const Icon(Icons.search, color: Color(0xFF9E9E9E), size: 22),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Buscar productos...',
-                    style: TextStyle(color: Color(0xFF9E9E9E), fontSize: 14),
+                    hintText,
+                    style: const TextStyle(
+                      color: Color(0xFF9E9E9E),
+                      fontSize: 14,
+                    ),
                   ),
                 ),
-                Icon(Icons.tune, color: moradoPrincipal, size: 20),
+                const Icon(
+                  Icons.tune,
+                  color: AppColors.primaryPurple,
+                  size: 20,
+                ),
               ],
             ),
           ),
         ),
-
-        
         const SizedBox(width: 10),
         Material(
-          color: moradoPrincipal,
+          color: AppColors.primaryPurple,
           borderRadius: BorderRadius.circular(12),
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
-            onTap: () => NewProductModal.show(context),
+            onTap: onAddPressed,
             child: const SizedBox(
               width: 48,
               height: 48,

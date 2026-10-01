@@ -1,10 +1,8 @@
-﻿import 'package:flutter/material.dart';
-import 'service_modal.dart';
+import 'package:flutter/material.dart';
+import '../../../theme/app_colors.dart';
 
-class ServiceSearchBar extends StatelessWidget {
-  const ServiceSearchBar({super.key});
-
-  static const Color moradoPrincipal = Color(0xFF5C2483);
+class CustomerSearchBar extends StatelessWidget {
+  const CustomerSearchBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,27 +29,13 @@ class ServiceSearchBar extends StatelessWidget {
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Buscar servicios...',
+                    'Buscar cliente...',
                     style: TextStyle(color: Color(0xFF9E9E9E), fontSize: 14),
                   ),
                 ),
-                Icon(Icons.tune, color: moradoPrincipal, size: 20),
+                Icon(Icons.tune, color: AppColors.primaryPurple, size: 20),
               ],
             ),
-          ),
-        ),
-        
-        const SizedBox(width: 10),
-        GestureDetector(
-          onTap: () => NewServiceModal.show(context),
-          child: Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: moradoPrincipal,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(Icons.add, color: Colors.white, size: 24),
           ),
         ),
       ],

@@ -1,93 +1,71 @@
 ﻿import 'package:flutter/material.dart';
+import '../models/servicemodels.dart';
+import '../../../theme/app_colors.dart';
+import '../../../widgets/custom_delete.dart';
 import 'edit_service_modal.dart';
-import 'delete_service.dart';
 import 'service_detail_modal.dart';
 
-
 class ServiceCard extends StatelessWidget {
-  final String nombre;
-  final String productoUtilizado;
-  final String precio;
-  final IconData icono;
+  final String name;
+  final String price;
+  final IconData icon;
 
   const ServiceCard({
     super.key,
-    required this.nombre,
-    required this.productoUtilizado,
-    required this.precio,
-    required this.icono,
+    required this.name,
+    required this.price,
+    this.icon = Icons.content_cut_rounded,
   });
-
-  static const Color moradoPrincipal = Color(0xFF5C2483);
-  static const Color moradoFondoIcono = Color(0xFFEFE8F6);
-  static const Color textoSecundario = Color(0xFF757575);
-  static const Color iconoAccion = Color(0xFF5C2483);
-  static const Color iconoEliminar = Color(0xFFB24C5D);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(14.0),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.borderGrey),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x08000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
+            color: AppColors.boxShadowColor,
+            blurRadius: 10,
+            offset: Offset(0, 4),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-        
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 46,
-                height: 46,
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
-                  color: moradoFondoIcono,
-                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.bgIconColor,
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
-                  icono,
-                  color: moradoPrincipal,
-                  size: 24,
+                  icon,
+                  color: AppColors.actionIcon,
+                  size: 22,
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      nombre,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                        color: Color(0xFF212121),
-                        height: 1.2,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Producto: $productoUtilizado',
-                      style: const TextStyle(
-                        color: textoSecundario,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.5,
+                    color: AppColors.textPrimary,
+                  ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,14 +76,17 @@ class ServiceCard extends StatelessWidget {
                 children: [
                   const Text(
                     'Precio',
-                    style: TextStyle(color: textoSecundario, fontSize: 11),
+                    style: TextStyle(
+                      color: AppColors.cardTextSecondary,
+                      fontSize: 11,
+                    ),
                   ),
                   Text(
-                    precio,
+                    price,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: moradoPrincipal,
+                      color: AppColors.primaryPurple,
                     ),
                   ),
                 ],
@@ -113,34 +94,62 @@ class ServiceCard extends StatelessWidget {
 
               Row(
                 children: [
-                  
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  icon: const Icon(Icons.visibility_outlined, color: Color(0xFF5C2483), size: 20),
-                  onPressed: () {
-                     ServiceDetailModal.show(context);
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(
+                      Icons.visibility_outlined,
+                      color: AppColors.actionIcon,
+                      size: 20,
+                    ),
+                    onPressed: () {
+                      ServiceDetailModal.show(
+                        context,
+                        service: Service(
+                          name: name,
+                          price: price,
+                          category: 'Cuidado Capilar',
+                          description: 'Servicio integral con lavado y peinado profesional.',
+                          product: 'Shampoo Revitalizante, Acondicionador',
+                          status: 'Activo',
+                        ),
+                      );
                     },
                   ),
+                  const SizedBox(width: 16),
 
                   IconButton(
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
-                    icon: const Icon(Icons.edit_outlined, color: Color(0xFF5C2483), size: 20),
+                    icon: const Icon(
+                      Icons.edit_outlined,
+                      color: AppColors.actionIcon,
+                      size: 20,
+                    ),
                     onPressed: () {
                       EditServiceModal.show(context);
                     },
                   ),
+                  const SizedBox(width: 16),
 
                   IconButton(
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
-                    icon: const Icon(Icons.delete_outline_rounded, color: Color(0xFFDC2626), size: 20),
+                    icon: const Icon(
+                      Icons.delete_outline_rounded,
+                      color: AppColors.deleteIcon,
+                      size: 20,
+                    ),
                     onPressed: () {
-                      DeleteService.show(context);
+                      showDialog(
+                        context: context,
+                        builder: (context) => const CustomDeleteDialog(
+                          titulo: 'Eliminar',
+                          mensaje: '¿Deseas eliminar este servicio?',
+                        ),
+                      );
                     },
-
-                  )
+                  ),
                 ],
               ),
             ],

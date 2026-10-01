@@ -1,134 +1,116 @@
 import 'package:flutter/material.dart';
+import '../../../theme/app_colors.dart';
+import '../../../widgets/custom_confirm_dialog.dart';
+import '../../../widgets/custom_modal_sheet.dart';
 
 class NewProductModal extends StatelessWidget {
   const NewProductModal({super.key});
 
   static void show(BuildContext context) {
-    showModalBottomSheet(
+    CustomModalSheet.show(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const NewProductModal(),
+      child: const NewProductModal(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    const morado = Color(0xFF5C2483);
+    return CustomModalSheet(
+      title: 'Nuevo producto',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildTextField(
+            label: 'Nombre del producto',
+            hint: 'Ej. Shampoo Keratina',
+          ),
+          const SizedBox(height: 14),
 
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      padding: EdgeInsets.only(
-        left: 20,
-        right: 20,
-        top: 20,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          _buildTextField(
+            label: 'Descripción',
+            hint: 'Detalles del producto...',
+            maxLines: 3,
+          ),
+          const SizedBox(height: 14),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  '+',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: morado,
+          _buildTextField(
+            label: 'Marca',
+            hint: 'Ej. Savilé',
+          ),
+          const SizedBox(height: 14),
+
+          _buildSelectField(
+            label: 'Unidad de Medida',
+            hint: 'Seleccionar unidad',
+            onTap: () {},
+          ),
+          const SizedBox(height: 14),
+
+          _buildSelectField(
+            label: 'Categoría',
+            hint: 'Seleccionar categoría',
+            onTap: () {},
+          ),
+          const SizedBox(height: 14),
+
+          _buildSelectField(
+            label: 'Proveedor',
+            hint: 'Seleccionar proveedor',
+            onTap: () {},
+          ),
+          const SizedBox(height: 24),
+
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) => CustomConfirmDialog(
+                    titulo: '¿Deseas guardar este producto?',
+                    mensaje: 'El producto se añadirá al inventario.',
+                    confirmText: 'Guardar',
+                    cancelText: 'Cancelar',
+                    onConfirm: () {
+                      Navigator.of(dialogContext).pop(); 
+                      Navigator.of(context).pop();     
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('¡Producto guardado exitosamente!'),
+                          backgroundColor: AppColors.primaryPurple,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    },
                   ),
+                );
+              },
+              icon: const Icon(Icons.add, color: AppColors.white, size: 20),
+              label: const Text(
+                'Guardar Producto',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.white,
                 ),
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close_rounded, color: Colors.grey),
-                  splashRadius: 20,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            _campo(
-              label: 'Nombre del producto',
-              hint: 'Ej. Shampoo Keratina',
-            ),
-            const SizedBox(height: 14),
-
-            _campo(
-              label: 'Descripción',
-              hint: 'Detalles del producto...',
-              maxLines: 3,
-            ),
-            const SizedBox(height: 14),
-
-            _campo(
-              label: 'Marca',
-              hint: 'Ej. Savile',
-
-            ),
-            const SizedBox(height: 14),
-
-
-            _campoSeleccionar(
-              label: 'Unidad de Medida',
-              hint: 'Seleccionar unidad',
-              onTap: () {},
-            ),
-            const SizedBox(height: 14),
-
-            _campoSeleccionar(
-              label: 'Categoría',
-              hint: 'Seleccionar categoría',
-              onTap: () {},
-            ),
-            const SizedBox(height: 14),
-
-            _campoSeleccionar(
-              label: 'Proveedor',
-              hint: 'Seleccionar proveedor',
-              onTap: () {},
-            ),
-            const SizedBox(height: 14),
-
-
-           
-
-            SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: ElevatedButton.icon(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.add, color: Colors.white, size: 20),
-                label: const Text(
-                  'Guardar Producto',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: morado,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryPurple,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  //  campos 
-  Widget _campo({
+  Widget _buildTextField({
     required String label,
     required String hint,
     int maxLines = 1,
@@ -141,41 +123,36 @@ class NewProductModal extends StatelessWidget {
           style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF4A4A4A),
+            color: AppColors.textPrimary,
           ),
-
         ),
         const SizedBox(height: 6),
         TextField(
           maxLines: maxLines,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(color: Color(0xFFB0B0B0), fontSize: 13),
+            hintStyle: const TextStyle(
+              color: AppColors.textTertiary,
+              fontSize: 13,
+            ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             filled: true,
-            fillColor: const Color(0xFFF9F9FB),
+            fillColor: AppColors.white,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color.fromARGB(255, 206, 206, 233)),
+              borderSide: const BorderSide(color: AppColors.borderGrey),
             ),
-
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFFE5E5EA)),
-            ),
-
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: Color(0xFF5C2483)),
+              borderSide: const BorderSide(color: AppColors.primaryPurple),
             ),
-
           ),
         ),
       ],
     );
   }
 
-  Widget _campoSeleccionar({
+  Widget _buildSelectField({
     required String label,
     required String hint,
     required VoidCallback onTap,
@@ -188,10 +165,9 @@ class NewProductModal extends StatelessWidget {
           style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF4A4A4A),
+            color: AppColors.textSecondary,
           ),
         ),
-
         const SizedBox(height: 6),
         InkWell(
           onTap: onTap,
@@ -199,25 +175,23 @@ class NewProductModal extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
             decoration: BoxDecoration(
-              color: const Color(0xFFF9F9FB),
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: const Color(0xFFE5E5EA)),
+              border: Border.all(color: AppColors.borderGrey),
             ),
-
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   hint,
                   style: const TextStyle(
-                    color: Color(0xFFB0B0B0),
+                    color: AppColors.textTertiary,
                     fontSize: 13,
                   ),
-
                 ),
                 const Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  color: Color(0xFF757575),
+                  color: AppColors.iconGrey,
                   size: 22,
                 ),
               ],

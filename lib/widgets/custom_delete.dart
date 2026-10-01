@@ -1,48 +1,49 @@
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 
-class DeleteProduct extends StatelessWidget {
-  const DeleteProduct({super.key});
+class CustomDeleteDialog extends StatelessWidget {
+  final String titulo;
+  final String mensaje;
 
-  static void show(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => const DeleteProduct(),
-    );
-  }
+  const CustomDeleteDialog({
+    super.key,
+    this.titulo = 'Eliminar',
+    this.mensaje = '¿Estás seguro de que deseas eliminar este elemento?',
+  });
 
   @override
   Widget build(BuildContext context) {
-    const rojoPrincipal = Color(0xFFDC2626);
-    const rojoFondo = Color(0xFFFDE8E8);
-
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
       elevation: 0,
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       insetPadding: const EdgeInsets.symmetric(horizontal: 24),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-           
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Eliminar Producto',
-                  style: TextStyle(
+                Text(
+                  titulo,
+                  style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E1E1E),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close_rounded, color: Color(0xFF8E8E93), size: 22),
+                  icon: const Icon(
+                    Icons.close_rounded,
+                    color: AppColors.iconGrey,
+                    size: 22,
+                  ),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                   splashRadius: 18,
@@ -55,24 +56,23 @@ class DeleteProduct extends StatelessWidget {
               width: 64,
               height: 64,
               decoration: const BoxDecoration(
-                color: rojoFondo,
+                color: AppColors.lightRed,
                 shape: BoxShape.circle,
               ),
-
               child: const Icon(
                 Icons.delete_outline_rounded,
-                color: rojoPrincipal,
+                color: AppColors.strongRed,
                 size: 32,
               ),
             ),
             const SizedBox(height: 18),
 
-            const Text(
-              '¿Estás seguro de que deseas eliminar este producto?',
+            Text(
+              mensaje,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 13.5,
-                color: Color(0xFF6B7280),
+                color: AppColors.textSecondary,
                 height: 1.4,
               ),
             ),
@@ -84,7 +84,7 @@ class DeleteProduct extends StatelessWidget {
               child: OutlinedButton(
                 onPressed: () => Navigator.pop(context),
                 style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Color(0xFFD1D5DB)),
+                  side: const BorderSide(color: AppColors.borderGrey),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -92,7 +92,7 @@ class DeleteProduct extends StatelessWidget {
                 child: const Text(
                   'Cancelar',
                   style: TextStyle(
-                    color: Color(0xFF374151),
+                    color: AppColors.textSecondary,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
@@ -107,7 +107,7 @@ class DeleteProduct extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: rojoPrincipal,
+                  backgroundColor: AppColors.strongRed,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -116,7 +116,7 @@ class DeleteProduct extends StatelessWidget {
                 child: const Text(
                   'Eliminar',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
