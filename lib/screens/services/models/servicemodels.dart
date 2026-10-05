@@ -9,9 +9,11 @@ class Service {
   const Service({
     required this.name,
     required this.price,
-    this.category = '',
-    this.product = '',
-    this.status = 'Activo',
-    this.description = '',
+    required this.category,
+    required this.product,
+    required this.status,
+    required this.description,
   });
+
+
 }

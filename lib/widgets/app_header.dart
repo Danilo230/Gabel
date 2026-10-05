@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
-
-import '../theme/app_colors.dart';
 import '../screens/settings/settings.dart';
+import '../theme/app_colors.dart';
 
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final bool showMenu;
   final Color backgroundColor;
-  final VoidCallback? onMenuTap;
 
   const AppHeader({
     super.key,
     required this.title,
-    this.showMenu = false,
-    this.backgroundColor = Colors.white,
-    this.onMenuTap,
+    this.backgroundColor = AppColors.white,
   });
 
   @override
@@ -23,19 +18,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: backgroundColor,
       surfaceTintColor: backgroundColor,
       elevation: 0.5,
-      centerTitle: showMenu,
-
-      leading: showMenu
-          ? IconButton(
-              onPressed: onMenuTap,
-              icon: const Icon(
-                Icons.menu,
-                color: AppColors.textPrimary,
-                size: 26,
-              ),
-            )
-          : null,
-
+      centerTitle: false,
       title: Text(
         title,
         style: const TextStyle(
@@ -56,7 +39,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
             },
             child: const Icon(
               Icons.account_circle_outlined,
-              color: Color(0xFF424242),
+              color: AppColors.textPrimary,
               size: 28,
             ),
           ),

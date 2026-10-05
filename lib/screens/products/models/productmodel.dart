@@ -10,12 +10,12 @@ class Product {
 
   const Product({
     required this.name,
-    this.description = '',
-    this.brand = '',
-    this.unitOfMeasure = '',
-    this.category = '',
-    this.supplier = '',
+    required this.description,
+    required this.brand ,
+    required this.unitOfMeasure,
+    required this.category,
+    required this.supplier,
     required this.price,
-    this.status = 'Activo',
+    required this.status,
   });
 }

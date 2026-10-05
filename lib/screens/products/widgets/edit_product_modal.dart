@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
-import '../../../widgets/custom_confirm_dialog.dart'; // 👈 Diálogo Global de Confirmación
-import '../../../widgets/custom_modal_sheet.dart';   // 👈 Modal Global
+import '../../../widgets/custom_confirm_dialog.dart'; 
+import '../../../widgets/custom_modal_sheet.dart';  
 
 class EditProductModal extends StatelessWidget {
   const EditProductModal({super.key});
@@ -76,10 +76,8 @@ class EditProductModal extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (dialogContext) => CustomConfirmDialog(
-                    titulo: '¿Deseas guardar los cambios?',
-                    mensaje: 'La información del producto será actualizado.',
-                    confirmText: 'Guardar',
-                    cancelText: 'Cancelar',
+                    title: '¿Deseas guardar los cambios?',
+                    message: 'La información del producto será actualizado.',
                     onConfirm: () {
                       Navigator.of(dialogContext).pop();
                       Navigator.of(context).pop();      
@@ -177,6 +175,7 @@ class EditProductModal extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
+        
         InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(10),
