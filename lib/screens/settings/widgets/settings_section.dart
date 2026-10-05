@@ -15,7 +15,6 @@ class SettingsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Título de la sección
         Text(
           qualification,
           style: const TextStyle(
@@ -27,7 +26,6 @@ class SettingsSection extends StatelessWidget {
 
         const SizedBox(height: 8),
 
-        // Tarjeta
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(14),
