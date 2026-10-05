@@ -11,7 +11,9 @@ class Service {
     required this.price,
     this.category = '',
     this.product = '',
-    this.status = 'Activo',
+    this.status = '',
     this.description = '',
   });
+
+
 }

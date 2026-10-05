@@ -144,8 +144,8 @@ class ServiceCard extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => const CustomDeleteDialog(
-                          titulo: 'Eliminar',
-                          mensaje: '¿Deseas eliminar este servicio?',
+                          title: 'Eliminar',
+                          message: '¿Deseas eliminar este servicio?',
                         ),
                       );
                     },

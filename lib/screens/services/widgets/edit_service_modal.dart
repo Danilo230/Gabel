@@ -69,10 +69,8 @@ class EditServiceModal extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (dialogContext) => CustomConfirmDialog(
-                    titulo: '¿Deseas guardar los cambios?',
-                    mensaje: 'La información del servicio será actualizada.',
-                    confirmText: 'Guardar',
-                    cancelText: 'Cancelar',
+                    title: '¿Deseas guardar los cambios?',
+                    message: 'La información del servicio será actualizada.',
                     onConfirm: () {
                       Navigator.of(dialogContext).pop(); 
                       Navigator.of(context).pop();      
@@ -130,6 +128,7 @@ class EditServiceModal extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
+        
         TextField(
           maxLines: maxLines,
           keyboardType: keyboardType,
@@ -142,10 +141,12 @@ class EditServiceModal extends StatelessWidget {
             contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             filled: true,
             fillColor: AppColors.white,
+            
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: AppColors.borderGrey),
             ),
+            
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: AppColors.primaryPurple),
