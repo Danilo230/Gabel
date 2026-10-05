@@ -7,10 +7,7 @@ class NewProductModal extends StatelessWidget {
   const NewProductModal({super.key});
 
   static void show(BuildContext context) {
-    CustomModalSheet.show(
-      context: context,
-      child: const NewProductModal(),
-    );
+    CustomModalSheet.show(context: context, child: const NewProductModal());
   }
 
   @override
@@ -33,10 +30,7 @@ class NewProductModal extends StatelessWidget {
           ),
           const SizedBox(height: 14),
 
-          _buildTextField(
-            label: 'Marca',
-            hint: 'Ej. Savilé',
-          ),
+          _buildTextField(label: 'Marca', hint: 'Ej. Savilé'),
           const SizedBox(height: 14),
 
           _buildSelectField(
@@ -71,8 +65,7 @@ class NewProductModal extends StatelessWidget {
                     title: '¿Deseas guardar este producto?',
                     message: 'El producto se añadirá al inventario.',
                     onConfirm: () {
-                      Navigator.of(dialogContext).pop(); 
-                      Navigator.of(context).pop();     
+                      Navigator.of(context).pop();
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -133,7 +126,10 @@ class NewProductModal extends StatelessWidget {
               color: AppColors.textTertiary,
               fontSize: 13,
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 12,
+            ),
             filled: true,
             fillColor: AppColors.white,
             border: OutlineInputBorder(

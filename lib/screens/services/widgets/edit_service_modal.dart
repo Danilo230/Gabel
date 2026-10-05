@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_confirm_dialog.dart';
-import '../../../widgets/custom_modal_sheet.dart';  
+import '../../../widgets/custom_modal_sheet.dart';
 
 class EditServiceModal extends StatelessWidget {
   const EditServiceModal({super.key});
 
   static void show(BuildContext context) {
-    CustomModalSheet.show(
-      context: context,
-      child: const EditServiceModal(),
-    );
+    CustomModalSheet.show(context: context, child: const EditServiceModal());
   }
 
   @override
@@ -20,10 +17,7 @@ class EditServiceModal extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTextField(
-            label: 'Nombre del servicio',
-            hint: 'Ej. Corte',
-          ),
+          _buildTextField(label: 'Nombre del servicio', hint: 'Ej. Corte'),
           const SizedBox(height: 14),
 
           _buildTextField(
@@ -72,8 +66,7 @@ class EditServiceModal extends StatelessWidget {
                     title: '¿Deseas guardar los cambios?',
                     message: 'La información del servicio será actualizada.',
                     onConfirm: () {
-                      Navigator.of(dialogContext).pop(); 
-                      Navigator.of(context).pop();      
+                      Navigator.of(context).pop();
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -128,7 +121,7 @@ class EditServiceModal extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        
+
         TextField(
           maxLines: maxLines,
           keyboardType: keyboardType,
@@ -138,15 +131,18 @@ class EditServiceModal extends StatelessWidget {
               color: AppColors.textTertiary,
               fontSize: 13,
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 12,
+            ),
             filled: true,
             fillColor: AppColors.white,
-            
+
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: AppColors.borderGrey),
             ),
-            
+
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: AppColors.primaryPurple),

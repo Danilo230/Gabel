@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
-import '../../../widgets/custom_confirm_dialog.dart'; // 👈 Diálogo Global de Confirmación
-import '../../../widgets/custom_modal_sheet.dart';   // 👈 Modal Global
+import '../../../widgets/custom_confirm_dialog.dart';
+import '../../../widgets/custom_modal_sheet.dart';
 
 class EditProductModal extends StatelessWidget {
   const EditProductModal({super.key});
 
   static void show(BuildContext context) {
-    CustomModalSheet.show(
-      context: context,
-      child: const EditProductModal(),
-    );
+    CustomModalSheet.show(context: context, child: const EditProductModal());
   }
 
   @override
@@ -79,8 +76,7 @@ class EditProductModal extends StatelessWidget {
                     title: '¿Deseas guardar los cambios?',
                     message: 'La información del producto será actualizado.',
                     onConfirm: () {
-                      Navigator.of(dialogContext).pop();
-                      Navigator.of(context).pop();      
+                      Navigator.of(context).pop();
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -141,13 +137,17 @@ class EditProductModal extends StatelessWidget {
               color: AppColors.textTertiary,
               fontSize: 13,
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 12,
+            ),
             filled: true,
             fillColor: AppColors.white,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: AppColors.borderGrey),
             ),
+
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: AppColors.primaryPurple),
@@ -175,7 +175,7 @@ class EditProductModal extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
-        
+
         InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(10),

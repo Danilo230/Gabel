@@ -7,10 +7,7 @@ class NewServiceModal extends StatelessWidget {
   const NewServiceModal({super.key});
 
   static void show(BuildContext context) {
-    CustomModalSheet.show(
-      context: context,
-      child: const NewServiceModal(),
-    );
+    CustomModalSheet.show(context: context, child: const NewServiceModal());
   }
 
   @override
@@ -65,8 +62,7 @@ class NewServiceModal extends StatelessWidget {
                     title: '¿Deseas guardar este servicio?',
                     message: 'El servicio estará disponible.',
                     onConfirm: () {
-                      Navigator.of(dialogContext).pop(); 
-                      Navigator.of(context).pop();       
+                      Navigator.of(context).pop();
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -129,7 +125,10 @@ class NewServiceModal extends StatelessWidget {
               color: AppColors.textTertiary,
               fontSize: 13,
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 12,
+            ),
             filled: true,
             fillColor: AppColors.white,
             border: OutlineInputBorder(
