@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-
 import '../theme/app_colors.dart';
 
 class CustomPagination extends StatelessWidget {
   final int currentPage;
   final int totalPages;
-  final ValueChanged<int>? onPageTap;
 
   const CustomPagination({
     super.key,
-    this.currentPage = 6,
+    this.currentPage = 1,
     this.totalPages = 7,
-    this.onPageTap,
   });
 
   @override
@@ -26,58 +23,47 @@ class CustomPagination extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _arrowButton(
-            Icons.chevron_left,
-            currentPage > 1 ? () => onPageTap?.call(currentPage - 1) : null,
-          ),
+          _arrowButton(Icons.chevron_left),
           const SizedBox(width: 4),
+
           for (int i = 1; i <= totalPages; i++)
             _pageNumber(i, active: i == currentPage),
           const SizedBox(width: 4),
-          _arrowButton(
-            Icons.chevron_right,
-            currentPage < totalPages
-                ? () => onPageTap?.call(currentPage + 1)
-                : null,
-          ),
+
+          _arrowButton(Icons.chevron_right),
         ],
       ),
     );
   }
 
   Widget _pageNumber(int page, {bool active = false}) {
-    return GestureDetector(
-      onTap: () => onPageTap?.call(page),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: active ? AppColors.mediumPurple : Colors.transparent,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          '$page',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 13,
-            fontWeight: active ? FontWeight.bold : FontWeight.normal,
-          ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: active ? AppColors.mediumPurple : Colors.transparent,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      
+      child: Text(
+        '$page',
+        style: TextStyle(
+          color: AppColors.white,
+          fontSize: 13,
+          fontWeight: active ? FontWeight.bold : FontWeight.normal,
         ),
       ),
     );
   }
 
-  Widget _arrowButton(IconData icon, VoidCallback? onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 28,
-        height: 28,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: AppColors.darkPurple,
-        ),
-        child: Icon(icon, color: Colors.white, size: 18),
+  Widget _arrowButton(IconData icon) {
+    return Container(
+      width: 28,
+      height: 28,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.darkPurple,
       ),
+      child: Icon(icon, color: AppColors.white, size: 18),
     );
   }
 }

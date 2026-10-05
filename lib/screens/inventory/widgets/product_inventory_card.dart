@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../models/product.dart';
 
-// tarjeta que muestra la informacion de un producto en el inventario
-
 class ProductInventoryCard extends StatelessWidget {
   final Product product;
   final VoidCallback? onViewDetail;
@@ -28,8 +26,16 @@ class ProductInventoryCard extends StatelessWidget {
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.borderGrey),
+        boxShadow: const [
+          BoxShadow(
+            color: AppColors.boxShadowColor,
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Column(
@@ -38,41 +44,29 @@ class ProductInventoryCard extends StatelessWidget {
                 Text(
                   product.name,
                   style: const TextStyle(
-                    fontSize: 17,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
-                    height: 1.25,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 Row(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                        color: lowStock
-                            ? AppColors.lightRed
-                            : AppColors.lightGrey,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        'Stock: ${product.stock}',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: lowStock
-                              ? AppColors.red
-                              : AppColors.textSecondary,
-                        ),
-                      ),
+                    Icon(
+                      Icons.inventory_2_outlined,
+                      size: 15,
+                      color:
+                          lowStock ? AppColors.red : AppColors.textTertiary,
                     ),
-                    const SizedBox(width: 12),
+                    const SizedBox(width: 6),
                     Text(
-                      '\$${product.salePrice.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primaryPurple,
+                      'Stock: ${product.stock} uds',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color:
+                            lowStock ? AppColors.red : AppColors.textSecondary,
+                        fontWeight:
+                            lowStock ? FontWeight.w600 : FontWeight.normal,
                       ),
                     ),
                   ],
@@ -80,18 +74,46 @@ class ProductInventoryCard extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 8),
-          IconButton(
-            onPressed: onViewDetail,
-            tooltip: 'Ver detalle',
-            icon: const Icon(Icons.remove_red_eye_outlined,
-                size: 23, color: AppColors.primaryPurple),
-          ),
-          IconButton(
-            onPressed: onRegisterDamage,
-            tooltip: 'Registrar daño',
-            icon: const Icon(Icons.warning_amber_rounded,
-                size: 23, color: AppColors.strongRed),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '\$${product.salePrice.toStringAsFixed(2)}',
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primaryPurple,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: onViewDetail,
+                    tooltip: 'Ver detalle',
+                    icon: const Icon(
+                      Icons.remove_red_eye_outlined,
+                      size: 24,
+                      color: AppColors.primaryPurple,
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    onPressed: onRegisterDamage,
+                    tooltip: 'Registrar daño',
+                    icon: const Icon(
+                      Icons.warning_amber_rounded,
+                      size: 24,
+                      color: AppColors.deleteIcon,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),

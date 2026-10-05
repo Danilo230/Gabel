@@ -8,9 +8,7 @@ import 'widgets/monthly_sales_chart.dart';
 import 'widgets/stat_card.dart';
 
 class DashboardScreen extends StatelessWidget {
-  final ValueChanged<String>? onTabChange;
-
-  const DashboardScreen({super.key, this.onTabChange});
+  const DashboardScreen({super.key});
 
   static const List<MonthlySale> _sales = [
     MonthlySale('Ene', 42),
@@ -51,10 +49,7 @@ class DashboardScreen extends StatelessWidget {
       appBar: const AppHeader(
         title: 'Dashboard',
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        activeTab: 'Dashboard',
-        onItemTap: onTabChange,
-      ),
+      bottomNavigationBar: const CustomBottomNavBar(activeTab: 'Dashboard'),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 20, 16, 28),
         child: Column(
@@ -66,7 +61,7 @@ class DashboardScreen extends StatelessWidget {
               crossAxisCount: 2,
               crossAxisSpacing: 14,
               mainAxisSpacing: 14,
-              childAspectRatio: 0.98,
+              childAspectRatio: 1.35,
               children: const [
                 StatCard(
                   icon: Icons.shopping_bag_outlined,

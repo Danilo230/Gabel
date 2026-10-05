@@ -25,34 +25,34 @@ class ProductDetailModal extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildDetailField(label: 'Nombre del producto', value: product.name),
+          _DetailField(label: 'Nombre del producto', value: product.name),
           const SizedBox(height: 14),
 
-          _buildDetailField(label: 'Descripción', value: product.description),
+          _DetailField(label: 'Descripción', value: product.description),
           const SizedBox(height: 14),
 
-          _buildDetailField(label: 'Marca', value: product.brand),
+          _DetailField(label: 'Marca', value: product.brand),
           const SizedBox(height: 14),
 
-          _buildDetailField(label: 'Unidad de Medida', value: product.unitOfMeasure),
+          _DetailField(label: 'Unidad de Medida', value: product.unitOfMeasure),
           const SizedBox(height: 14),
 
-          _buildDetailField(label: 'Categoría', value: product.category),
+          _DetailField(label: 'Categoría', value: product.category),
           const SizedBox(height: 14),
 
-          _buildDetailField(label: 'Proveedor', value: product.supplier),
+          _DetailField(label: 'Proveedor', value: product.supplier),
           const SizedBox(height: 14),
 
-          _buildDetailField(label: 'Precio', value: product.price),
+          _DetailField(label: 'Precio', value: product.price),
           const SizedBox(height: 14),
 
-          _buildStatusField(label: 'Estado', status: product.status),
+          _StatusField(label: 'Estado', status: product.status),
         ],
       ),
     );
   }
 
-  Widget _buildDetailField({required String label, required String value}) {
+  Widget _DetailField({required String label, required String value}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -85,7 +85,7 @@ class ProductDetailModal extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusField({required String label, required String status}) {
+  Widget _StatusField({required String label, required String status}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -98,6 +98,7 @@ class ProductDetailModal extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
+        
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           decoration: BoxDecoration(

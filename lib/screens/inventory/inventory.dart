@@ -13,14 +13,7 @@ import 'widgets/product_inventory_card.dart';
 import 'widgets/register_damage_modal.dart';
 
 class InventoryScreen extends StatefulWidget {
-  final ValueChanged<String>? onTabChange;
-  final bool isSalesperson;
-
-  const InventoryScreen({
-    super.key,
-    this.onTabChange,
-    this.isSalesperson = false,
-  });
+  const InventoryScreen({super.key});
 
   @override
   State<InventoryScreen> createState() => _InventoryScreenState();
@@ -98,14 +91,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
       appBar: const AppHeader(
         title: 'Inventario',
       ),
-      bottomNavigationBar: widget.isSalesperson
-          ? const CustomBottomNavBarSales(
-              activeTab: 'Inventario',
-            )
-          : CustomBottomNavBar(
-              activeTab: 'Inventario',
-              onItemTap: widget.onTabChange,
-            ),
+      bottomNavigationBar: const CustomBottomNavBar(activeTab: 'Inventario'),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(

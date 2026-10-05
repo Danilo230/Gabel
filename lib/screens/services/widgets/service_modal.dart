@@ -62,10 +62,8 @@ class NewServiceModal extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (dialogContext) => CustomConfirmDialog(
-                    titulo: '¿Deseas guardar este servicio?',
-                    mensaje: 'El servicio estará disponible.',
-                    confirmText: 'Guardar',
-                    cancelText: 'Cancelar',
+                    title: '¿Deseas guardar este servicio?',
+                    message: 'El servicio estará disponible.',
                     onConfirm: () {
                       Navigator.of(dialogContext).pop(); 
                       Navigator.of(context).pop();       

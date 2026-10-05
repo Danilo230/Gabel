@@ -4,7 +4,7 @@ import '../../widgets/app_header.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/custom_pagination.dart';
 import '../services/widgets/service_modal.dart';
-import '../../widgets/custom_search_bar.dart'; 
+import '../../widgets/search_bar_add.dart'; 
 import 'widgets/service_card.dart';
 
 class ServicesScreen extends StatelessWidget {
@@ -21,28 +21,12 @@ class ServicesScreen extends StatelessWidget {
           child: Column(
             children: [
 
-              Row(
-                children: [
-                  const Expanded(
-                    child: CustomSearchBar(),
-                  ),
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () => NewServiceModal.show(context),
-                    child: Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryPurple,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-
-                      child: const Icon(Icons.add, color: AppColors.white, size: 24),
-                    ),
-                  ),
-                ],
+              SearchBarAdd(
+                onAddPressed: () {
+                  NewServiceModal.show(context);
+                },
               ),
-             const SizedBox(height: 16),
+             SizedBox(height: 12),
 
              const ServiceCard(
                 name: 'Corte de Cabello y Estilo',

@@ -147,8 +147,8 @@ class ProductCard extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => const CustomDeleteDialog(
-                          titulo: 'Eliminar',
-                          mensaje: '¿Deseas eliminar este producto?',
+                          title: 'Eliminar',
+                          message: '¿Deseas eliminar este producto?',
                         ),
                       );
                     },

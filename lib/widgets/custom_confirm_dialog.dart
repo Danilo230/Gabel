@@ -2,38 +2,51 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
 class CustomConfirmDialog extends StatelessWidget {
-  final String titulo;
-  final String mensaje;
-  final String confirmText;
-  final String cancelText;
-  final VoidCallback onConfirm;
-  final VoidCallback? onCancel;
+  final String title;
+  final String message;
+  final VoidCallback? onConfirm;
 
   const CustomConfirmDialog({
     super.key,
-    required this.titulo,
-    required this.mensaje,
-    this.confirmText = 'Guardar',
-    this.cancelText = 'Cancelar',
-    required this.onConfirm,
-    this.onCancel,
+    required this.title,
+    required this.message,
+    this.onConfirm,
   });
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangle64(20),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
       backgroundColor: AppColors.white,
       insetPadding: const EdgeInsets.symmetric(horizontal: 24),
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+          
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+
             Container(
-              width: 56,
-              height: 56,
-              decoration: BoxDecoration(
+              width: 64,
+              height: 64,
+              decoration: const BoxDecoration(
                 color: AppColors.paleLavender,
                 shape: BoxShape.circle,
               ),
@@ -46,67 +59,66 @@ class CustomConfirmDialog extends StatelessWidget {
             const SizedBox(height: 18),
 
             Text(
-              titulo,
+              message,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 8),
-
-            Text(
-              mensaje,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
+                fontSize: 13.5,
                 color: AppColors.textSecondary,
                 height: 1.4,
               ),
             ),
             const SizedBox(height: 24),
+
             Row(
               children: [
                 Expanded(
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 13),
-                      side: const BorderSide(color: AppColors.borderGrey),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                    height: 46,
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: AppColors.borderGrey),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                    ),
-                    onPressed: onCancel ?? () => Navigator.of(context).pop(),
-                    child: Text(
-                      cancelText,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textSecondary,
+                      child: const Text(
+                        'Cancelar',
+                        style: TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 12), 
 
                 Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primaryPurple,
-                      padding: const EdgeInsets.symmetric(vertical: 13),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                    height: 46,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (onConfirm != null) {
+                          onConfirm!();
+                        }
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryPurple,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                    ),
-                    onPressed: onConfirm,
-                    child: Text(
-                      confirmText,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.white,
+                      child: const Text(
+                        'Gurdar',
+                        style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -118,7 +130,4 @@ class CustomConfirmDialog extends StatelessWidget {
       ),
     );
   }
-}
-
-RoundedRectangleBorder RoundedRectangle64(double radius) =>
-  RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius));
+}  

@@ -56,38 +56,32 @@ class _RegisterDamageModalState extends State<RegisterDamageModal> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _productHeader(),
-          const SizedBox(height: 22),
+          const SizedBox(height: 20),
           CustomTextField(
             label: 'Cantidad Dañada (Requerido)',
             hintText: '0',
             controller: _quantityController,
             keyboardType: TextInputType.number,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
           CustomTextField(
             label: 'Motivo del Daño (Requerido)',
             hintText: 'Describa el motivo',
             controller: _reasonController,
             maxLines: 4,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 16),
           CustomTextField(
             label: 'Estilista Responsable (Opcional)',
             hintText: 'Nombre del estilista',
             controller: _stylistController,
           ),
-          const SizedBox(height: 26),
+          const SizedBox(height: 24),
           CustomButton(
             text: 'Confirmar Perdida',
             type: ButtonType.danger,
             icon: Icons.disabled_by_default_outlined,
             onPressed: null,
-          ),
-          const SizedBox(height: 12),
-          CustomButton(
-            text: 'Cancelar',
-            type: ButtonType.neutral,
-            onPressed: () => Navigator.of(context).pop(),
           ),
         ],
       ),
@@ -101,45 +95,38 @@ class _RegisterDamageModalState extends State<RegisterDamageModal> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.paleLavender,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.borderGrey),
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 46,
-            height: 46,
-            decoration: BoxDecoration(
-              color: AppColors.lightGrey,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(Icons.inventory_2_rounded,
-                size: 24, color: AppColors.mediumPurple),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
+          Row(
+            children: [
+              const Icon(
+                Icons.inventory_2_outlined,
+                color: AppColors.primaryPurple,
+                size: 22,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
                   product.name,
                   style: const TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
-                    height: 1.25,
                   ),
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  'Stock Actual: ${product.stock} uds',
-                  style: const TextStyle(
-                    fontSize: 15,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
-              ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Stock actual: ${product.stock} uds',
+            style: const TextStyle(
+              fontSize: 14,
+              color: AppColors.textSecondary,
             ),
           ),
         ],

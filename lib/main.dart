@@ -32,7 +32,6 @@ class MainApp extends StatelessWidget {
         AppRoutes.dashboard: (context) => const DashboardScreen(),
 
         AppRoutes.inventory: (context) => const InventoryScreen(),
-        AppRoutes.salespersonInventory: (context) => const InventoryScreen(isSalesperson: true,),
 
         AppRoutes.purchaseHistory: (context) => const PurchaseHistoryScreen(),
 
