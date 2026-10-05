@@ -61,7 +61,7 @@ class DashboardScreen extends StatelessWidget {
               crossAxisCount: 2,
               crossAxisSpacing: 14,
               mainAxisSpacing: 14,
-              childAspectRatio: 0.98,
+              childAspectRatio: 1.35,
               children: const [
                 StatCard(
                   icon: Icons.shopping_bag_outlined,
