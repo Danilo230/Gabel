@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
-import '../../../widgets/custom_confirm_dialog.dart'; // 👈 Diálogo Global de Confirmación
-import '../../../widgets/custom_modal_sheet.dart';   // 👈 Modal Global
+import '../../../widgets/custom_confirm_dialog.dart'; 
+import '../../../widgets/custom_modal_sheet.dart';  
 
 class EditProductModal extends StatelessWidget {
   const EditProductModal({super.key});
