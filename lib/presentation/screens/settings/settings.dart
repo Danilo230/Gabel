@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/app_header.dart';
 import 'widgets/settings_option.dart';
 import 'widgets/settings_section.dart';
-import 'package:gabel/screens/profile/profile.dart';
+import 'package:gabel/presentation/screens/profile/profile.dart';
 import '../../widgets/app_routes.dart';
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gabel/screens/customers/widgets/customer_add_modal.dart';
+import 'package:gabel/presentation/screens/customers/widgets/customer_add_modal.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/custom_pagination.dart';
