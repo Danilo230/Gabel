@@ -7,7 +7,6 @@ class CustomDateFilter extends StatelessWidget {
   final String endDate;
   final VoidCallback? onStartDateTap;
   final VoidCallback? onEndDateTap;
-  final VoidCallback? onFilterTap;
 
   const CustomDateFilter({
     super.key,
@@ -15,7 +14,6 @@ class CustomDateFilter extends StatelessWidget {
     this.endDate = 'Fecha final',
     this.onStartDateTap,
     this.onEndDateTap,
-    this.onFilterTap,
   });
 
   @override
@@ -51,27 +49,6 @@ class CustomDateFilter extends StatelessWidget {
                 onTap: onEndDateTap,
               ),
             ),
-
-            const SizedBox(width: 10),
-
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: AppColors.primaryPurple,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: IconButton(
-                onPressed: onFilterTap,
-                tooltip: 'Filtrar',
-                padding: EdgeInsets.zero,
-                icon: const Icon(
-                  Icons.filter_alt_outlined,
-                  color: Colors.white,
-                  size: 22,
-                ),
-              ),
-            ), 
           ],
         ),
       ],

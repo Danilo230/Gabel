@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
-import '../../widgets/custom_pagination.dart';
 import '../../widgets/custom_date_filter.dart';
 import '../../widgets/custom_filter_dropdown.dart';
 import '../../widgets/custom_modal_sheet.dart';
+import '../../widgets/custom_pagination.dart';
+
 import 'models/salesmodel.dart';
 import 'models/salesdetailmodel.dart';
 import 'widgets/saleshistory_card.dart';
@@ -21,6 +22,7 @@ class SalesScreen extends StatefulWidget {
 
 class _SalesScreenState extends State<SalesScreen> {
   String selectedProduct = 'Todos los productos';
+
   String selectedService = 'Todos los servicios';
 
   final List<String> products = [
@@ -51,14 +53,15 @@ class _SalesScreenState extends State<SalesScreen> {
             horizontal: 16.0,
             vertical: 14.0,
           ),
-
           child: Column(
             children: [
+
               const CustomDateFilter(),
 
               const SizedBox(height: 12),
 
               Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Expanded(
                     child: CustomFilterDropdown(
@@ -89,6 +92,29 @@ class _SalesScreenState extends State<SalesScreen> {
                           });
                         }
                       },
+                    ),
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryPurple,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+
+                      },
+                      tooltip: 'Aplicar filtros',
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(
+                        Icons.filter_alt_outlined,
+                        color: Colors.white,
+                        size: 22,
+                      ),
                     ),
                   ),
                 ],

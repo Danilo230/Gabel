@@ -55,17 +55,47 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
 
               const SizedBox(height: 12),
 
-              CustomFilterDropdown(
-                label: 'Producto',
-                value: selectedProduct,
-                items: products,
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      selectedProduct = value;
-                    });
-                  }
-                },
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: CustomFilterDropdown(
+                      label: 'Producto',
+                      value: selectedProduct,
+                      items: products,
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            selectedProduct = value;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryPurple,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+
+                      },
+                      tooltip: 'Aplicar filtros',
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(
+                        Icons.filter_alt_outlined,
+                        color: Colors.white,
+                        size: 22,
+                      ),
+                    ),
+                  ),
+                ],
               ),
 
               const SizedBox(height: 16),
