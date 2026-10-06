@@ -22,60 +22,66 @@ class SalesDetailModal extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          // Información general de la venta
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(
-                Icons.person_outline,
-                color: AppColors.primaryPurple,
-                size: 22,
-              ),
-
-              const SizedBox(width: 8),
-
               Expanded(
-                child: Text(
-                  sale.customerName,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Cliente',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      sale.customerName,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
-              Text(
-                sale.totalPrice,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryPurple,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Text(
+                    'Total',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    sale.totalPrice,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryPurple,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
 
-          Row(
-            children: [
-              const Icon(
-                Icons.calendar_today_outlined,
-                size: 17,
-                color: AppColors.textSecondary,
-              ),
-
-              const SizedBox(width: 8),
-
-              Text(
-                sale.saleDate,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-            ],
+          Text(
+            sale.saleDate,
+            style: const TextStyle(
+              fontSize: 14,
+              color: AppColors.textSecondary,
+              fontWeight: FontWeight.w500,
+            ),
           ),
 
           const SizedBox(height: 20),
@@ -97,7 +103,6 @@ class SalesDetailModal extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          // Detalles de la venta
           ...details.map(
             (detail) => _detalleItem(detail),
           ),
@@ -110,7 +115,6 @@ class SalesDetailModal extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          // Total
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -122,7 +126,6 @@ class SalesDetailModal extends StatelessWidget {
                   color: AppColors.textPrimary,
                 ),
               ),
-
               Text(
                 sale.totalPrice,
                 style: const TextStyle(
@@ -144,9 +147,9 @@ class SalesDetailModal extends StatelessWidget {
     final bool esProducto = detail.itemType == 'PRODUCT';
 
     return Container(
+      width: double.infinity,
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(14),
-
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
@@ -154,59 +157,27 @@ class SalesDetailModal extends StatelessWidget {
           color: AppColors.borderGrey,
         ),
       ),
-
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            detail.itemName,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+          ),
 
-          Row(
-            children: [
+          const SizedBox(height: 3),
 
-              Container(
-                width: 42,
-                height: 42,
-                decoration: BoxDecoration(
-                  color: AppColors.paleLavender,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-
-                child: Icon(
-                  esProducto
-                      ? Icons.shopping_bag_outlined
-                      : Icons.content_cut_rounded,
-                  color: AppColors.primaryPurple,
-                  size: 21,
-                ),
-              ),
-
-              const SizedBox(width: 12),
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-
-                    Text(
-                      detail.itemName,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-
-                    const SizedBox(height: 3),
-
-                    Text(
-                      esProducto ? 'Producto' : 'Servicio',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          // Indica si es producto o servicio
+          Text(
+            esProducto ? 'Producto' : 'Servicio',
+            style: const TextStyle(
+              fontSize: 12,
+              color: AppColors.textSecondary,
+            ),
           ),
 
           const SizedBox(height: 14),
@@ -218,12 +189,10 @@ class SalesDetailModal extends StatelessWidget {
                 'Cantidad',
                 '${detail.saleQuantity}',
               ),
-
               _datoDetalle(
                 'Precio',
                 'C\$${detail.salePrice.toStringAsFixed(2)}',
               ),
-
               _datoDetalle(
                 'Subtotal',
                 'C\$${detail.lineTotal.toStringAsFixed(2)}',
@@ -244,7 +213,6 @@ class SalesDetailModal extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         Text(
           titulo,
           style: const TextStyle(

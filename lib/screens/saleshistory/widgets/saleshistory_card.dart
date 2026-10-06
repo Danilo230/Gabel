@@ -16,7 +16,7 @@ class SalesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
@@ -34,8 +34,6 @@ class SalesCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
-          // Nombre del cliente y total
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -50,11 +48,13 @@ class SalesCard extends StatelessWidget {
                         color: AppColors.textSecondary,
                       ),
                     ),
+
                     const SizedBox(height: 4),
+
                     Text(
                       sale.customerName,
                       style: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 17,
                         fontWeight: FontWeight.bold,
                         color: AppColors.textPrimary,
                       ),
@@ -73,11 +73,13 @@ class SalesCard extends StatelessWidget {
                       color: AppColors.textSecondary,
                     ),
                   ),
+
                   const SizedBox(height: 4),
+
                   Text(
                     sale.totalPrice,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 17,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primaryPurple,
                     ),
@@ -96,17 +98,8 @@ class SalesCard extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          // Fecha y botón para ver detalle
           Row(
             children: [
-              const Icon(
-                Icons.calendar_today_outlined,
-                size: 17,
-                color: AppColors.textSecondary,
-              ),
-
-              const SizedBox(width: 7),
-
               Text(
                 sale.saleDate,
                 style: const TextStyle(
@@ -123,7 +116,7 @@ class SalesCard extends StatelessWidget {
                 tooltip: 'Ver detalle',
                 icon: const Icon(
                   Icons.visibility_outlined,
-                  size: 24,
+                  size: 23,
                   color: AppColors.primaryPurple,
                 ),
               ),

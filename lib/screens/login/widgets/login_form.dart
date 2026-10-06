@@ -1,95 +1,79 @@
 import 'package:flutter/material.dart';
-import '../../../widgets/app_routes.dart';
 
-class LoginForm extends StatelessWidget {
+import '../../../widgets/app_routes.dart';
+import '../../../widgets/custom_button.dart';
+import '../../../widgets/custom_text_field.dart';
+
+class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final TextEditingController _usuarioController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _usuarioController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _iniciarSesion() {
+    final String usuario =
+        _usuarioController.text.trim().toLowerCase();
+
+    if (usuario == 'admin') {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.dashboard,
+        (route) => false,
+      );
+    } else if (usuario == 'vendedor') {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.salesperson,
+        (route) => false,
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Usuario no válido'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Usuario',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        TextField(
-          decoration: InputDecoration(
-            hintText: 'Ingresa tu usuario',
-            prefixIcon: const Icon(
-              Icons.person_outline,
-              color: Color(0xFF7557AC),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
+        CustomTextField(
+          label: 'Usuario',
+          hintText: 'Ingresa tu usuario',
+          prefixIcon: Icons.person_outline,
+          controller: _usuarioController,
         ),
 
         const SizedBox(height: 20),
 
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Contraseña',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        TextField(
+        CustomTextField(
+          label: 'Contraseña',
+          hintText: 'Ingresa tu contraseña',
+          prefixIcon: Icons.lock_outline,
           obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'Ingresa tu contraseña',
-
-            prefixIcon: const Icon(
-              Icons.lock_outline,
-              color: Color(0xFF7557AC),
-            ),
-
-            suffixIcon: const Icon(
-              Icons.visibility_outlined,
-              color: Color(0xFF7557AC),
-            ),
-
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
+          controller: _passwordController,
         ),
 
-        const SizedBox(height: 20),
+        const SizedBox(height: 26),
 
-        ElevatedButton(
-          onPressed: () {
-              Navigator.pushNamedAndRemoveUntil(context, AppRoutes.dashboard.toString(), (route) => false);
-          },
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 50),
-            backgroundColor: const Color(0xFF7557AC),
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          child: const Text('Iniciar Sesión',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+        CustomButton(
+          text: 'Iniciar sesión',
+          icon: Icons.login_rounded,
+          onPressed: _iniciarSesion,
         ),
       ],
     );

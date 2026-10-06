@@ -3,16 +3,40 @@ import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
-import '../../widgets/custom_pagination.dart';
 import '../../widgets/custom_date_filter.dart';
+import '../../widgets/custom_filter_dropdown.dart';
 import '../../widgets/custom_modal_sheet.dart';
+import '../../widgets/custom_pagination.dart';
+
 import 'models/salesmodel.dart';
 import 'models/salesdetailmodel.dart';
 import 'widgets/saleshistory_card.dart';
 import 'widgets/saleshistory_detail_modal.dart';
 
-class SalesScreen extends StatelessWidget {
+class SalesScreen extends StatefulWidget {
   const SalesScreen({super.key});
+
+  @override
+  State<SalesScreen> createState() => _SalesScreenState();
+}
+
+class _SalesScreenState extends State<SalesScreen> {
+  String selectedProduct = 'Todos los productos';
+
+  String selectedService = 'Todos los servicios';
+
+  final List<String> products = [
+    'Todos los productos',
+    'Shampoo Revitalizante',
+    'Acondicionador',
+  ];
+
+  final List<String> services = [
+    'Todos los servicios',
+    'Corte de cabello',
+    'Lavado de cabello',
+    'Tratamiento capilar',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +53,74 @@ class SalesScreen extends StatelessWidget {
             horizontal: 16.0,
             vertical: 14.0,
           ),
-
           child: Column(
             children: [
+
               const CustomDateFilter(),
 
               const SizedBox(height: 12),
+
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: CustomFilterDropdown(
+                      label: 'Producto',
+                      value: selectedProduct,
+                      items: products,
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            selectedProduct = value;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  Expanded(
+                    child: CustomFilterDropdown(
+                      label: 'Servicio',
+                      value: selectedService,
+                      items: services,
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            selectedService = value;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryPurple,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+
+                      },
+                      tooltip: 'Aplicar filtros',
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(
+                        Icons.filter_alt_outlined,
+                        color: Colors.white,
+                        size: 22,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
 
               SalesCard(
                 sale: const Sales(
@@ -120,7 +206,6 @@ class SalesScreen extends StatelessWidget {
         salePrice: 150.00,
         lineTotal: 300.00,
       ),
-
       SaleDetail(
         itemType: 'SERVICE',
         productName: null,
