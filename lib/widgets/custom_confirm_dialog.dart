@@ -113,7 +113,7 @@ class CustomConfirmDialog extends StatelessWidget {
                         ),
                       ),
                       child: const Text(
-                        'Gurdar',
+                        'Guardar',
                         style: TextStyle(
                           color: AppColors.white,
                           fontSize: 14,

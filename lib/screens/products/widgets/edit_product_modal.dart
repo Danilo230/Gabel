@@ -79,7 +79,6 @@ class EditProductModal extends StatelessWidget {
                     title: '¿Deseas guardar los cambios?',
                     message: 'La información del producto será actualizado.',
                     onConfirm: () {
-                      Navigator.of(dialogContext).pop();
                       Navigator.of(context).pop();      
 
                       ScaffoldMessenger.of(context).showSnackBar(
