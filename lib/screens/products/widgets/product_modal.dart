@@ -70,8 +70,7 @@ class NewProductModal extends StatelessWidget {
                   builder: (dialogContext) => CustomConfirmDialog(
                     title: '¿Deseas guardar este producto?',
                     message: 'El producto se añadirá al inventario.',
-                    onConfirm: () {
-                      Navigator.of(dialogContext).pop(); 
+                    onConfirm: () { 
                       Navigator.of(context).pop();     
 
                       ScaffoldMessenger.of(context).showSnackBar(

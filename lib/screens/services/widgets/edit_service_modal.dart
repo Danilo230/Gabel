@@ -72,7 +72,6 @@ class EditServiceModal extends StatelessWidget {
                     title: '¿Deseas guardar los cambios?',
                     message: 'La información del servicio será actualizada.',
                     onConfirm: () {
-                      Navigator.of(dialogContext).pop(); 
                       Navigator.of(context).pop();      
 
                       ScaffoldMessenger.of(context).showSnackBar(
