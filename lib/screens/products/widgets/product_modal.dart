@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
+import '../models/productmodel.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_confirm_dialog.dart';
+import '../../../widgets/custom_filter_dropdown.dart';
 import '../../../widgets/custom_modal_sheet.dart';
+import '../../../widgets/custom_text_field.dart';
 
-class NewProductModal extends StatelessWidget {
+class NewProductModal extends StatefulWidget {
   const NewProductModal({super.key});
 
   static void show(BuildContext context) {
     CustomModalSheet.show(context: context, child: const NewProductModal());
   }
+
+  @override
+  State<NewProductModal> createState() => _NewProductModalState();
+}
+
+class _NewProductModalState extends State<NewProductModal> {
+  String? _selectedUnit = Product.units.first;
+  String? _selectedCategory = Product.categories.first;
+  String? _selectedSupplier = Product.suppliers.first;
 
   @override
   Widget build(BuildContext context) {
@@ -17,40 +29,46 @@ class NewProductModal extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTextField(
+          const CustomTextField(
             label: 'Nombre del producto',
-            hint: 'Ej. Shampoo Keratina',
+            hintText: 'Ej. Shampoo Keratina',
           ),
           const SizedBox(height: 14),
 
-          _buildTextField(
+          const CustomTextField(
             label: 'Descripción',
-            hint: 'Detalles del producto...',
+            hintText: 'Detalles del producto...',
             maxLines: 3,
           ),
           const SizedBox(height: 14),
 
-          _buildTextField(label: 'Marca', hint: 'Ej. Savilé'),
+          const CustomTextField(label: 'Marca', hintText: 'Ej. Savilé'),
           const SizedBox(height: 14),
 
-          _buildSelectField(
+          CustomFilterDropdown(
             label: 'Unidad de Medida',
             hint: 'Seleccionar unidad',
-            onTap: () {},
+            value: _selectedUnit,
+            items: Product.units,
+            onChanged: (val) => setState(() => _selectedUnit = val),
           ),
           const SizedBox(height: 14),
 
-          _buildSelectField(
+          CustomFilterDropdown(
             label: 'Categoría',
             hint: 'Seleccionar categoría',
-            onTap: () {},
+            value: _selectedCategory,
+            items: Product.categories,
+            onChanged: (val) => setState(() => _selectedCategory = val),
           ),
           const SizedBox(height: 14),
 
-          _buildSelectField(
+          CustomFilterDropdown(
             label: 'Proveedor',
             hint: 'Seleccionar proveedor',
-            onTap: () {},
+            value: _selectedSupplier,
+            items: Product.suppliers,
+            onChanged: (val) => setState(() => _selectedSupplier = val),
           ),
           const SizedBox(height: 24),
 
@@ -98,101 +116,6 @@ class NewProductModal extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildTextField({
-    required String label,
-    required String hint,
-    int maxLines = 1,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        const SizedBox(height: 6),
-        TextField(
-          maxLines: maxLines,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: const TextStyle(
-              color: AppColors.textTertiary,
-              fontSize: 13,
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 12,
-            ),
-            filled: true,
-            fillColor: AppColors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: AppColors.borderGrey),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: AppColors.primaryPurple),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSelectField({
-    required String label,
-    required String hint,
-    required VoidCallback onTap,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: 6),
-        InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.borderGrey),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  hint,
-                  style: const TextStyle(
-                    color: AppColors.textTertiary,
-                    fontSize: 13,
-                  ),
-                ),
-                const Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: AppColors.iconGrey,
-                  size: 22,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

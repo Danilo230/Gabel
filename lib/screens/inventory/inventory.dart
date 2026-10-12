@@ -12,9 +12,7 @@ import 'widgets/product_inventory_card.dart';
 import 'widgets/register_damage_modal.dart';
 
 class InventoryScreen extends StatefulWidget {
-  final ValueChanged<String>? onTabChange;
-
-  const InventoryScreen({super.key, this.onTabChange});
+  const InventoryScreen({super.key});
 
   @override
   State<InventoryScreen> createState() => _InventoryScreenState();
@@ -92,13 +90,13 @@ class _InventoryScreenState extends State<InventoryScreen> {
       appBar: const AppHeader(
         title: 'Inventario',
       ),
-      bottomNavigationBar: CustomBottomNavBar(
-        activeTab: 'Inventario',
-        onItemTap: widget.onTabChange,
-      ),
+      bottomNavigationBar: const CustomBottomNavBar(activeTab: 'Inventario'),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 20.0,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -110,7 +108,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 const Center(
                   child: Text(
                     'No se encontraron productos.',
-                    style: TextStyle(color: AppColors.textSecondary),
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                 )
               else

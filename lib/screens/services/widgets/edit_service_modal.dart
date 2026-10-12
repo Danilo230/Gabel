@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_confirm_dialog.dart';
 import '../../../widgets/custom_modal_sheet.dart';
+import '../models/servicemodels.dart';
+import '../../../widgets/custom_filter_dropdown.dart';
+import '../../../widgets/custom_text_field.dart';
 
-class EditServiceModal extends StatelessWidget {
+class EditServiceModal extends StatefulWidget {
   const EditServiceModal({super.key});
 
   static void show(BuildContext context) {
@@ -11,195 +14,157 @@ class EditServiceModal extends StatelessWidget {
   }
 
   @override
+  State<EditServiceModal> createState() => _EditServiceModalState();
+}
+
+class _EditServiceModalState extends State<EditServiceModal> {
+  bool _isEditing = false;
+  String? _selectedCategory = Service.categories.first;
+  String? _selectedProduct = Service.products.first;
+  String? _selectedStatus = Service.statuses.first;
+
+  @override
   Widget build(BuildContext context) {
     return CustomModalSheet(
-      title: 'Editar Servicio',
+      title: _isEditing ? 'Editar servicio' : 'Detalle de servicio',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTextField(label: 'Nombre del servicio', hint: 'Ej. Corte'),
+          CustomTextField(
+            label: 'Nombre del servicio',
+            hintText: 'Ej. Keratina',
+            enabled: _isEditing,
+          ),
           const SizedBox(height: 14),
 
-          _buildTextField(
+          CustomTextField(
             label: 'Descripción',
-            hint: 'Detalles del servicio...',
+            hintText: 'Detalles del servicio...',
             maxLines: 3,
+            enabled: _isEditing,
           ),
           const SizedBox(height: 14),
 
-          _buildSelectField(
+          CustomFilterDropdown(
             label: 'Categoría',
-            hint: 'Seleccionar categoría',
-            onTap: () {},
+            value: _selectedCategory,
+            items: Service.categories,
+            enabled: _isEditing,
+            onChanged: (val) => setState(() => _selectedCategory = val),
           ),
           const SizedBox(height: 14),
 
-          _buildSelectField(
-            label: 'Producto Utilizado',
-            hint: 'Seleccionar producto',
-            onTap: () {},
+          // CORREGIDO: Producto con Service.products
+          CustomFilterDropdown(
+            label: 'Producto',
+            value: _selectedProduct,
+            items: Service.products,
+            enabled: _isEditing,
+            onChanged: (val) => setState(() => _selectedProduct = val),
           ),
           const SizedBox(height: 14),
 
-          _buildTextField(
+          CustomTextField(
             label: 'Precio',
-            hint: '0.00',
+            hintText: '0.00',
             keyboardType: TextInputType.number,
+            enabled: _isEditing,
           ),
           const SizedBox(height: 14),
 
-          _buildSelectField(
+          CustomFilterDropdown(
             label: 'Estado',
-            hint: 'Seleccionar estado',
-            onTap: () {},
+            value: _selectedStatus,
+            items: Service.statuses,
+            enabled: _isEditing,
+            onChanged: (val) => setState(() => _selectedStatus = val),
           ),
           const SizedBox(height: 24),
 
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (dialogContext) => CustomConfirmDialog(
-                    title: '¿Deseas guardar los cambios?',
-                    message: 'La información del servicio será actualizada.',
-                    onConfirm: () {
-                      Navigator.of(context).pop();
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('¡Cambios guardados exitosamente!'),
-                          backgroundColor: AppColors.primaryPurple,
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-              icon: const Icon(Icons.check, color: AppColors.white, size: 20),
-              label: const Text(
-                'Guardar cambios',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.white,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryPurple,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
+          _buildBottomButton(context),
         ],
       ),
     );
   }
 
-  Widget _buildTextField({
-    required String label,
-    required String hint,
-    int maxLines = 1,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
+  Widget _buildBottomButton(BuildContext context) {
+    if (!_isEditing) {
+      return SizedBox(
+        width: double.infinity,
+        height: 48,
+        child: ElevatedButton.icon(
+          onPressed: () {
+            setState(() {
+              _isEditing = true;
+            });
+          },
+          icon: const Icon(
+            Icons.edit_outlined,
+            color: AppColors.white,
+            size: 20,
           ),
-        ),
-        const SizedBox(height: 6),
-
-        TextField(
-          maxLines: maxLines,
-          keyboardType: keyboardType,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: const TextStyle(
-              color: AppColors.textTertiary,
-              fontSize: 13,
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 12,
-            ),
-            filled: true,
-            fillColor: AppColors.white,
-
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: AppColors.borderGrey),
-            ),
-
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: AppColors.primaryPurple),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSelectField({
-    required String label,
-    required String hint,
-    required VoidCallback onTap,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textSecondary,
-          ),
-        ),
-        const SizedBox(height: 6),
-        InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-            decoration: BoxDecoration(
+          label: const Text(
+            'Editar servicio',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.borderGrey),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  hint,
-                  style: const TextStyle(
-                    color: AppColors.textTertiary,
-                    fontSize: 13,
-                  ),
-                ),
-                const Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: AppColors.iconGrey,
-                  size: 22,
-                ),
-              ],
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primaryPurple,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
         ),
-      ],
-    );
+      );
+    } else {
+      return SizedBox(
+        width: double.infinity,
+        height: 48,
+        child: ElevatedButton.icon(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (dialogContext) => CustomConfirmDialog(
+                title: '¿Deseas guardar los cambios?',
+                message: 'La información del servicio será actualizada.',
+                onConfirm: () {
+                  Navigator.of(dialogContext).pop();
+                  setState(() {
+                    _isEditing = false;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('¡Cambios guardados exitosamente!'),
+                      backgroundColor: AppColors.primaryPurple,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+          icon: const Icon(Icons.check, color: AppColors.white, size: 20),
+          label: const Text(
+            'Guardar Cambios',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: AppColors.white,
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primaryPurple,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+      );
+    }
   }
 }

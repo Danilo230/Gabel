@@ -4,6 +4,7 @@ import '../../theme/app_colors.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/custom_date_filter.dart';
+import '../../widgets/custom_filter_dropdown.dart';
 import '../../widgets/custom_modal_sheet.dart';
 import '../../widgets/custom_pagination.dart';
 
@@ -12,8 +13,26 @@ import '../purchaseshistory/models/purchasesmodel.dart';
 import 'widgets/purchaseshistory_card.dart';
 import 'widgets/purchaseshistory_detail_modal.dart';
 
-class PurchaseHistoryScreen extends StatelessWidget {
+class PurchaseHistoryScreen extends StatefulWidget {
   const PurchaseHistoryScreen({super.key});
+
+  @override
+  State<PurchaseHistoryScreen> createState() =>
+      _PurchaseHistoryScreenState();
+}
+
+class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
+  String selectedProduct = 'Todos los productos';
+
+  final List<String> products = [
+    'Todos los productos',
+    'Sérum Verb',
+    'Shampoo Revitalizante',
+    'Acondicionador Profesional',
+    'Mascarilla Capilar',
+    'Tratamiento Capilar',
+    'Aceite para Cabello',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +49,54 @@ class PurchaseHistoryScreen extends StatelessWidget {
             horizontal: 16.0,
             vertical: 14.0,
           ),
-
           child: Column(
             children: [
               const CustomDateFilter(),
+
+              const SizedBox(height: 12),
+
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: CustomFilterDropdown(
+                      label: 'Producto',
+                      value: selectedProduct,
+                      items: products,
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            selectedProduct = value;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryPurple,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+
+                      },
+                      tooltip: 'Aplicar filtros',
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(
+                        Icons.filter_alt_outlined,
+                        color: Colors.white,
+                        size: 22,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
 
               const SizedBox(height: 16),
 

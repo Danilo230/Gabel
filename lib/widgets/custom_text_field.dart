@@ -10,6 +10,9 @@ class CustomTextField extends StatelessWidget {
   final int maxLines;
   final ValueChanged<String>? onChanged;
   final bool obscureText;
+  final IconData? prefixIcon;
+  final Widget? suffixIcon;
+  final bool enabled;
 
   const CustomTextField({
     super.key,
@@ -20,6 +23,9 @@ class CustomTextField extends StatelessWidget {
     this.maxLines = 1,
     this.onChanged,
     this.obscureText = false,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.enabled = true,
   });
 
   @override
@@ -35,7 +41,9 @@ class CustomTextField extends StatelessWidget {
             color: AppColors.textPrimary,
           ),
         ),
+
         const SizedBox(height: 8),
+
         TextField(
           controller: controller,
           keyboardType: keyboardType,
@@ -45,20 +53,31 @@ class CustomTextField extends StatelessWidget {
           style: const TextStyle(fontSize: 15, color: AppColors.textPrimary),
           decoration: InputDecoration(
             hintText: hintText,
+            enabled: enabled,
             hintStyle: const TextStyle(
               fontSize: 15,
               color: AppColors.textTertiary,
             ),
+
+            prefixIcon: prefixIcon != null
+                ? Icon(prefixIcon, color: AppColors.primaryPurple, size: 21)
+                : null,
+
+            suffixIcon: suffixIcon,
+
             filled: true,
             fillColor: AppColors.white,
+
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 14,
               vertical: 14,
             ),
+
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: AppColors.borderGrey),
             ),
+
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(
@@ -66,6 +85,7 @@ class CustomTextField extends StatelessWidget {
                 width: 1.4,
               ),
             ),
+
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: AppColors.borderGrey),
