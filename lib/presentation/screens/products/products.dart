@@ -3,7 +3,11 @@ import '../../theme/app_colors.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/custom_pagination.dart';
+<<<<<<< HEAD:lib/screens/products/products.dart
 import '../../widgets/search_bar_add.dart';
+=======
+import '../../widgets/search_bar_add.dart'; 
+>>>>>>> origin/develop:lib/presentation/screens/products/products.dart
 import '../products/widgets/product_card.dart';
 import '../products/widgets/product_modal.dart';
 
@@ -20,13 +24,22 @@ class ProductsScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
           child: Column(
             children: [
+<<<<<<< HEAD:lib/screens/products/products.dart
+=======
+                             
+>>>>>>> origin/develop:lib/presentation/screens/products/products.dart
               SearchBarAdd(
                 onAddPressed: () {
                   NewProductModal.show(context);
                 },
               ),
+<<<<<<< HEAD:lib/screens/products/products.dart
               SizedBox(height: 12),
 
+=======
+             SizedBox(height: 12),
+              
+>>>>>>> origin/develop:lib/presentation/screens/products/products.dart
               const ProductCard(
                 name: 'Shampoo Revitalizante',
                 price: '\$240.00',

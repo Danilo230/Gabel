@@ -74,8 +74,13 @@ class _NewServiceModalState extends State<NewServiceModal> {
                   builder: (dialogContext) => CustomConfirmDialog(
                     title: '¿Deseas guardar este servicio?',
                     message: 'El servicio estará disponible.',
+<<<<<<< HEAD:lib/screens/services/widgets/service_modal.dart
                     onConfirm: () {
                       Navigator.of(context).pop();
+=======
+                    onConfirm: () { 
+                      Navigator.of(context).pop();       
+>>>>>>> origin/develop:lib/presentation/screens/services/widgets/service_modal.dart
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

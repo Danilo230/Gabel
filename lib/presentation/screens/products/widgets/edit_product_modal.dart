@@ -1,87 +1,148 @@
 import 'package:flutter/material.dart';
+import '../models/productmodel.dart';
 import '../../../theme/app_colors.dart';
+<<<<<<< HEAD:lib/screens/products/widgets/edit_product_modal.dart
 import '../../../widgets/custom_confirm_dialog.dart';
-import '../../../widgets/custom_modal_sheet.dart';
-import '../models/servicemodels.dart';
 import '../../../widgets/custom_filter_dropdown.dart';
+import '../../../widgets/custom_modal_sheet.dart';
 import '../../../widgets/custom_text_field.dart';
+=======
+import '../../../widgets/custom_confirm_dialog.dart'; 
+import '../../../widgets/custom_modal_sheet.dart';  
+>>>>>>> origin/develop:lib/presentation/screens/products/widgets/edit_product_modal.dart
 
-class EditServiceModal extends StatefulWidget {
-  const EditServiceModal({super.key});
+class EditProductModal extends StatefulWidget {
+  const EditProductModal({super.key});
 
   static void show(BuildContext context) {
-    CustomModalSheet.show(context: context, child: const EditServiceModal());
+    CustomModalSheet.show(context: context, child: const EditProductModal());
   }
 
   @override
-  State<EditServiceModal> createState() => _EditServiceModalState();
+  State<EditProductModal> createState() => _EditProductModalState();
 }
 
-class _EditServiceModalState extends State<EditServiceModal> {
+class _EditProductModalState extends State<EditProductModal> {
   bool _isEditing = false;
-  String? _selectedCategory = Service.categories.first;
-  String? _selectedProduct = Service.products.first;
-  String? _selectedStatus = Service.statuses.first;
+  String? _selectedUnit = Product.units.first;
+  String? _selectedCategory = Product.categories.first;
+  String? _selectedSupplier = Product.suppliers.first;
+  String? _selectedBrand = Product.brands.first;
+  String? _selectedStatus = Product.statuses.first;
 
   @override
   Widget build(BuildContext context) {
     return CustomModalSheet(
-      title: _isEditing ? 'Editar servicio' : 'Detalle de servicio',
+      title: _isEditing ? 'Editar Producto' : 'Detalle de Producto',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomTextField(
-            label: 'Nombre del servicio',
-            hintText: 'Ej. Keratina',
+            label: 'Nombre del producto',
+            hintText: 'Ej. Shampoo Keratina',
             enabled: _isEditing,
           ),
           const SizedBox(height: 14),
 
           CustomTextField(
             label: 'Descripción',
-            hintText: 'Detalles del servicio...',
+            hintText: 'Detalles del producto...',
             maxLines: 3,
             enabled: _isEditing,
           ),
           const SizedBox(height: 14),
 
           CustomFilterDropdown(
+            label: 'Unidad de Medida',
+            value: _selectedUnit,
+            items: Product.units,
+            enabled: _isEditing,
+            onChanged: (val) => setState(() => _selectedUnit = val),
+          ),
+          const SizedBox(height: 14),
+
+          CustomFilterDropdown(
             label: 'Categoría',
             value: _selectedCategory,
-            items: Service.categories,
+            items: Product.categories,
             enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedCategory = val),
           ),
           const SizedBox(height: 14),
 
-          // CORREGIDO: Producto con Service.products
           CustomFilterDropdown(
-            label: 'Producto',
-            value: _selectedProduct,
-            items: Service.products,
+            label: 'Proveedor',
+            value: _selectedSupplier,
+            items: Product.suppliers,
             enabled: _isEditing,
-            onChanged: (val) => setState(() => _selectedProduct = val),
+            onChanged: (val) => setState(() => _selectedSupplier = val),
           ),
           const SizedBox(height: 14),
 
-          CustomTextField(
-            label: 'Precio',
-            hintText: '0.00',
-            keyboardType: TextInputType.number,
+          CustomFilterDropdown(
+            label: 'Marca',
+            value: _selectedBrand,
+            items: Product.brands,
             enabled: _isEditing,
+            onChanged: (val) => setState(() => _selectedBrand = val),
           ),
           const SizedBox(height: 14),
 
           CustomFilterDropdown(
             label: 'Estado',
             value: _selectedStatus,
-            items: Service.statuses,
+            items: Product.statuses,
             enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedStatus = val),
           ),
           const SizedBox(height: 24),
 
+<<<<<<< HEAD:lib/screens/products/widgets/edit_product_modal.dart
           _buildBottomButton(context),
+=======
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) => CustomConfirmDialog(
+                    title: '¿Deseas guardar los cambios?',
+                    message: 'La información del producto será actualizado.',
+                    onConfirm: () {
+                      Navigator.of(context).pop();      
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('¡Cambios guardados exitosamente!'),
+                          backgroundColor: AppColors.primaryPurple,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+              icon: const Icon(Icons.check, color: AppColors.white, size: 20),
+              label: const Text(
+                'Guardar Cambios',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.white,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryPurple,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+            ),
+          ),
+>>>>>>> origin/develop:lib/presentation/screens/products/widgets/edit_product_modal.dart
         ],
       ),
     );
@@ -104,7 +165,7 @@ class _EditServiceModalState extends State<EditServiceModal> {
             size: 20,
           ),
           label: const Text(
-            'Editar servicio',
+            'Editar Producto',
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
@@ -130,7 +191,7 @@ class _EditServiceModalState extends State<EditServiceModal> {
               context: context,
               builder: (dialogContext) => CustomConfirmDialog(
                 title: '¿Deseas guardar los cambios?',
-                message: 'La información del servicio será actualizada.',
+                message: 'La información del producto será actualizada.',
                 onConfirm: () {
                   Navigator.of(dialogContext).pop();
                   setState(() {
