@@ -22,13 +22,13 @@ flutter:
   assets:
       - assets/images/
   fonts:
-      - family: ProzaLibre
+      - family: Proza_Libre
         fonts:
-          - asset: assets/fonts/ProzaLibre-Regular.ttf
+          - asset: assets/fonts/Proza_Libre/ProzaLibre-Regular.ttf
             weight: 400
-          - asset: assets/fonts/ProzaLibre-Medium.ttf
+          - asset: assets/fonts/Proza_Libre/ProzaLibre-Medium.ttf
             weight: 500
-          - asset: assets/fonts/ProzaLibre-SemiBold.ttf
+          - asset: assets/fonts/Proza_Libre/ProzaLibre-SemiBold.ttf
             weight: 600
-          - asset: assets/fonts/ProzaLibre-Bold.ttf
+          - asset: assets/fonts/Proza_Libre/ProzaLibre-Bold.ttf
             weight: 700
