@@ -1,21 +1,13 @@
-﻿import 'package:flutter/material.dart';
-import '../models/servicemodels.dart';
+import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_delete.dart';
 import 'edit_service_modal.dart';
-import 'service_detail_modal.dart';
 
 class ServiceCard extends StatelessWidget {
   final String name;
   final String price;
-  final IconData icon;
 
-  const ServiceCard({
-    super.key,
-    required this.name,
-    required this.price,
-    this.icon = Icons.content_cut_rounded,
-  });
+  const ServiceCard({super.key, required this.name, required this.price});
 
   @override
   Widget build(BuildContext context) {
@@ -39,26 +31,12 @@ class ServiceCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: AppColors.bgIconColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(
-                  icon,
-                  color: AppColors.actionIcon,
-                  size: 22,
-                ),
-              ),
-              const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   name,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 14.5,
+                    fontSize: 17,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -69,7 +47,6 @@ class ServiceCard extends StatelessWidget {
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +55,7 @@ class ServiceCard extends StatelessWidget {
                     'Precio',
                     style: TextStyle(
                       color: AppColors.cardTextSecondary,
-                      fontSize: 11,
+                      fontSize: 12,
                     ),
                   ),
                   Text(
@@ -99,30 +76,6 @@ class ServiceCard extends StatelessWidget {
                     constraints: const BoxConstraints(),
                     icon: const Icon(
                       Icons.visibility_outlined,
-                      color: AppColors.actionIcon,
-                      size: 20,
-                    ),
-                    onPressed: () {
-                      ServiceDetailModal.show(
-                        context,
-                        service: Service(
-                          name: name,
-                          price: price,
-                          category: 'Cuidado Capilar',
-                          description: 'Servicio integral con lavado y peinado profesional.',
-                          product: 'Shampoo Revitalizante, Acondicionador',
-                          status: 'Activo',
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 16),
-
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: const Icon(
-                      Icons.edit_outlined,
                       color: AppColors.actionIcon,
                       size: 20,
                     ),
