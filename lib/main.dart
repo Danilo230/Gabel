@@ -13,6 +13,7 @@ import 'presentation/screens/purchaseshistory/purchaseshistory.dart';
 import 'presentation/screens/reports/reports.dart';
 import 'presentation/screens/services/services.dart';
 import 'presentation/screens/settings/settings.dart';
+import 'presentation/theme/app_typography.dart';
 
 void main() {
   runApp(const MainApp());
@@ -25,6 +26,10 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: AppTypography.fontFamily,
+        textTheme: AppTypography.textTheme,
+      ),
 
       initialRoute: AppRoutes.login,
 
