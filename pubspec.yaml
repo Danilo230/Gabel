@@ -17,3 +17,18 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+
+  assets:
+      - assets/images/
+  fonts:
+      - family: Proza_Libre
+        fonts:
+          - asset: assets/fonts/Proza_Libre/ProzaLibre-Regular.ttf
+            weight: 400
+          - asset: assets/fonts/Proza_Libre/ProzaLibre-Medium.ttf
+            weight: 500
+          - asset: assets/fonts/Proza_Libre/ProzaLibre-SemiBold.ttf
+            weight: 600
+          - asset: assets/fonts/Proza_Libre/ProzaLibre-Bold.ttf
+            weight: 700
