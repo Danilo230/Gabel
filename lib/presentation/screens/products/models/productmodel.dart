@@ -1,21 +1,25 @@
 class Product {
-  final String name;
-  final String description;
-  final String brand;
-  final String unitOfMeasure;
-  final String category;
-  final String supplier;
-  final String price;
-  final String status;
+  static const List<String> units = [
+    'Unidad',
+    'Litro',
+    'Mililitro',
+    'kilogramo',
+  ];
+  static const List<String> categories = ['Seleccionar categoria', 'Alisado'];
+  static const List<String> suppliers = [
+    'Seleccionar proveedor',
+    'Distribuidora Central',
+    'Laboratorios Belleza S.A.',
+    'Proveedor Nacional',
+    'Cosméticos Global',
+  ];
 
-  const Product({
-    required this.name,
-    required this.description,
-    required this.brand ,
-    required this.unitOfMeasure,
-    required this.category,
-    required this.supplier,
-    required this.price,
-    required this.status,
-  });
+  static const List<String> brands = [
+    'Seleccionar marca',
+    'Sedal',
+    'Pantene',
+    'Garnier',
+    'Head & Shoulders',
+  ];
+  static const List<String> statuses = ['Activo', 'Inactivo'];
 }

@@ -1,21 +1,13 @@
 ﻿import 'package:flutter/material.dart';
-import '../models/productmodel.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_delete.dart';
 import 'edit_product_modal.dart';
-import 'product_detail_modal.dart';
 
 class ProductCard extends StatelessWidget {
   final String name;
   final String price;
-  final IconData icon;
 
-  const ProductCard({
-    super.key,
-    required this.name,
-    required this.price,
-    this.icon = Icons.shopping_bag_rounded,
-  });
+  const ProductCard({super.key, required this.name, required this.price});
 
   @override
   Widget build(BuildContext context) {
@@ -39,26 +31,11 @@ class ProductCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: AppColors.bgIconColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(
-                  icon,
-                  color: AppColors.actionIcon,
-                  size: 22,
-                ),
-              ),
-              const SizedBox(width: 12),
-
               Expanded(
                 child: Text(
                   name,
                   style: const TextStyle(
-                    fontSize: 14.5,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
                   ),
@@ -78,7 +55,7 @@ class ProductCard extends StatelessWidget {
                     'Precio',
                     style: TextStyle(
                       color: AppColors.cardTextSecondary,
-                      fontSize: 11,
+                      fontSize: 12,
                     ),
                   ),
                   Text(
@@ -99,33 +76,6 @@ class ProductCard extends StatelessWidget {
                     constraints: const BoxConstraints(),
                     icon: const Icon(
                       Icons.visibility_outlined,
-                      color: AppColors.actionIcon,
-                      size: 20,
-                    ),
-                    onPressed: () {
-                      ProductDetailModal.show(
-                        context,
-                        product: Product(
-                          name: name,
-                          price: price,
-                          description: 'Fijación fuerte con acabado mate natural sin residuos.',
-                          brand: 'Styling Pro',
-                          category: 'Fijación',
-                          supplier: 'Distribuidora Belleza S.A.',
-                          unitOfMeasure: '150 ml',
-                          status: 'Activo',
-
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 16),
-
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: const Icon(
-                      Icons.edit_outlined,
                       color: AppColors.actionIcon,
                       size: 20,
                     ),

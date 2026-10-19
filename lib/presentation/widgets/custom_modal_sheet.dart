@@ -81,6 +81,8 @@ class CustomModalSheet extends StatelessWidget {
             Flexible(
               child: SingleChildScrollView(padding: padding, child: child),
             ),
+
+            //opcion de editar
           ],
         ),
       ),
