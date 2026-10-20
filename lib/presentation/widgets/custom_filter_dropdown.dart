@@ -4,16 +4,20 @@ import '../theme/app_colors.dart';
 
 class CustomFilterDropdown extends StatelessWidget {
   final String label;
-  final String value;
+  final String? value;
+  final String? hint;
   final List<String> items;
   final ValueChanged<String?>? onChanged;
+  final bool enabled;
 
   const CustomFilterDropdown({
     super.key,
     required this.label,
-    required this.value,
+    this.value,
     required this.items,
     this.onChanged,
+    this.hint,
+    this.enabled = true,
   });
 
   @override
@@ -38,9 +42,7 @@ class CustomFilterDropdown extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: AppColors.borderGrey,
-            ),
+            border: Border.all(color: AppColors.borderGrey),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
@@ -57,13 +59,10 @@ class CustomFilterDropdown extends StatelessWidget {
               items: items.map((String item) {
                 return DropdownMenuItem<String>(
                   value: item,
-                  child: Text(
-                    item,
-                    overflow: TextOverflow.ellipsis,
-                  ),
+                  child: Text(item, overflow: TextOverflow.ellipsis),
                 );
               }).toList(),
-              onChanged: onChanged,
+              onChanged: enabled ? onChanged : null,
             ),
           ),
         ),

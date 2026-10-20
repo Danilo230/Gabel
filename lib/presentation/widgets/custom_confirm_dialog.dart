@@ -16,9 +16,7 @@ class CustomConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 0,
       backgroundColor: AppColors.white,
       insetPadding: const EdgeInsets.symmetric(horizontal: 24),
@@ -27,7 +25,6 @@ class CustomConfirmDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-          
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -93,7 +90,7 @@ class CustomConfirmDialog extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12), 
+                const SizedBox(width: 12),
 
                 Expanded(
                   child: SizedBox(
@@ -130,4 +127,4 @@ class CustomConfirmDialog extends StatelessWidget {
       ),
     );
   }
-}  
+}

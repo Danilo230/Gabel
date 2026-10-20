@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final IconData? prefixIcon;
   final Widget? suffixIcon;
+  final bool enabled;
 
   const CustomTextField({
     super.key,
@@ -24,6 +25,7 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.prefixIcon,
     this.suffixIcon,
+    this.enabled = true,
   });
 
   @override
@@ -48,24 +50,17 @@ class CustomTextField extends StatelessWidget {
           maxLines: maxLines,
           obscureText: obscureText,
           onChanged: onChanged,
-          style: const TextStyle(
-            fontSize: 15,
-            color: AppColors.textPrimary,
-          ),
+          style: const TextStyle(fontSize: 15, color: AppColors.textPrimary),
           decoration: InputDecoration(
             hintText: hintText,
-
+            enabled: enabled,
             hintStyle: const TextStyle(
               fontSize: 15,
               color: AppColors.textTertiary,
             ),
 
             prefixIcon: prefixIcon != null
-                ? Icon(
-                    prefixIcon,
-                    color: AppColors.primaryPurple,
-                    size: 21,
-                  )
+                ? Icon(prefixIcon, color: AppColors.primaryPurple, size: 21)
                 : null,
 
             suffixIcon: suffixIcon,
@@ -80,9 +75,7 @@ class CustomTextField extends StatelessWidget {
 
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AppColors.borderGrey,
-              ),
+              borderSide: const BorderSide(color: AppColors.borderGrey),
             ),
 
             focusedBorder: OutlineInputBorder(
@@ -95,9 +88,7 @@ class CustomTextField extends StatelessWidget {
 
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AppColors.borderGrey,
-              ),
+              borderSide: const BorderSide(color: AppColors.borderGrey),
             ),
           ),
         ),

@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import '../models/servicemodels.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_confirm_dialog.dart';
+import '../../../widgets/custom_filter_dropdown.dart';
 import '../../../widgets/custom_modal_sheet.dart';
+import '../../../widgets/custom_text_field.dart';
 
-class NewServiceModal extends StatelessWidget {
+class NewServiceModal extends StatefulWidget {
   const NewServiceModal({super.key});
 
   static void show(BuildContext context) {
-    CustomModalSheet.show(
-      context: context,
-      child: const NewServiceModal(),
-    );
+    CustomModalSheet.show(context: context, child: const NewServiceModal());
   }
+
+  @override
+  State<NewServiceModal> createState() => _NewServiceModalState();
+}
+
+class _NewServiceModalState extends State<NewServiceModal> {
+  String? _selectedCategory = Service.categories.first;
+  String? _selectedProduct = Service.products.first;
 
   @override
   Widget build(BuildContext context) {
@@ -20,36 +28,38 @@ class NewServiceModal extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildTextField(
+          const CustomTextField(
             label: 'Nombre del servicio',
-            hint: 'Ej. Corte y Peinado Profesional',
+            hintText: 'Ej. Corte y Peinado Profesional',
           ),
           const SizedBox(height: 14),
 
-          _buildTextField(
+          const CustomTextField(
             label: 'Descripción',
-            hint: 'Detalles del servicio...',
+            hintText: 'Detalles del servicio...',
             maxLines: 3,
           ),
           const SizedBox(height: 14),
 
-          _buildSelectField(
+          CustomFilterDropdown(
             label: 'Categoría',
-            hint: 'Seleccionar categoría',
-            onTap: () {},
+            value: _selectedCategory,
+            items: Service.categories,
+            onChanged: (val) => setState(() => _selectedCategory = val),
           ),
           const SizedBox(height: 14),
 
-          _buildSelectField(
-            label: 'Productos o Insumos Asociados',
-            hint: 'Seleccionar insumos',
-            onTap: () {},
+          CustomFilterDropdown(
+            label: 'Producto',
+            value: _selectedProduct,
+            items: Service.products,
+            onChanged: (val) => setState(() => _selectedProduct = val),
           ),
           const SizedBox(height: 14),
 
-          _buildTextField(
+          const CustomTextField(
             label: 'Precio del servicio',
-            hint: 'Ej. \$35.00',
+            hintText: 'Ej. \$35.00',
             keyboardType: TextInputType.number,
           ),
           const SizedBox(height: 24),
@@ -64,8 +74,8 @@ class NewServiceModal extends StatelessWidget {
                   builder: (dialogContext) => CustomConfirmDialog(
                     title: '¿Deseas guardar este servicio?',
                     message: 'El servicio estará disponible.',
-                    onConfirm: () { 
-                      Navigator.of(context).pop();       
+                    onConfirm: () {
+                      Navigator.of(context).pop();
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -98,100 +108,6 @@ class NewServiceModal extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildTextField({
-    required String label,
-    required String hint,
-    int maxLines = 1,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        const SizedBox(height: 6),
-        TextField(
-          maxLines: maxLines,
-          keyboardType: keyboardType,
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: const TextStyle(
-              color: AppColors.textTertiary,
-              fontSize: 13,
-            ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            filled: true,
-            fillColor: AppColors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: AppColors.borderGrey),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(color: AppColors.primaryPurple),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSelectField({
-    required String label,
-    required String hint,
-    required VoidCallback onTap,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        const SizedBox(height: 6),
-        InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: AppColors.borderGrey),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  hint,
-                  style: const TextStyle(
-                    color: AppColors.textTertiary,
-                    fontSize: 13,
-                  ),
-                ),
-                const Icon(
-                  Icons.keyboard_arrow_down_rounded,
-                  color: AppColors.iconGrey,
-                  size: 22,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
