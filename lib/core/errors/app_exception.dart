@@ -25,3 +25,7 @@ class ParsingException extends AppException {
 class UnauthorizedException extends AppException {
   const UnauthorizedException([super.message = 'No autorizado. Por favor, inicie sesión nuevamente.']);
 }
+
+class NotFoundException extends AppException {
+  const NotFoundException([super.message = 'Recurso no encontrado.']);
+}
