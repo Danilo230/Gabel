@@ -12,10 +12,7 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final IconData? prefixIcon;
   final Widget? suffixIcon;
-<<<<<<< HEAD:lib/widgets/custom_text_field.dart
   final bool enabled;
-=======
->>>>>>> origin/develop:lib/presentation/widgets/custom_text_field.dart
 
   const CustomTextField({
     super.key,
@@ -28,10 +25,7 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.prefixIcon,
     this.suffixIcon,
-<<<<<<< HEAD:lib/widgets/custom_text_field.dart
     this.enabled = true,
-=======
->>>>>>> origin/develop:lib/presentation/widgets/custom_text_field.dart
   });
 
   @override
@@ -56,32 +50,17 @@ class CustomTextField extends StatelessWidget {
           maxLines: maxLines,
           obscureText: obscureText,
           onChanged: onChanged,
-          style: const TextStyle(
-            fontSize: 15,
-            color: AppColors.textPrimary,
-          ),
+          style: const TextStyle(fontSize: 15, color: AppColors.textPrimary),
           decoration: InputDecoration(
             hintText: hintText,
-<<<<<<< HEAD:lib/widgets/custom_text_field.dart
             enabled: enabled,
-=======
-
->>>>>>> origin/develop:lib/presentation/widgets/custom_text_field.dart
             hintStyle: const TextStyle(
               fontSize: 15,
               color: AppColors.textTertiary,
             ),
 
             prefixIcon: prefixIcon != null
-<<<<<<< HEAD:lib/widgets/custom_text_field.dart
                 ? Icon(prefixIcon, color: AppColors.primaryPurple, size: 21)
-=======
-                ? Icon(
-                    prefixIcon,
-                    color: AppColors.primaryPurple,
-                    size: 21,
-                  )
->>>>>>> origin/develop:lib/presentation/widgets/custom_text_field.dart
                 : null,
 
             suffixIcon: suffixIcon,
@@ -96,9 +75,7 @@ class CustomTextField extends StatelessWidget {
 
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AppColors.borderGrey,
-              ),
+              borderSide: const BorderSide(color: AppColors.borderGrey),
             ),
 
             focusedBorder: OutlineInputBorder(
@@ -111,9 +88,7 @@ class CustomTextField extends StatelessWidget {
 
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AppColors.borderGrey,
-              ),
+              borderSide: const BorderSide(color: AppColors.borderGrey),
             ),
           ),
         ),

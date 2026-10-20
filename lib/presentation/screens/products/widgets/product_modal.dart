@@ -47,7 +47,6 @@ class _NewProductModalState extends State<NewProductModal> {
 
           CustomFilterDropdown(
             label: 'Unidad de Medida',
-            hint: 'Seleccionar unidad',
             value: _selectedUnit,
             items: Product.units,
             onChanged: (val) => setState(() => _selectedUnit = val),
@@ -56,7 +55,6 @@ class _NewProductModalState extends State<NewProductModal> {
 
           CustomFilterDropdown(
             label: 'Categoría',
-            hint: 'Seleccionar categoría',
             value: _selectedCategory,
             items: Product.categories,
             onChanged: (val) => setState(() => _selectedCategory = val),
@@ -65,7 +63,6 @@ class _NewProductModalState extends State<NewProductModal> {
 
           CustomFilterDropdown(
             label: 'Proveedor',
-            hint: 'Seleccionar proveedor',
             value: _selectedSupplier,
             items: Product.suppliers,
             onChanged: (val) => setState(() => _selectedSupplier = val),
