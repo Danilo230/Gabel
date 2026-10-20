@@ -54,7 +54,6 @@ class _EditServiceModalState extends State<EditServiceModal> {
           ),
           const SizedBox(height: 14),
 
-          // CORREGIDO: Producto con Service.products
           CustomFilterDropdown(
             label: 'Producto',
             value: _selectedProduct,
@@ -81,53 +80,7 @@ class _EditServiceModalState extends State<EditServiceModal> {
           ),
           const SizedBox(height: 24),
 
-<<<<<<< HEAD:lib/screens/services/widgets/edit_service_modal.dart
           _buildBottomButton(context),
-=======
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (dialogContext) => CustomConfirmDialog(
-                    title: '¿Deseas guardar los cambios?',
-                    message: 'La información del servicio será actualizada.',
-                    onConfirm: () {
-                      Navigator.of(context).pop();      
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('¡Cambios guardados exitosamente!'),
-                          backgroundColor: AppColors.primaryPurple,
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-              icon: const Icon(Icons.check, color: AppColors.white, size: 20),
-              label: const Text(
-                'Guardar cambios',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.white,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryPurple,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
->>>>>>> origin/develop:lib/presentation/screens/services/widgets/edit_service_modal.dart
         ],
       ),
     );

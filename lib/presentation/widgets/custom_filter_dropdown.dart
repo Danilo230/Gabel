@@ -4,32 +4,20 @@ import '../theme/app_colors.dart';
 
 class CustomFilterDropdown extends StatelessWidget {
   final String label;
-<<<<<<< HEAD:lib/widgets/custom_filter_dropdown.dart
   final String? value;
   final String? hint;
   final List<String> items;
   final ValueChanged<String?>? onChanged;
   final bool enabled;
-=======
-  final String value;
-  final List<String> items;
-  final ValueChanged<String?>? onChanged;
->>>>>>> origin/develop:lib/presentation/widgets/custom_filter_dropdown.dart
 
   const CustomFilterDropdown({
     super.key,
     required this.label,
-<<<<<<< HEAD:lib/widgets/custom_filter_dropdown.dart
     this.value,
     required this.items,
     this.onChanged,
     this.hint,
     this.enabled = true,
-=======
-    required this.value,
-    required this.items,
-    this.onChanged,
->>>>>>> origin/develop:lib/presentation/widgets/custom_filter_dropdown.dart
   });
 
   @override
@@ -54,13 +42,7 @@ class CustomFilterDropdown extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(12),
-<<<<<<< HEAD:lib/widgets/custom_filter_dropdown.dart
             border: Border.all(color: AppColors.borderGrey),
-=======
-            border: Border.all(
-              color: AppColors.borderGrey,
-            ),
->>>>>>> origin/develop:lib/presentation/widgets/custom_filter_dropdown.dart
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
@@ -77,28 +59,14 @@ class CustomFilterDropdown extends StatelessWidget {
               items: items.map((String item) {
                 return DropdownMenuItem<String>(
                   value: item,
-<<<<<<< HEAD:lib/widgets/custom_filter_dropdown.dart
                   child: Text(item, overflow: TextOverflow.ellipsis),
                 );
               }).toList(),
               onChanged: enabled ? onChanged : null,
-=======
-                  child: Text(
-                    item,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                );
-              }).toList(),
-              onChanged: onChanged,
->>>>>>> origin/develop:lib/presentation/widgets/custom_filter_dropdown.dart
             ),
           ),
         ),
       ],
     );
   }
-<<<<<<< HEAD:lib/widgets/custom_filter_dropdown.dart
 }
-=======
-}
->>>>>>> origin/develop:lib/presentation/widgets/custom_filter_dropdown.dart

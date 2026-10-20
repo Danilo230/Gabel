@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import '../models/productmodel.dart';
 import '../../../theme/app_colors.dart';
-<<<<<<< HEAD:lib/screens/products/widgets/edit_product_modal.dart
 import '../../../widgets/custom_confirm_dialog.dart';
 import '../../../widgets/custom_filter_dropdown.dart';
 import '../../../widgets/custom_modal_sheet.dart';
 import '../../../widgets/custom_text_field.dart';
-=======
-import '../../../widgets/custom_confirm_dialog.dart'; 
-import '../../../widgets/custom_modal_sheet.dart';  
->>>>>>> origin/develop:lib/presentation/screens/products/widgets/edit_product_modal.dart
 
 class EditProductModal extends StatefulWidget {
   const EditProductModal({super.key});
@@ -97,52 +92,7 @@ class _EditProductModalState extends State<EditProductModal> {
           ),
           const SizedBox(height: 24),
 
-<<<<<<< HEAD:lib/screens/products/widgets/edit_product_modal.dart
           _buildBottomButton(context),
-=======
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (dialogContext) => CustomConfirmDialog(
-                    title: '¿Deseas guardar los cambios?',
-                    message: 'La información del producto será actualizado.',
-                    onConfirm: () {
-                      Navigator.of(context).pop();      
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('¡Cambios guardados exitosamente!'),
-                          backgroundColor: AppColors.primaryPurple,
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-              icon: const Icon(Icons.check, color: AppColors.white, size: 20),
-              label: const Text(
-                'Guardar Cambios',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.white,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryPurple,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-          ),
->>>>>>> origin/develop:lib/presentation/screens/products/widgets/edit_product_modal.dart
         ],
       ),
     );
