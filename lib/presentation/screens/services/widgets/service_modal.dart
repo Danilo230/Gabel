@@ -18,8 +18,7 @@ class NewServiceModal extends StatefulWidget {
 }
 
 class _NewServiceModalState extends State<NewServiceModal> {
-  String? _selectedCategory = Service.categories.first;
-  String? _selectedProduct = Service.products.first;
+  String? _selectedEstilist = Service.estilists.first;
 
   @override
   Widget build(BuildContext context) {
@@ -35,34 +34,26 @@ class _NewServiceModalState extends State<NewServiceModal> {
           const SizedBox(height: 14),
 
           const CustomTextField(
-            label: 'Descripción',
-            hintText: 'Detalles del servicio...',
-            maxLines: 3,
-          ),
-          const SizedBox(height: 14),
-
-          CustomFilterDropdown(
-            label: 'Categoría',
-            value: _selectedCategory,
-            items: Service.categories,
-            onChanged: (val) => setState(() => _selectedCategory = val),
-          ),
-          const SizedBox(height: 14),
-
-          CustomFilterDropdown(
-            label: 'Producto',
-            value: _selectedProduct,
-            items: Service.products,
-            onChanged: (val) => setState(() => _selectedProduct = val),
-          ),
-          const SizedBox(height: 14),
-
-          const CustomTextField(
             label: 'Precio del servicio',
             hintText: 'Ej. \$35.00',
             keyboardType: TextInputType.number,
           ),
           const SizedBox(height: 24),
+
+          CustomFilterDropdown(
+            label: 'Nombre del estilista',
+            value: _selectedEstilist,
+            items: Service.estilists,
+            onChanged: (val) => setState(() => _selectedEstilist = val),
+          ),
+          const SizedBox(height: 14),
+
+          const CustomTextField(
+            label: 'Descripción',
+            hintText: 'Detalles del servicio...',
+            maxLines: 3,
+          ),
+          const SizedBox(height: 14),
 
           SizedBox(
             width: double.infinity,

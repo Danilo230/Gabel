@@ -19,8 +19,7 @@ class EditServiceModal extends StatefulWidget {
 
 class _EditServiceModalState extends State<EditServiceModal> {
   bool _isEditing = false;
-  String? _selectedCategory = Service.categories.first;
-  String? _selectedProduct = Service.products.first;
+  String? _selectedEstilist = Service.estilists.first;
   String? _selectedStatus = Service.statuses.first;
 
   @override
@@ -38,35 +37,25 @@ class _EditServiceModalState extends State<EditServiceModal> {
           const SizedBox(height: 14),
 
           CustomTextField(
-            label: 'Descripción',
-            hintText: 'Detalles del servicio...',
-            maxLines: 3,
+            label: 'Precio',
+            hintText: '0.00',
+            keyboardType: TextInputType.number,
             enabled: _isEditing,
           ),
           const SizedBox(height: 14),
 
           CustomFilterDropdown(
-            label: 'Categoría',
-            value: _selectedCategory,
-            items: Service.categories,
-            enabled: _isEditing,
-            onChanged: (val) => setState(() => _selectedCategory = val),
-          ),
-          const SizedBox(height: 14),
-
-          CustomFilterDropdown(
-            label: 'Producto',
-            value: _selectedProduct,
-            items: Service.products,
-            enabled: _isEditing,
-            onChanged: (val) => setState(() => _selectedProduct = val),
+            label: 'Nombre del estilista',
+            value: _selectedEstilist,
+            items: Service.estilists,
+            onChanged: (val) => setState(() => _selectedEstilist = val),
           ),
           const SizedBox(height: 14),
 
           CustomTextField(
-            label: 'Precio',
-            hintText: '0.00',
-            keyboardType: TextInputType.number,
+            label: 'Descripción',
+            hintText: 'Detalles del servicio...',
+            maxLines: 3,
             enabled: _isEditing,
           ),
           const SizedBox(height: 14),
