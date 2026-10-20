@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gabel/presentation/theme/app_typography.dart';
 
 import 'presentation/widgets/app_routes.dart';
@@ -15,7 +16,9 @@ import 'presentation/screens/reports/reports.dart';
 import 'presentation/screens/services/services.dart';
 import 'presentation/screens/settings/settings.dart';
 
-void main() {
+Future<void> main() async{
+  await dotenv.load();
+
   runApp(const MainApp());
 }
 

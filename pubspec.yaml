@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^6.0.1
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:
@@ -22,6 +23,7 @@ flutter:
 
   assets:
       - assets/images/
+      - .env
   fonts:
       - family: ProzaLibre
         fonts:
