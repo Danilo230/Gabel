@@ -15,9 +15,8 @@ import 'presentation/screens/purchaseshistory/purchaseshistory.dart';
 import 'presentation/screens/reports/reports.dart';
 import 'presentation/screens/services/services.dart';
 import 'presentation/screens/settings/settings.dart';
-import 'presentation/theme/app_typography.dart';
 
-Future<void> main() async{
+Future<void> main() async {
   await dotenv.load();
 
   runApp(const MainApp());
