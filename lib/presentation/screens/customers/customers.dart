@@ -3,13 +3,52 @@ import 'package:gabel/presentation/screens/customers/widgets/customer_add_modal.
 import '../../widgets/app_header.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/custom_pagination.dart';
+import '../../widgets/custom_filter_dropdown.dart';
+import '../../widgets/custom_filter_modal.dart';
 import '../../widgets/search_bar_add.dart';
 import 'models/customer.dart';
 import '../../theme/app_colors.dart';
 import 'widgets/customer_card.dart';
 
-class CustomersScreen extends StatelessWidget {
+class CustomersScreen extends StatefulWidget {
   const CustomersScreen({super.key});
+
+  @override
+  State<CustomersScreen> createState() => _CustomersScreenState();
+}
+
+class _CustomersScreenState extends State<CustomersScreen> {
+  static const List<String> status = ['Activo', 'Inactivo'];
+  String selectedStatus = status.first;
+
+  void _openFilterModal() {
+    CustomFilterModal.show(
+      context,
+      title: 'Filtrar Clientes',
+      builder: (modalContext, setModalState) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomFilterDropdown(
+              label: 'Estado',
+              value: selectedStatus,
+              items: status,
+              onChanged: (val) {
+                if (val != null) {
+                  setModalState(() => selectedStatus = val);
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+          ],
+        );
+      },
+      onApply: () {
+        setState(() {});
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,13 +63,13 @@ class CustomersScreen extends StatelessWidget {
                 onAddPressed: () {
                   NewCustomerModal.show(context);
                 },
+                onFilterPressed: _openFilterModal,
               ),
               SizedBox(height: 12),
               CustomerCard(
                 customer: const Customer(
                   customerName: 'Juan',
                   customerLastName: 'Pérez',
-                  customerEmail: 'juan.perez@exmple.com',
                   customerPhone: '+505 88923213',
                   customerStatus: 'Activo',
                 ),
@@ -40,7 +79,6 @@ class CustomersScreen extends StatelessWidget {
                 customer: Customer(
                   customerName: 'María',
                   customerLastName: 'González',
-                  customerEmail: 'maria.gonzalez@example.com',
                   customerPhone: '+505 88923214',
                   customerStatus: 'Activo',
                 ),
@@ -51,7 +89,6 @@ class CustomersScreen extends StatelessWidget {
                 customer: Customer(
                   customerName: 'Carlos',
                   customerLastName: 'Ramírez',
-                  customerEmail: 'carlos.ramirez@example.com',
                   customerPhone: '+505 88923215',
                   customerStatus: 'Activo',
                 ),
@@ -61,7 +98,6 @@ class CustomersScreen extends StatelessWidget {
                 customer: const Customer(
                   customerName: 'Juan',
                   customerLastName: 'Pérez',
-                  customerEmail: 'juan.perez@exmple.com',
                   customerPhone: '+505 88923213',
                   customerStatus: 'Activo',
                 ),
