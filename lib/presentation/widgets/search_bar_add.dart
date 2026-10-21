@@ -4,11 +4,13 @@ import '../theme/app_colors.dart';
 class SearchBarAdd extends StatelessWidget {
   final String hintText;
   final VoidCallback? onAddPressed;
+  final VoidCallback? onFilterPressed;
 
   const SearchBarAdd({
     super.key,
     this.hintText = 'Buscar...',
     this.onAddPressed,
+    this.onFilterPressed,
   });
 
   @override
@@ -43,10 +45,13 @@ class SearchBarAdd extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Icon(
-                  Icons.tune,
-                  color: AppColors.primaryPurple,
-                  size: 20,
+                GestureDetector(
+                  onTap: onFilterPressed,
+                  child: const Icon(
+                    Icons.tune,
+                    color: AppColors.primaryPurple,
+                    size: 20,
+                  ),
                 ),
               ],
             ),
