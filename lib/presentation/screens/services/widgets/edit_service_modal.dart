@@ -48,6 +48,7 @@ class _EditServiceModalState extends State<EditServiceModal> {
             label: 'Nombre del estilista',
             value: _selectedEstilist,
             items: Service.estilists,
+            enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedEstilist = val),
           ),
           const SizedBox(height: 14),
