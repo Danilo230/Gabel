@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../models/customer.dart';
-import '../../customers/widgets/customer_modal.dart';
 import '../../customers/widgets/customer_edit_modal.dart';
+import '../../../widgets/custom_delete.dart';
 
 class CustomerCard extends StatelessWidget {
   final Customer customer;
@@ -58,18 +58,6 @@ class CustomerCard extends StatelessWidget {
                   size: 20,
                 ),
                 onPressed: () {
-                  CustomerDetailModal.show(context, customer);
-                },
-              ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                icon: const Icon(
-                  Icons.edit_outlined,
-                  color: AppColors.actionIcon,
-                  size: 20,
-                ),
-                onPressed: () {
                   CustomerEditModal.show(context, customer);
                 },
               ),
@@ -82,7 +70,14 @@ class CustomerCard extends StatelessWidget {
                   size: 20,
                 ),
                 onPressed: () {
-                  // Aquí se conecta el aviso de eliminar.
+                  showDialog(
+                    context: context,
+                    builder: (context) => const CustomDeleteDialog(
+                      title: 'Eliminar cliente',
+                      message:
+                          '¿Estás seguro de que deseas eliminar este cliente?',
+                    ),
+                  );
                 },
               ),
             ],

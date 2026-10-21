@@ -30,7 +30,6 @@ class CustomersScreen extends StatelessWidget {
                 customer: const Customer(
                   customerName: 'Juan',
                   customerLastName: 'Pérez',
-                  customerEmail: 'juan.perez@exmple.com',
                   customerPhone: '+505 88923213',
                   customerStatus: 'Activo',
                 ),
@@ -40,7 +39,6 @@ class CustomersScreen extends StatelessWidget {
                 customer: Customer(
                   customerName: 'María',
                   customerLastName: 'González',
-                  customerEmail: 'maria.gonzalez@example.com',
                   customerPhone: '+505 88923214',
                   customerStatus: 'Activo',
                 ),
@@ -51,7 +49,6 @@ class CustomersScreen extends StatelessWidget {
                 customer: Customer(
                   customerName: 'Carlos',
                   customerLastName: 'Ramírez',
-                  customerEmail: 'carlos.ramirez@example.com',
                   customerPhone: '+505 88923215',
                   customerStatus: 'Activo',
                 ),
@@ -61,7 +58,6 @@ class CustomersScreen extends StatelessWidget {
                 customer: const Customer(
                   customerName: 'Juan',
                   customerLastName: 'Pérez',
-                  customerEmail: 'juan.perez@exmple.com',
                   customerPhone: '+505 88923213',
                   customerStatus: 'Activo',
                 ),

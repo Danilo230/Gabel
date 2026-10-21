@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_modal_sheet.dart';
 import '../models/customer.dart';
+import '../../../widgets/custom_confirm_dialog.dart';
+import '../../../widgets/custom_text_field.dart';
+import '../../../widgets/custom_filter_dropdown.dart';
+
 
 class CustomerEditModal extends StatefulWidget {
   final Customer customer;
@@ -9,14 +13,9 @@ class CustomerEditModal extends StatefulWidget {
   const CustomerEditModal({super.key, required this.customer});
 
   static void show(BuildContext context, Customer customer) {
-    showModalBottomSheet(
+    CustomModalSheet.show(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      barrierColor: const Color.fromRGBO(0, 0, 0, 0.45),
-      builder: (context) {
-        return CustomerEditModal(customer: customer);
-      },
+      child: CustomerEditModal(customer: customer),
     );
   }
 
@@ -25,118 +24,131 @@ class CustomerEditModal extends StatefulWidget {
 }
 
 class _CustomerEditModalState extends State<CustomerEditModal> {
-  late String selectedStatus;
+  bool _isEditing = false;
+  late String? _selectedStatus;
 
   @override
   void initState() {
     super.initState();
-    selectedStatus = widget.customer.customerStatus;
+    _selectedStatus = widget.customer.customerStatus;
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomModalSheet(
-      title: 'Editar Cliente',
+      title: _isEditing ? 'Editar Cliente' : 'Detalle de Cliente',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _field(label: 'Nombre', value: widget.customer.customerName),
-          const SizedBox(height: 16),
-          _field(label: 'Apellido', value: widget.customer.customerLastName),
-          const SizedBox(height: 16),
-          _field(label: 'Correo', value: widget.customer.customerEmail),
-          const SizedBox(height: 16),
-          _field(label: 'Teléfono', value: widget.customer.customerPhone),
-          const SizedBox(height: 16),
-          const Text(
-            'Estado',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
+          CustomTextField(
+            label: 'Nombre del clinte',
+            hintText: 'Ej. Juan',
+            enabled: _isEditing,
           ),
-          const SizedBox(height: 8),
-          DropdownButtonFormField<String>(
-            initialValue: selectedStatus,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: AppColors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: AppColors.borderGrey),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide(color: AppColors.borderGrey),
-              ),
-            ),
-            items: const [
-              DropdownMenuItem(value: 'Activo', child: Text('Activo')),
-              DropdownMenuItem(value: 'Inactivo', child: Text('Inactivo')),
-            ],
-            onChanged: (value) {
-              setState(() {
-                selectedStatus = value!;
-              });
-            },
+          const SizedBox(height: 16),
+          CustomTextField(
+            label: 'Apellido del cliente',
+            hintText: 'Ej. Pérez',
+            enabled: _isEditing,
           ),
-          const SizedBox(height: 14),
-          SizedBox(
-            width: double.infinity,
-            height: 48,
-            child: ElevatedButton.icon(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.edit, color: AppColors.white, size: 20),
-              label: const Text(
-                'Editar cliente',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.white,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryPurple,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
+          const SizedBox(height: 16),
+          CustomTextField(
+            label: 'Teléfono',
+            hintText: 'Ej. +505 88923213',
+            enabled: _isEditing,
           ),
+          const SizedBox(height: 16),
+          CustomFilterDropdown(
+            label: 'Estado',
+            value: _selectedStatus,
+            items: const ['Activo', 'Inactivo'],
+            onChanged: (val) => setState(() => _selectedStatus = val),
+            enabled: _isEditing,
+          ),
+          
+          SizedBox(height: 14),
+          _buildBottomButton(context),
         ],
       ),
     );
   }
 
-  Widget _field({required String label, required String value}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
-          ),
-        ),
-        const SizedBox(height: 6),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-          decoration: BoxDecoration(
+  Widget _buildBottomButton(BuildContext context) {
+    if (!_isEditing) {
+      return SizedBox(
+        width: double.infinity,
+        height: 48,
+        child: ElevatedButton.icon(
+          onPressed: () {
+            setState(() => _isEditing = true);
+          },
+          icon: const Icon(
+            Icons.edit_outlined,
             color: AppColors.white,
-            border: Border.all(color: AppColors.borderGrey),
-            borderRadius: BorderRadius.circular(8),
+            size: 20,
           ),
-          child: Text(
-            value,
-            style: const TextStyle(fontSize: 15, color: AppColors.textPrimary),
+          label: const Text(
+            'Editar cliente',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: AppColors.white,
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primaryPurple,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
           ),
         ),
-      ],
-    );
+      );
+    } else {
+      return SizedBox(
+        width: double.infinity,
+        height: 48,
+        child: ElevatedButton.icon(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (dialogContext) => CustomConfirmDialog(
+                title: '¿Deseas guardar los cambios?',
+                message: 'La información del cliente será actualizada.',
+                onConfirm: () {
+                  Navigator.of(dialogContext).pop();
+                  setState(() {
+                    _isEditing = false;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Cambios guardados exitosamente'),
+                      backgroundColor: AppColors.primaryPurple,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+          icon: const Icon(Icons.check, color: AppColors.white, size: 20),
+          label: const Text(
+            'Guardar cambios',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: AppColors.white,
+            ),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.primaryPurple,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+      );
+    }
   }
 }
