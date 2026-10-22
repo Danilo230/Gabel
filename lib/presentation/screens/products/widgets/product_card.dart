@@ -5,9 +5,8 @@ import 'edit_product_modal.dart';
 
 class ProductCard extends StatelessWidget {
   final String name;
-  final String price;
 
-  const ProductCard({super.key, required this.name, required this.price});
+  const ProductCard({super.key, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -46,29 +45,8 @@ class ProductCard extends StatelessWidget {
           const SizedBox(height: 12),
 
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Precio',
-                    style: TextStyle(
-                      color: AppColors.cardTextSecondary,
-                      fontSize: 12,
-                    ),
-                  ),
-                  Text(
-                    price,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.actionIcon,
-                    ),
-                  ),
-                ],
-              ),
-
               Row(
                 children: [
                   IconButton(

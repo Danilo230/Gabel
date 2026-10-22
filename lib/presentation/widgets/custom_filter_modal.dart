@@ -11,10 +11,10 @@ class CustomFilterModal extends StatelessWidget {
 
   const CustomFilterModal({
     super.key,
-    this.title = 'Filtros',
+    this.title = '',
     required this.builder,
     required this.onApply,
-    this.applyButtonText = 'Aplicar Filtros',
+    this.applyButtonText = 'Filtrar',
   });
 
   static Future<void> show(

@@ -53,7 +53,7 @@ class CustomFilterDropdown extends StatelessWidget {
                 color: AppColors.primaryPurple,
               ),
               style: const TextStyle(
-                fontSize: 13,
+                fontSize: 15,
                 color: AppColors.textSecondary,
               ),
               items: items.map((String item) {
