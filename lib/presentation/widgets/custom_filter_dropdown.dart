@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../theme/app_typography.dart';
 import '../theme/app_colors.dart';
 
 class CustomFilterDropdown extends StatelessWidget {
@@ -28,6 +28,7 @@ class CustomFilterDropdown extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
+            fontFamily: AppTypography.fontFamily,
             fontSize: 14,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
@@ -53,6 +54,7 @@ class CustomFilterDropdown extends StatelessWidget {
                 color: AppColors.primaryPurple,
               ),
               style: const TextStyle(
+                fontFamily: AppTypography.fontFamily,
                 fontSize: 15,
                 color: AppColors.textSecondary,
               ),
