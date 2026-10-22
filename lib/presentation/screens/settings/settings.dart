@@ -127,6 +127,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               const SizedBox(height: 24),
 
+              // CERRAR SESIÓN
               SizedBox(
                 width: double.infinity,
                 height: 50,

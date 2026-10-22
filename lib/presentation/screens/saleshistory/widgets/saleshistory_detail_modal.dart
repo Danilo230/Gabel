@@ -171,6 +171,7 @@ class SalesDetailModal extends StatelessWidget {
 
           const SizedBox(height: 3),
 
+          // Indica si es producto o servicio
           Text(
             esProducto ? 'Producto' : 'Servicio',
             style: const TextStyle(
