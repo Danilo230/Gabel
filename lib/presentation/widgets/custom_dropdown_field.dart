@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_typography.dart';
 
 class CustomDropdownField extends StatelessWidget {
   final String label;
@@ -27,6 +28,7 @@ class CustomDropdownField extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
+            fontFamily: AppTypography.fontFamily,
             fontSize: 13,
             fontWeight: FontWeight.w600,
             color: AppColors.textSecondary,
@@ -45,6 +47,7 @@ class CustomDropdownField extends StatelessWidget {
             size: 22,
           ),
           style: TextStyle(
+            fontFamily: AppTypography.fontFamily,
             fontSize: 13,
             color: enabled ? AppColors.textPrimary : AppColors.textSecondary,
           ),
