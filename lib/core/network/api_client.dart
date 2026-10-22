@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 
 
+import 'package:gabel/core/errors/app_exception.dart';
 import 'package:http/http.dart' as http;
 import 'package:gabel/core/constants/api_constants.dart';
 
@@ -32,10 +34,33 @@ class ApiClient {
       response = await _client.send(request)
         .timeout(ApiConstants.timeoutDuration)
         .then(http.Response.fromStream);
-    } catch (e) {
-      throw Exception('Failed to send request: $e');
+    } on TimeoutException{
+      throw NetworkException('Request timed out. Please check your internet connection and try again.');
+    } on http.ClientException {
+      throw const NetworkException('Failed to send request. Please try again later.');
+    } 
+
+    if (response.statusCode ==401) {
+      throw const UnauthorizedException();
     }
 
-    return response;
+    return _decode(response);
   }
+
+  dynamic _decode(http.Response response) {
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw ServerException('Request failed', statusCode: response.statusCode);
+    }
+
+    if (response.body.isEmpty) return null;
+
+    try {
+      return jsonDecode(response.body);
+    } on FormatException {
+      throw const ParsingException();
+    }
+  }
+
+  void dispose() => _client.close();
 }
