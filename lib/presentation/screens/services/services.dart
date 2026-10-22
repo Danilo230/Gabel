@@ -17,21 +17,16 @@ class ServicesScreen extends StatefulWidget {
 }
 
 class _ServicesScreenState extends State<ServicesScreen> {
+  static const List<String> filter = ['Estilista'];
+
   static const List<String> estilist = [
     'Seleccionar estilista',
     'María García',
     'Ana López',
     'Laura Martínez',
   ];
-
-  static const List<String> services = [
-    'Todos los servicios',
-    'Corte de cabello',
-    'Lavado de cabello',
-    'Tratamiento capilar',
-  ];
+  String selectedFilter = filter.first;
   String selectedEstilist = estilist.first;
-  String selectedService = services.first;
 
   void _openFilterModal() {
     CustomFilterModal.show(
@@ -42,12 +37,12 @@ class _ServicesScreenState extends State<ServicesScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomFilterDropdown(
-              label: 'Estilista',
-              value: selectedEstilist,
-              items: estilist,
+              label: 'Filtrar por',
+              value: selectedFilter,
+              items: filter,
               onChanged: (val) {
                 if (val != null) {
-                  setModalState(() => selectedEstilist = val);
+                  setModalState(() => selectedFilter = val);
                 }
               },
             ),
@@ -55,11 +50,11 @@ class _ServicesScreenState extends State<ServicesScreen> {
 
             CustomFilterDropdown(
               label: 'Servicio',
-              value: selectedService,
-              items: services,
+              value: selectedEstilist,
+              items: estilist,
               onChanged: (val) {
                 if (val != null) {
-                  setModalState(() => selectedService = val);
+                  setModalState(() => selectedEstilist = val);
                 }
               },
             ),
