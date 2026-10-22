@@ -16,11 +16,11 @@ class TokenModel {
 
   static TokenModel fromJson(Map<String, dynamic> json){
     return TokenModel(
-      userId: json['userId'],
-      userName: json['userName'],
-      identityCard: json['identityCard'],
-      token: json['token'],
-      roles: List<String>.from(json['roles']),
+      userId: json['userId'] as int,
+      userName: json['userName'] as String,
+      identityCard: json['identityCard'] as String,
+      token: json['token'] as String,
+      roles: List<String>.from(json['roles'] as List<dynamic>),
     );
   }
 
