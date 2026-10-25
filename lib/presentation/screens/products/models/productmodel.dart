@@ -1,4 +1,24 @@
 class Product {
+  final String productName;
+  final String productDescription;
+  final String productBrand;
+  final String productUnit;
+  final String productCategory;
+  final String productSupplier;
+  final String productPrice;
+  final String productStatus;
+
+  const Product({
+    required this.productName,
+    required this.productDescription,
+    required this.productBrand,
+    required this.productUnit,
+    required this.productCategory,
+    required this.productSupplier,
+    required this.productPrice,
+    required this.productStatus,
+  });
+
   static const List<String> units = [
     'Unidad',
     'Litro',
