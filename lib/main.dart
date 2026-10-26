@@ -18,21 +18,18 @@ import 'presentation/screens/reports/reports.dart';
 import 'presentation/screens/services/services.dart';
 import 'presentation/screens/settings/settings.dart';
 
-//Future<void> main() async {
-//  await dotenv.load();
-//  setupDependencies();
-//  runApp(
-//    ChangeNotifierProvider(
-//      create: (_) => getIt<AuthenticationProvider>(),
-//      child: const MainApp(),
-//    )
-//  );
-//}
-
-Future<void> main() async{
+Future<void> main() async {
   await dotenv.load();
+  setupDependencies();
 
-  runApp(const MainApp());
+  getIt<AuthenticationProvider>().checkSession();
+
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => getIt<AuthenticationProvider>(),
+      child: const MainApp(),
+    )
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -46,6 +43,8 @@ class MainApp extends StatelessWidget {
         fontFamily: AppTypography.fontFamily,
         textTheme: AppTypography.textTheme,
       ),
+
+      home: Scaffold(body: _AuthGuard(),),
 
       initialRoute: AppRoutes.login,
 
@@ -74,4 +73,23 @@ class MainApp extends StatelessWidget {
       },
     );
   }
+}
+
+class _AuthGuard extends StatelessWidget {
+  const _AuthGuard();
+
+  @override
+  Widget build(BuildContext context) {
+
+    var authProvider = context.watch<AuthenticationProvider>();
+    switch (authProvider.authStatus) {
+      case AuthenticationStatus.authenticated:
+        return const Center(child: Text('Authenticated'));
+      case AuthenticationStatus.unauthenticated:
+        return const LoginScreen();
+      default:
+        return const Center(child: CircularProgressIndicator());
+    }
+  }
+
 }

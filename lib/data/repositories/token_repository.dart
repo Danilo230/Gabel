@@ -30,4 +30,7 @@ class TokenRepository {
   Future<void> removeToken() async{
     await _sharedPreferences.remove(_tokenKey);
   }
+
+  Future<bool> hasValidToken() async => await getToken() != null;
+  
 }
