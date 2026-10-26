@@ -19,6 +19,7 @@ import 'presentation/screens/services/services.dart';
 import 'presentation/screens/settings/settings.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
   setupDependencies();
 
