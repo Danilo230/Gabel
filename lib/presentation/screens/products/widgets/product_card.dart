@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_delete.dart';
+import '../models/productmodel.dart';
 import 'edit_product_modal.dart';
 
 class ProductCard extends StatelessWidget {
@@ -77,7 +78,7 @@ class ProductCard extends StatelessWidget {
                       size: 20,
                     ),
                     onPressed: () {
-                      EditProductModal.show(context);
+                      EditProductModal.show(context, product);
                     },
                   ),
                   const SizedBox(width: 16),

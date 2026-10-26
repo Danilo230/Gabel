@@ -8,6 +8,7 @@ import '../products/widgets/product_card.dart';
 import '../products/widgets/product_modal.dart';
 import '../../widgets/custom_filter_modal.dart';
 import '../../widgets/custom_filter_dropdown.dart';
+import 'models/productmodel.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -26,6 +27,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
     'Garnier',
     'Head & Shoulders',
   ];
+
   String selectedBrand = brands.first;
   String selectedFilter = filter.first;
 
@@ -84,7 +86,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 },
                 onFilterPressed: _openFilterModal,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
               const ProductCard(name: 'Shampoo Revitalizante', brand: 'Sedal'),
               const SizedBox(height: 12),
