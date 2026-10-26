@@ -16,7 +16,6 @@ class TokenRepository {
   Future<TokenModel?>getToken() async{
     final String? rawJson = await _sharedPreferences.getString(_tokenKey);
     if (rawJson == null) return null;
-    final Map<String, dynamic> jsonMap = jsonDecode(rawJson);
     
     try {
       final Map<String, dynamic> jsonMap = jsonDecode(rawJson);
