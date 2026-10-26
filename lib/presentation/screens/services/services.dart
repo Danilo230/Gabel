@@ -92,6 +92,18 @@ class _ServicesScreenState extends State<ServicesScreen> {
               const SizedBox(height: 12),
 
               const ServiceCard(
+                name: 'Tinte de cabello y Alisado',
+                price: '\$36.00',
+              ),
+              const SizedBox(height: 12),
+
+              const ServiceCard(
+                name: 'Corte de Cabello y Tinte',
+                price: '\$46.00',
+              ),
+              const SizedBox(height: 12),
+
+              const ServiceCard(
                 name: 'Tinte y Tratamiento Capilar',
                 price: '\$45.00',
               ),

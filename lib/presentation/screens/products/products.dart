@@ -88,47 +88,21 @@ class _ProductsScreenState extends State<ProductsScreen> {
               ),
               const SizedBox(height: 16),
 
-              ProductCard(
-                product: const Product(
-                  productName: 'Shampoo Revitalizante',
-                  productDescription:
-                      'Fórmula hidratante con keratina para cabello maltratado.',
-                  productBrand: 'Sedal',
-                  productUnit: 'Unidad',
-                  productCategory: 'Alisado',
-                  productSupplier: 'Distribuidora Central',
-                  productPrice: '240.00',
-                  productStatus: 'Activo',
-                ),
+              const ProductCard(name: 'Shampoo Revitalizante', brand: 'Sedal'),
+              const SizedBox(height: 12),
+
+              const ProductCard(
+                name: 'Acondicionador Color Protec',
+                brand: 'Pantene',
               ),
               const SizedBox(height: 12),
 
-              ProductCard(
-                product: const Product(
-                  productName: 'Acondicionador Color Protec',
-                  productDescription: 'Protección de color y brillo intenso.',
-                  productBrand: 'Pantene',
-                  productUnit: 'Unidad',
-                  productCategory: 'Alisado',
-                  productSupplier: 'Distribuidora Central',
-                  productPrice: '260.00',
-                  productStatus: 'Activo',
-                ),
-              ),
+              const ProductCard(name: 'Shampoo reparador', brand: 'Sedal'),
               const SizedBox(height: 12),
 
-              ProductCard(
-                product: const Product(
-                  productName: 'Mascarilla Hidratación Profunda',
-                  productDescription:
-                      'Reparación intensiva de puntas abiertas.',
-                  productBrand: 'Garnier',
-                  productUnit: 'Unidad',
-                  productCategory: 'Alisado',
-                  productSupplier: 'Laboratorios Belleza S.A.',
-                  productPrice: '200.00',
-                  productStatus: 'Activo',
-                ),
+              const ProductCard(
+                name: 'Mascarilla Hidratación Profunda',
+                brand: 'Garnier',
               ),
               const SizedBox(height: 20),
 

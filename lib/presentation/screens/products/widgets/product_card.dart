@@ -5,9 +5,10 @@ import '../models/productmodel.dart';
 import 'edit_product_modal.dart';
 
 class ProductCard extends StatelessWidget {
-  final Product product;
+  final String name;
+  final String brand;
 
-  const ProductCard({super.key, required this.product});
+  const ProductCard({super.key, required this.name, required this.brand});
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +32,12 @@ class ProductCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Text(
-                  product.productName,
-                  softWrap: true,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                    height: 1.3,
-                  ),
+              Text(
+                name,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -48,33 +45,28 @@ class ProductCard extends StatelessWidget {
           const SizedBox(height: 12),
 
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Marca',
-                      style: TextStyle(
-                        color: AppColors.cardTextSecondary,
-                        fontSize: 12,
-                      ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Marca',
+                    style: TextStyle(
+                      color: AppColors.cardTextSecondary,
+                      fontSize: 12,
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      product.productBrand,
-                      softWrap: true,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.actionIcon,
-                      ),
+                  ),
+                  Text(
+                    brand,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.primaryPurple,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-
               Row(
                 children: [
                   IconButton(
