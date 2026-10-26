@@ -31,7 +31,11 @@ class AuthenticationProvider extends ChangeNotifier {
       _authStatus = AuthenticationStatus.authenticated;
     } on AppException catch (e) {
       _errorMessage = e.toString();
-    } catch (e) {
+    } 
+    on FormatException catch (e) {
+      _errorMessage = 'Error de formato: ${e.message}';
+    }
+    catch (e) {
       _errorMessage = 'ocurrio un error inesperado. intentalo de nuevo mas tarde';
     } 
 
