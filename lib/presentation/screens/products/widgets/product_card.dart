@@ -1,12 +1,13 @@
 ﻿import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_delete.dart';
+import '../models/productmodel.dart';
 import 'edit_product_modal.dart';
 
 class ProductCard extends StatelessWidget {
-  final String name;
+  final Product product;
 
-  const ProductCard({super.key, required this.name});
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +33,13 @@ class ProductCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  name,
+                  product.productName,
+                  softWrap: true,
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimary,
+                    height: 1.3,
                   ),
                 ),
               ),
@@ -47,6 +50,31 @@ class ProductCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Marca',
+                      style: TextStyle(
+                        color: AppColors.cardTextSecondary,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      product.productBrand,
+                      softWrap: true,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.actionIcon,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
               Row(
                 children: [
                   IconButton(
@@ -58,7 +86,7 @@ class ProductCard extends StatelessWidget {
                       size: 20,
                     ),
                     onPressed: () {
-                      EditProductModal.show(context);
+                      EditProductModal.show(context, product);
                     },
                   ),
                   const SizedBox(width: 16),

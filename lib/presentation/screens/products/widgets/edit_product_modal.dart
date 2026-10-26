@@ -7,10 +7,14 @@ import '../../../widgets/custom_modal_sheet.dart';
 import '../../../widgets/custom_text_field.dart';
 
 class EditProductModal extends StatefulWidget {
-  const EditProductModal({super.key});
+  final Product product;
+  const EditProductModal({super.key, required this.product});
 
-  static void show(BuildContext context) {
-    CustomModalSheet.show(context: context, child: const EditProductModal());
+  static void show(BuildContext context, Product product) {
+    CustomModalSheet.show(
+      context: context,
+      child: EditProductModal(product: product),
+    );
   }
 
   @override
