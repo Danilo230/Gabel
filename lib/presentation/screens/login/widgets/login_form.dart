@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/presentation/providers/authenticatio_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../../widgets/app_routes.dart';
 import '../../../widgets/custom_button.dart';
@@ -12,6 +14,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _usuarioController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -20,6 +23,17 @@ class _LoginFormState extends State<LoginForm> {
     _usuarioController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _login () async {
+    if (_formKey.currentState!.validate()) return;
+    String usuario = _usuarioController.text.trim();
+    String password = _passwordController.text.trim();
+
+    await context.read<AuthenticationProvider>().login(
+      username: usuario,
+      password: password,
+    );
   }
 
   void _iniciarSesion() {
@@ -73,7 +87,7 @@ class _LoginFormState extends State<LoginForm> {
         CustomButton(
           text: 'Iniciar sesión',
           icon: Icons.login_rounded,
-          onPressed: _iniciarSesion,
+          onPressed: _login,
         ),
       ],
     );
