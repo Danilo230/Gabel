@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:gabel/core/di/injection.dart';
 import 'package:gabel/presentation/theme/app_typography.dart';
 import 'presentation/widgets/app_routes.dart';
 
@@ -17,7 +18,7 @@ import 'presentation/screens/settings/settings.dart';
 
 Future<void> main() async {
   await dotenv.load();
-
+  setupDependencies();
   runApp(const MainApp());
 }
 
