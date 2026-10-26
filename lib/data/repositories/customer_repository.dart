@@ -16,7 +16,7 @@ class CustomerRepository {
     return CustomerModel.fromJson(json);
   }
 
-  Future<List<CustomerModel>> search(Map<String, String>? params) async {
+  Future<List<CustomerModel>> getAll(Map<String, String>? params) async {
     final data = await _apiClient.get(ApiConstants.customer, query: params);
     if (data is! List) throw ParsingException();
 
