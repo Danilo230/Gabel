@@ -1,7 +1,9 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gabel/core/di/injection.dart';
+import 'package:gabel/presentation/providers/authenticatio_provider.dart';
 import 'package:gabel/presentation/theme/app_typography.dart';
+import 'package:provider/provider.dart';
 import 'presentation/widgets/app_routes.dart';
 
 import 'presentation/screens/customers/customers.dart';
@@ -19,7 +21,12 @@ import 'presentation/screens/settings/settings.dart';
 Future<void> main() async {
   await dotenv.load();
   setupDependencies();
-  runApp(const MainApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => getIt<AuthenticationProvider>(),
+      child: const MainApp(),
+    )
+  );
 }
 
 class MainApp extends StatelessWidget {
