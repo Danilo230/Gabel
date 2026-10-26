@@ -20,7 +20,7 @@ class AuthenticationProvider extends ChangeNotifier {
   bool _isSubmitting = false;
   bool get isSubmitting => _isSubmitting;
 
-  Future<void> login(required String username, required String password) async {
+  Future<void> login({required String username, required String password}) async {
     if (_isSubmitting) return;
 
     _isSubmitting = true;
