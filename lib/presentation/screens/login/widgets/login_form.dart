@@ -63,6 +63,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = context.watch<AuthenticationProvider>();
+
     return Column(
       children: [
         CustomTextField(
@@ -82,12 +84,19 @@ class _LoginFormState extends State<LoginForm> {
           controller: _passwordController,
         ),
 
+        if (auth.errorMessage != null) ...[
+          const SizedBox(height: 10),
+          Text(
+            auth.errorMessage!,
+            style: const TextStyle(color: Colors.red, fontSize: 17),
+          ),
+        ],
         const SizedBox(height: 26),
 
         CustomButton(
           text: 'Iniciar sesión',
           icon: Icons.login_rounded,
-          onPressed: _login,
+          onPressed: auth.isSubmitting ? null : _login,
         ),
       ],
     );
