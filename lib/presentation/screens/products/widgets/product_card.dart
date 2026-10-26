@@ -31,16 +31,12 @@ class ProductCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Text(
-                  product.productName,
-                  softWrap: true,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                    height: 1.3,
-                  ),
+              Text(
+                product.productName,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -48,33 +44,28 @@ class ProductCard extends StatelessWidget {
           const SizedBox(height: 12),
 
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Marca',
-                      style: TextStyle(
-                        color: AppColors.cardTextSecondary,
-                        fontSize: 12,
-                      ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Marca',
+                    style: TextStyle(
+                      color: AppColors.cardTextSecondary,
+                      fontSize: 12,
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      product.productBrand,
-                      softWrap: true,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.actionIcon,
-                      ),
+                  ),
+                  Text(
+                    product.productBrand,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.primaryPurple,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-
               Row(
                 children: [
                   IconButton(
@@ -89,7 +80,6 @@ class ProductCard extends StatelessWidget {
                       EditProductModal.show(context, product);
                     },
                   ),
-                  const SizedBox(width: 16),
 
                   IconButton(
                     padding: EdgeInsets.zero,

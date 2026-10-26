@@ -89,13 +89,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
               const SizedBox(height: 16),
 
               ProductCard(
-                product: const ProductModel(
+                product: ProductModel(
+                  productId: 1,
                   productName: 'Shampoo Revitalizante',
                   productDescription:
                       'Fórmula hidratante con keratina para cabello maltratado.',
                   productBrand: 'Sedal',
-                  productUnit: 'Unidad',
-                  productCategory: 'Alisado',
+                  productUnit: 'Kg',
+                  productCategory: 'Cuidado Personal',
                   productSupplier: 'Distribuidora Central',
                   productPrice: '240.00',
                   productStatus: 'Activo',
@@ -104,12 +105,13 @@ class _ProductsScreenState extends State<ProductsScreen> {
               const SizedBox(height: 12),
 
               ProductCard(
-                product: const ProductModel(
+                product: ProductModel(
+                  productId: 2,
                   productName: 'Acondicionador Color Protec',
                   productDescription: 'Protección de color y brillo intenso.',
                   productBrand: 'Pantene',
-                  productUnit: 'Unidad',
-                  productCategory: 'Alisado',
+                  productUnit: 'ml',
+                  productCategory: 'Higiene',
                   productSupplier: 'Distribuidora Central',
                   productPrice: '260.00',
                   productStatus: 'Activo',
@@ -118,13 +120,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
               const SizedBox(height: 12),
 
               ProductCard(
-                product: const ProductModel(
+                product: ProductModel(
+                  productId: 3,
                   productName: 'Mascarilla Hidratación Profunda',
                   productDescription:
                       'Reparación intensiva de puntas abiertas.',
                   productBrand: 'Garnier',
-                  productUnit: 'Unidad',
-                  productCategory: 'Alisado',
+                  productUnit: 'L',
+                  productCategory: 'Cosméticos',
                   productSupplier: 'Laboratorios Belleza S.A.',
                   productPrice: '200.00',
                   productStatus: 'Activo',

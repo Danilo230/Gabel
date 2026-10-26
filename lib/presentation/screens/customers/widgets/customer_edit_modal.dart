@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_modal_sheet.dart';
-import '../models/customer.dart';
+import 'package:gabel/data/models/customer_model.dart';
 import '../../../widgets/custom_confirm_dialog.dart';
 import '../../../widgets/custom_text_field.dart';
 import '../../../widgets/custom_filter_dropdown.dart';
 
-
 class CustomerEditModal extends StatefulWidget {
-  final Customer customer;
+  final CustomerModel customer;
 
   const CustomerEditModal({super.key, required this.customer});
 
-  static void show(BuildContext context, Customer customer) {
+  static void show(BuildContext context, CustomerModel customer) {
     CustomModalSheet.show(
       context: context,
       child: CustomerEditModal(customer: customer),
@@ -65,7 +64,7 @@ class _CustomerEditModalState extends State<CustomerEditModal> {
             onChanged: (val) => setState(() => _selectedStatus = val),
             enabled: _isEditing,
           ),
-          
+
           SizedBox(height: 14),
           _buildBottomButton(context),
         ],

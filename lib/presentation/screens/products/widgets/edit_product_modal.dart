@@ -64,7 +64,7 @@ class _EditProductModalState extends State<EditProductModal> {
           CustomFilterDropdown(
             label: 'Unidad de Medida',
             value: _selectedUnit,
-            items: const ['Unidad', 'Kilogramo', 'Litro', 'Caja'],
+            items: const ['Kg', 'L', 'Unidad'],
             enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedUnit = val),
           ),
@@ -73,7 +73,7 @@ class _EditProductModalState extends State<EditProductModal> {
           CustomFilterDropdown(
             label: 'Categoría',
             value: _selectedCategory,
-            items: const ['Cuidado Personal', 'Cosméticos', 'Capilar'],
+            items: const ['Higiene', 'Cosméticos', 'Cuidado Personal'],
             enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedCategory = val),
           ),
@@ -91,7 +91,7 @@ class _EditProductModalState extends State<EditProductModal> {
           CustomFilterDropdown(
             label: 'Marca',
             value: _selectedBrand,
-            items: const ['Marca', 'Marca', 'Marca'],
+            items: const ['Pantene', 'Sedal', 'Garnier'],
             enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedBrand = val),
           ),

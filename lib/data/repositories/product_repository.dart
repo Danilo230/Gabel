@@ -1,32 +1,26 @@
-import '../../presentation/screens/products/models/productmodel.dart';
+import 'package:gabel/core/network/api_client.dart';
+import 'package:gabel/presentation/screens/products/models/productmodel.dart';
+import 'package:gabel/core/errors/app_exception.dart';
+import 'package:gabel/core/constants/api_constants.dart';
 
 class ProductRepository {
-  final dynamic client;
+  final ApiClient _apiClient;
 
-  ProductRepository({this.client});
+  ProductRepository(this._apiClient);
+  Future<ProductModel> getById(int productId) async {
+    final json = await _apiClient.get('${ApiConstants.products}/$productId');
+    if (json == null) throw const NotFoundException();
+    if (json is! Map<String, dynamic>) throw ParsingException();
 
-  Future<List<ProductModel>> getProducts() async {
-    final response = await client.get('Products');
-    final List<dynamic> data = response.data;
-    return data.map((json) => ProductModel.fromJson(json)).toList();
+    return ProductModel.fromJson(json);
   }
 
-  Future<ProductModel> getProductById(int id) async {
-    final response = await client.get('Products/$id');
-    return ProductModel.fromJson(response.data);
-  }
+  Future<List<ProductModel>> getAll(Map<String, String>? params) async {
+    final data = await _apiClient.get(ApiConstants.products, query: params);
+    if (data is! List) throw ParsingException();
 
-  // Ahora recibe ProductModel directamente
-  Future<ProductModel> createProduct(ProductModel product) async {
-    final response = await client.post('Products', data: product.toJson());
-    return ProductModel.fromJson(response.data);
-  }
-
-  Future<void> updateProduct(int id, ProductModel product) async {
-    await client.put('Products/$id', data: product.toJson());
-  }
-
-  Future<void> deleteProduct(int id) async {
-    await client.delete('Products/$id');
+    return data
+        .map((json) => ProductModel.fromJson(json as Map<String, dynamic>))
+        .toList();
   }
 }

@@ -15,6 +15,7 @@ class ApiConstants {
   static const String products = '/Products';
   static const String services = '/Services';
   static const String inventory = '/Inventory';
+  static const String customer = '/Customer';
 
   static const Duration timeoutDuration = Duration(seconds: 30);
 }
