@@ -86,13 +86,22 @@ class _ProductsScreenState extends State<ProductsScreen> {
               ),
               SizedBox(height: 16),
 
-              const ProductCard(name: 'Shampoo Revitalizante'),
+              const ProductCard(name: 'Shampoo Revitalizante', brand: 'Sedal'),
               const SizedBox(height: 12),
 
-              const ProductCard(name: 'Acondicionador Color\nProtec'),
+              const ProductCard(
+                name: 'Acondicionador Color Protec',
+                brand: 'Pantene',
+              ),
               const SizedBox(height: 12),
 
-              const ProductCard(name: 'Mascarilla Hidratación\nProfunda'),
+              const ProductCard(name: 'Shampoo reparador', brand: 'Sedal'),
+              const SizedBox(height: 12),
+
+              const ProductCard(
+                name: 'Mascarilla Hidratación Profunda',
+                brand: 'Garnier',
+              ),
               const SizedBox(height: 20),
 
               const CustomPagination(currentPage: 6),

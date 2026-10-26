@@ -5,8 +5,9 @@ import 'edit_product_modal.dart';
 
 class ProductCard extends StatelessWidget {
   final String name;
+  final String brand;
 
-  const ProductCard({super.key, required this.name});
+  const ProductCard({super.key, required this.name, required this.brand});
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +31,12 @@ class ProductCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
+              Text(
+                name,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -45,8 +44,28 @@ class ProductCard extends StatelessWidget {
           const SizedBox(height: 12),
 
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Marca',
+                    style: TextStyle(
+                      color: AppColors.cardTextSecondary,
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    brand,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.primaryPurple,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
               Row(
                 children: [
                   IconButton(
