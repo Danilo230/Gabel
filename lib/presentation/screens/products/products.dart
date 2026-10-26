@@ -89,7 +89,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
               const SizedBox(height: 16),
 
               ProductCard(
-                product: const Product(
+                product: const ProductModel(
                   productName: 'Shampoo Revitalizante',
                   productDescription:
                       'Fórmula hidratante con keratina para cabello maltratado.',
@@ -104,7 +104,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
               const SizedBox(height: 12),
 
               ProductCard(
-                product: const Product(
+                product: const ProductModel(
                   productName: 'Acondicionador Color Protec',
                   productDescription: 'Protección de color y brillo intenso.',
                   productBrand: 'Pantene',
@@ -118,7 +118,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
               const SizedBox(height: 12),
 
               ProductCard(
-                product: const Product(
+                product: const ProductModel(
                   productName: 'Mascarilla Hidratación Profunda',
                   productDescription:
                       'Reparación intensiva de puntas abiertas.',

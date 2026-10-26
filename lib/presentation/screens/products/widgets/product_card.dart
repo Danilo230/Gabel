@@ -5,7 +5,7 @@ import '../models/productmodel.dart';
 import 'edit_product_modal.dart';
 
 class ProductCard extends StatelessWidget {
-  final Product product;
+  final ProductModel product;
 
   const ProductCard({super.key, required this.product});
 
