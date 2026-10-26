@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
-import '../models/customer.dart';
+import 'package:gabel/data/models/customer_model.dart';
 import '../../customers/widgets/customer_edit_modal.dart';
 import '../../../widgets/custom_delete.dart';
 
 class CustomerCard extends StatelessWidget {
-  final Customer customer;
+  final CustomerModel customer;
 
   const CustomerCard({super.key, required this.customer});
 
