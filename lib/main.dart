@@ -18,15 +18,21 @@ import 'presentation/screens/reports/reports.dart';
 import 'presentation/screens/services/services.dart';
 import 'presentation/screens/settings/settings.dart';
 
-Future<void> main() async {
+//Future<void> main() async {
+//  await dotenv.load();
+//  setupDependencies();
+//  runApp(
+//    ChangeNotifierProvider(
+//      create: (_) => getIt<AuthenticationProvider>(),
+//      child: const MainApp(),
+//    )
+//  );
+//}
+
+Future<void> main() async{
   await dotenv.load();
-  setupDependencies();
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => getIt<AuthenticationProvider>(),
-      child: const MainApp(),
-    )
-  );
+
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {

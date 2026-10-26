@@ -96,7 +96,7 @@ class _LoginFormState extends State<LoginForm> {
         CustomButton(
           text: 'Iniciar sesión',
           icon: Icons.login_rounded,
-          onPressed: auth.isSubmitting ? null : _login,
+          onPressed: auth.isSubmitting ? null : _iniciarSesion
         ),
       ],
     );
