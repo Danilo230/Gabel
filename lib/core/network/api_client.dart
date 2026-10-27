@@ -3,10 +3,16 @@ import 'dart:convert';
 
 
 import 'package:gabel/core/errors/app_exception.dart';
+import 'package:gabel/data/models/token_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:gabel/core/constants/api_constants.dart';
 
+typedef AuthTokenProvider = Future<TokenModel?> Function();
+
 class ApiClient {
+  final AuthTokenProvider? _authTokenProvider;
+  ApiClient({this._authTokenProvider});
+
   final http.Client _client = http.Client();
 
   Future<dynamic> get(String path, {Map<String, String>? query}) async => _send('GET', path, query, null);
@@ -19,9 +25,14 @@ class ApiClient {
     // Url base: https://localhost:7284/api
     // path: /Auth/Login
     final uri = Uri.parse('$baseUrl$path').replace(queryParameters: query);
-    final headers = {'Content-Type': 'application/json'};
+    final Map<String, String> headers = {};
     if (body != null) {
       headers['Content-Type'] = 'application/json';
+    }
+
+    TokenModel? token = await _authTokenProvider?.call();
+    if (token != null) {
+      headers['Authorization'] = 'Bearer ${token.token}';
     }
 
     final request = http.Request(method, uri)..headers.addAll(headers);
