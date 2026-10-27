@@ -5,10 +5,9 @@ import '../models/productmodel.dart';
 import 'edit_product_modal.dart';
 
 class ProductCard extends StatelessWidget {
-  final String name;
-  final String brand;
+  final ProductModel product;
 
-  const ProductCard({super.key, required this.name, required this.brand});
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class ProductCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                name,
+                product.productName,
                 style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -58,7 +57,7 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    brand,
+                    product.productBrand,
                     style: const TextStyle(
                       fontSize: 14,
                       color: AppColors.primaryPurple,
@@ -81,7 +80,6 @@ class ProductCard extends StatelessWidget {
                       EditProductModal.show(context, product);
                     },
                   ),
-                  const SizedBox(width: 16),
 
                   IconButton(
                     padding: EdgeInsets.zero,

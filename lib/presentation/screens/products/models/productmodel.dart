@@ -1,4 +1,5 @@
-class Product {
+class ProductModel {
+  final int? productId;
   final String productName;
   final String productDescription;
   final String productBrand;
@@ -8,7 +9,8 @@ class Product {
   final String productPrice;
   final String productStatus;
 
-  const Product({
+  const ProductModel({
+    this.productId,
     required this.productName,
     required this.productDescription,
     required this.productBrand,
@@ -19,27 +21,31 @@ class Product {
     required this.productStatus,
   });
 
-  static const List<String> units = [
-    'Unidad',
-    'Litro',
-    'Mililitro',
-    'kilogramo',
-  ];
-  static const List<String> categories = ['Seleccionar categoria', 'Alisado'];
-  static const List<String> suppliers = [
-    'Seleccionar proveedor',
-    'Distribuidora Central',
-    'Laboratorios Belleza S.A.',
-    'Proveedor Nacional',
-    'Cosméticos Global',
-  ];
+  factory ProductModel.fromJson(Map<String, dynamic> json) {
+    return ProductModel(
+      productId: json['productId'] as int?,
+      productName: json['productName'] as String,
+      productDescription: json['productDescription'] as String,
+      productBrand: json['productBrand'] as String,
+      productUnit: json['productUnit'] as String,
+      productCategory: json['productCategory'] as String,
+      productSupplier: json['productSupplier'] as String,
+      productPrice: json['productPrice'] as String,
+      productStatus: json['productStatus'] as String,
+    );
+  }
 
-  static const List<String> brands = [
-    'Seleccionar marca',
-    'Sedal',
-    'Pantene',
-    'Garnier',
-    'Head & Shoulders',
-  ];
-  static const List<String> statuses = ['Activo', 'Inactivo'];
+  Map<String, dynamic> toJson() {
+    return {
+      'productId': productId,
+      'productName': productName,
+      'productDescription': productDescription,
+      'productBrand': productBrand,
+      'productUnit': productUnit,
+      'productCategory': productCategory,
+      'productSupplier': productSupplier,
+      'productPrice': productPrice,
+      'productStatus': productStatus,
+    };
+  }
 }

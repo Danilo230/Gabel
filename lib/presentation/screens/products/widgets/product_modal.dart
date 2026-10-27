@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/productmodel.dart';
+import '../../products/models/productmodel.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_confirm_dialog.dart';
 import '../../../widgets/custom_filter_dropdown.dart';
@@ -18,9 +18,20 @@ class NewProductModal extends StatefulWidget {
 }
 
 class _NewProductModalState extends State<NewProductModal> {
-  String? _selectedUnit = Product.units.first;
-  String? _selectedCategory = Product.categories.first;
-  String? _selectedSupplier = Product.suppliers.first;
+  String? _selectedUnit;
+  String? _selectedCategory;
+  String? _selectedSupplier;
+
+  List<String> productUnits = ['Unidad', 'Kilogramo', 'Litro', 'Caja'];
+  List<String> productCategories = [
+    'Cuidado Personal',
+    'Cosméticos',
+    'Capilar',
+  ];
+  List<String> productSuppliers = [
+    'Distribuidora Central',
+    'Proveedor General',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +59,7 @@ class _NewProductModalState extends State<NewProductModal> {
           CustomFilterDropdown(
             label: 'Unidad de Medida',
             value: _selectedUnit,
-            items: Product.units,
+            items: productUnits,
             onChanged: (val) => setState(() => _selectedUnit = val),
           ),
           const SizedBox(height: 14),
@@ -56,7 +67,7 @@ class _NewProductModalState extends State<NewProductModal> {
           CustomFilterDropdown(
             label: 'Categoría',
             value: _selectedCategory,
-            items: Product.categories,
+            items: productCategories,
             onChanged: (val) => setState(() => _selectedCategory = val),
           ),
           const SizedBox(height: 14),
@@ -64,7 +75,7 @@ class _NewProductModalState extends State<NewProductModal> {
           CustomFilterDropdown(
             label: 'Proveedor',
             value: _selectedSupplier,
-            items: Product.suppliers,
+            items: productSuppliers,
             onChanged: (val) => setState(() => _selectedSupplier = val),
           ),
           const SizedBox(height: 24),

@@ -88,21 +88,50 @@ class _ProductsScreenState extends State<ProductsScreen> {
               ),
               const SizedBox(height: 16),
 
-              const ProductCard(name: 'Shampoo Revitalizante', brand: 'Sedal'),
-              const SizedBox(height: 12),
-
-              const ProductCard(
-                name: 'Acondicionador Color Protec',
-                brand: 'Pantene',
+              ProductCard(
+                product: ProductModel(
+                  productId: 1,
+                  productName: 'Shampoo Revitalizante',
+                  productDescription:
+                      'Fórmula hidratante con keratina para cabello maltratado.',
+                  productBrand: 'Sedal',
+                  productUnit: 'Kg',
+                  productCategory: 'Cuidado Personal',
+                  productSupplier: 'Distribuidora Central',
+                  productPrice: '240.00',
+                  productStatus: 'Activo',
+                ),
               ),
               const SizedBox(height: 12),
 
-              const ProductCard(name: 'Shampoo reparador', brand: 'Sedal'),
+              ProductCard(
+                product: ProductModel(
+                  productId: 2,
+                  productName: 'Acondicionador Color Protec',
+                  productDescription: 'Protección de color y brillo intenso.',
+                  productBrand: 'Pantene',
+                  productUnit: 'ml',
+                  productCategory: 'Higiene',
+                  productSupplier: 'Distribuidora Central',
+                  productPrice: '260.00',
+                  productStatus: 'Activo',
+                ),
+              ),
               const SizedBox(height: 12),
 
-              const ProductCard(
-                name: 'Mascarilla Hidratación Profunda',
-                brand: 'Garnier',
+              ProductCard(
+                product: ProductModel(
+                  productId: 3,
+                  productName: 'Mascarilla Hidratación Profunda',
+                  productDescription:
+                      'Reparación intensiva de puntas abiertas.',
+                  productBrand: 'Garnier',
+                  productUnit: 'L',
+                  productCategory: 'Cosméticos',
+                  productSupplier: 'Laboratorios Belleza S.A.',
+                  productPrice: '200.00',
+                  productStatus: 'Activo',
+                ),
               ),
               const SizedBox(height: 20),
 
