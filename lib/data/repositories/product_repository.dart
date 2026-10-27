@@ -23,4 +23,35 @@ class ProductRepository {
         .map((json) => ProductModel.fromJson(json as Map<String, dynamic>))
         .toList();
   }
+
+  Future<ProductModel> create(Map<String, dynamic> productData) async {
+    final json = await _apiClient.post(
+      ApiConstants.products,
+      body: productData,
+    );
+
+    if (json == null) throw const NotFoundException();
+    if (json is! Map<String, dynamic>) throw ParsingException();
+
+    return ProductModel.fromJson(json);
+  }
+
+  Future<ProductModel> update(
+    int productId,
+    Map<String, dynamic> productData,
+  ) async {
+    final json = await _apiClient.put(
+      '${ApiConstants.products}/$productId',
+      body: productData,
+    );
+
+    if (json == null) throw const NotFoundException();
+    if (json is! Map<String, dynamic>) throw ParsingException();
+
+    return ProductModel.fromJson(json);
+  }
+
+  Future<void> delete(int productId) async {
+    await _apiClient.delete('${ApiConstants.products}/$productId');
+  }
 }
