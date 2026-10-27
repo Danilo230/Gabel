@@ -26,7 +26,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future<void> _login () async {
-    if (_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) return;
     String usuario = _usuarioController.text.trim();
     String password = _passwordController.text.trim();
 
