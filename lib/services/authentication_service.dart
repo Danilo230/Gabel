@@ -30,7 +30,7 @@ class AuthenticationService {
 
   Future<bool> isLoggedIn() => _tokenRepository.hasValidToken();
 
-//  Future<void> logout() async {
-    // Implement logout logic if needed, e.g., clearing tokens or session data.
-//  }
+  Future<void> logout() async {
+    await _tokenRepository.removeToken();
+  }
 }
