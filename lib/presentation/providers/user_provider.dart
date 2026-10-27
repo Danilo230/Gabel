@@ -5,7 +5,7 @@ import 'package:gabel/services/user_service.dart';
 enum ViewStatus { initial, loading, success, error}
 
 class UserProvider extends ChangeNotifier {
-  final List<UserModel> _users = [];
+  List<UserModel> _users = [];
   List<UserModel> get users => _users;
 
   ViewStatus _viewStatus = ViewStatus.initial;
