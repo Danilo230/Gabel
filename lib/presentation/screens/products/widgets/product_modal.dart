@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../products/models/productmodel.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_confirm_dialog.dart';
 import '../../../widgets/custom_filter_dropdown.dart';

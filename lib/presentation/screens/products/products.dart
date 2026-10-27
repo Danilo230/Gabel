@@ -8,7 +8,7 @@ import '../products/widgets/product_card.dart';
 import '../products/widgets/product_modal.dart';
 import '../../widgets/custom_filter_modal.dart';
 import '../../widgets/custom_filter_dropdown.dart';
-import 'models/productmodel.dart';
+import '../../../data/models/product_model.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -99,7 +99,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   productCategory: 'Cuidado Personal',
                   productSupplier: 'Distribuidora Central',
                   productPrice: '240.00',
-                  productStatus: 'Activo',
+                  productStatus: true,
                 ),
               ),
               const SizedBox(height: 12),
@@ -114,7 +114,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   productCategory: 'Higiene',
                   productSupplier: 'Distribuidora Central',
                   productPrice: '260.00',
-                  productStatus: 'Activo',
+                  productStatus: true,
                 ),
               ),
               const SizedBox(height: 12),
@@ -130,7 +130,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   productCategory: 'Cosméticos',
                   productSupplier: 'Laboratorios Belleza S.A.',
                   productPrice: '200.00',
-                  productStatus: 'Activo',
+                  productStatus: true,
                 ),
               ),
               const SizedBox(height: 20),

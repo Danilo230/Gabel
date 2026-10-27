@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/data/models/service_models.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_delete.dart';
 import 'edit_service_modal.dart';
 
 class ServiceCard extends StatelessWidget {
-  final String name;
-  final String price;
+  final ServiceModels service;
 
-  const ServiceCard({super.key, required this.name, required this.price});
+  const ServiceCard({super.key, required this.service});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class ServiceCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  name,
+                  service.serviceName,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 17,
@@ -59,7 +59,7 @@ class ServiceCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    price,
+                    service.servicePrice,
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -80,10 +80,9 @@ class ServiceCard extends StatelessWidget {
                       size: 20,
                     ),
                     onPressed: () {
-                      EditServiceModal.show(context);
+                      EditServiceModal.show(context, service);
                     },
                   ),
-                  const SizedBox(width: 16),
 
                   IconButton(
                     padding: EdgeInsets.zero,
@@ -97,7 +96,6 @@ class ServiceCard extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => const CustomDeleteDialog(
-                          title: 'Eliminar',
                           message: '¿Deseas eliminar este servicio?',
                         ),
                       );

@@ -1,7 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_delete.dart';
-import '../models/productmodel.dart';
+import '../../../../data/models/product_model.dart';
 import 'edit_product_modal.dart';
 
 class ProductCard extends StatelessWidget {
@@ -93,7 +93,6 @@ class ProductCard extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => const CustomDeleteDialog(
-                          title: 'Eliminar',
                           message: '¿Deseas eliminar este producto?',
                         ),
                       );
