@@ -2,23 +2,15 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
 class CustomDeleteDialog extends StatelessWidget {
-  final String title;
   final String message;
   final VoidCallback? onConfirm;
 
-  const CustomDeleteDialog({
-    super.key,
-    required this.title,
-    required this.message,
-    this.onConfirm,
-  });
+  const CustomDeleteDialog({super.key, required this.message, this.onConfirm});
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       elevation: 0,
       backgroundColor: AppColors.white,
       insetPadding: const EdgeInsets.symmetric(horizontal: 24),
@@ -27,21 +19,6 @@ class CustomDeleteDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
             Container(
               width: 64,
               height: 64,
