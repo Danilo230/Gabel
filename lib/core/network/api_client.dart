@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 
+import 'package:flutter/material.dart';
 import 'package:gabel/core/errors/app_exception.dart';
 import 'package:gabel/data/models/token_model.dart';
 import 'package:http/http.dart' as http;
@@ -47,7 +48,9 @@ class ApiClient {
         .then(http.Response.fromStream);
     } on TimeoutException{
       throw NetworkException('Request timed out. Please check your internet connection and try again.');
-    } on http.ClientException {
+    } on http.ClientException catch (e) {
+        debugPrint('ClientException: $e');   // import 'package:flutter/foundation.dart';
+        debugPrint('URL: $uri');
       throw const NetworkException('Failed to send request. Please try again later.');
     } 
 
