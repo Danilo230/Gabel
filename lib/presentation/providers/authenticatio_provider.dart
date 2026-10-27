@@ -35,7 +35,9 @@ class AuthenticationProvider extends ChangeNotifier {
     on FormatException catch (e) {
       _errorMessage = 'Error de formato: ${e.message}';
     }
-    catch (e) {
+    catch (e, stack) {
+      debugPrint('ERROR LOGIN: $e');
+      debugPrint('$stack');
       _errorMessage = 'ocurrio un error inesperado. intentalo de nuevo mas tarde';
     } 
 

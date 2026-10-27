@@ -48,9 +48,7 @@ class ApiClient {
         .then(http.Response.fromStream);
     } on TimeoutException{
       throw NetworkException('Request timed out. Please check your internet connection and try again.');
-    } on http.ClientException catch (e) {
-        debugPrint('ClientException: $e');   // import 'package:flutter/foundation.dart';
-        debugPrint('URL: $uri');
+    } on http.ClientException {
       throw const NetworkException('Failed to send request. Please try again later.');
     } 
 
@@ -64,6 +62,8 @@ class ApiClient {
   dynamic _decode(http.Response response) {
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
+      debugPrint('STATUS: ${response.statusCode}');
+      debugPrint('BODY: ${response.body}');
       throw ServerException('Request failed', statusCode: response.statusCode);
     }
 

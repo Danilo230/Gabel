@@ -21,7 +21,7 @@ class TokenModel {
       userId: json['userId'] as int,
       userName: json['userName'] as String,
       identityCard: json['identityCard'] as String,
-      expiresAt: json['expiresAt'] as DateTime,
+      expiresAt: DateTime.parse(json['expiresAt'] as String),
       token: json['token'] as String,
 
       roles: List<String>.from(json['roles'] as List<dynamic>),
@@ -34,7 +34,7 @@ class TokenModel {
       'userName': userName,
       'identityCard': identityCard,
       'token': token,
-      'expiresAt': expiresAt,
+      'expiresAt': expiresAt.toIso8601String(),
       'roles': roles.toList(),
     };
   }
