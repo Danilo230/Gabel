@@ -13,19 +13,25 @@ class TokenRepository {
     await _sharedPreferences.setString(_tokenKey, jsonString);
   }
 
-  Future<TokenModel?>getToken() async{
-    final String? rawJson = await _sharedPreferences.getString(_tokenKey);
-    if (rawJson == null) return null;
-    
-    try {
-      final Map<String, dynamic> jsonMap = jsonDecode(rawJson);
-      return TokenModel.fromJson(jsonMap);
-    } catch (e) {
-      await removeToken(); 
-    }
+  Future<TokenModel?> getToken() async {
+  final String? rawJson = await _sharedPreferences.getString(_tokenKey);
+  if (rawJson == null) return null;
 
-    return null;
+  try {
+    final Map<String, dynamic> jsonMap = jsonDecode(rawJson);
+    final token = TokenModel.fromJson(jsonMap);
+
+    if (token.expiresAt.isBefore(DateTime.now())) {
+      await removeToken(); // token vencido
+      return null;
+    }
+    return token;
+  } catch (e) {
+    await removeToken();
   }
+
+  return null;
+}
 
   Future<void> removeToken() async{
     await _sharedPreferences.remove(_tokenKey);
