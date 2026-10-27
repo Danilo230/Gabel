@@ -2,7 +2,7 @@ class CustomerModel {
   final int customerId;
   final String customerName;
   final String customerLastName;
-  final String customerStatus;
+  final bool customerStatus;
   final String customerPhone;
 
   CustomerModel({
@@ -19,7 +19,7 @@ class CustomerModel {
       customerName: json['customerName'] as String,
       customerLastName: json['customerLastName'] as String,
       customerPhone: json['customerPhone'] as String,
-      customerStatus: json['customerStatus'] as String,
+      customerStatus: json['customerStatus'] as bool,
     );
   }
 

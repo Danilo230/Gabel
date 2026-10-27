@@ -29,7 +29,7 @@ class _CustomerEditModalState extends State<CustomerEditModal> {
   @override
   void initState() {
     super.initState();
-    _selectedStatus = widget.customer.customerStatus;
+    _selectedStatus = widget.customer.customerStatus ? 'Activo' : 'Inactivo';
   }
 
   @override
