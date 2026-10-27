@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gabel/core/errors/app_exception.dart';
+import 'package:gabel/presentation/providers/authenticatio_provider.dart' as _authenticationService;
 import 'package:gabel/services/authentication_service.dart';
 
 enum AuthenticationStatus {
@@ -68,4 +69,17 @@ class AuthenticationProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> logout() async {
+  try {
+    await _authenticationService.logout();
+  } catch (e) {
+    debugPrint('ERROR LOGOUT: $e');
+  } finally {
+    _roles = [];
+    _errorMessage = null;
+    _authStatus = AuthenticationStatus.unauthenticated;
+    notifyListeners();
+  }
+}
 }
