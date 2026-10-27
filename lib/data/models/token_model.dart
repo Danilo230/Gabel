@@ -4,6 +4,7 @@ class TokenModel {
   final String userName;
   final String identityCard;
   final String token;
+  final DateTime expiresAt;
   final Iterable<String> roles;
 
   TokenModel({
@@ -11,6 +12,7 @@ class TokenModel {
     required this.userName,
     required this.identityCard,
     required this.token,
+    required this.expiresAt,
     required this.roles,
   });
 
@@ -19,7 +21,9 @@ class TokenModel {
       userId: json['userId'] as int,
       userName: json['userName'] as String,
       identityCard: json['identityCard'] as String,
+      expiresAt: json['expiresAt'] as DateTime,
       token: json['token'] as String,
+
       roles: List<String>.from(json['roles'] as List<dynamic>),
     );
   }
@@ -30,6 +34,7 @@ class TokenModel {
       'userName': userName,
       'identityCard': identityCard,
       'token': token,
+      'expiresAt': expiresAt,
       'roles': roles.toList(),
     };
   }

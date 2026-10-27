@@ -14,6 +14,6 @@ class UserRepository {
     if (json is! Map<String, dynamic>) throw ParsingException();
     
     return UserModel.fromJson(json);
-
   }
+
 }
