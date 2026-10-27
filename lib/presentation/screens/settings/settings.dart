@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/presentation/providers/authenticatio_provider.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/app_header.dart';
 import 'widgets/settings_option.dart';
 import 'widgets/settings_section.dart';
@@ -133,9 +135,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 height: 50,
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login.toString(), (route) => false);
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    context.read<AuthenticationProvider>().logout();
                   },
-
                   icon: const Icon(
                     Icons.logout,
                     color: Color(0xFFD3455B),

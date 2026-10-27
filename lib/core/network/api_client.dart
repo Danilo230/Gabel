@@ -48,7 +48,10 @@ class ApiClient {
         .then(http.Response.fromStream);
     } on TimeoutException{
       throw NetworkException('Request timed out. Please check your internet connection and try again.');
-    } on http.ClientException {
+    } on http.ClientException catch (e){
+      debugPrint('ClientException: $e');
+      debugPrint('URL: $uri');
+
       throw const NetworkException('Failed to send request. Please try again later.');
     } 
 
