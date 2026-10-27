@@ -65,21 +65,21 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     final auth = context.watch<AuthenticationProvider>();
 
-    return Column(
+    return Form(
       key: _formKey,
-      children: [
+      child: Column(
+        children: [
         CustomTextField(
           label: 'Usuario',
           hintText: 'Ingresa tu usuario',
           prefixIcon: Icons.person_outline,
           controller: _usuarioController,
           validator: (value) {
-          if (value == null || value.trim().isEmpty) {
-            return 'Ingresa tu usuario';
-          }
-          return null;
-        },
-
+            if (value == null || value.trim().isEmpty) {
+              return 'Ingresa tu usuario';
+            }
+            return null;
+         },
         ),
 
         const SizedBox(height: 20),
@@ -91,11 +91,11 @@ class _LoginFormState extends State<LoginForm> {
           obscureText: true,
           controller: _passwordController,
           validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Ingresa tu contraseña';
-          }
-          return null;
-        },
+            if (value == null || value.isEmpty) {
+              return 'Ingresa tu contraseña';
+            }
+            return null;
+          },
         ),
 
         if (auth.errorMessage != null) ...[
@@ -113,6 +113,7 @@ class _LoginFormState extends State<LoginForm> {
           onPressed: auth.isSubmitting ? null : _login
         ),
       ],
+      ),
     );
   }
 }
