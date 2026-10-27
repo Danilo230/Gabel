@@ -45,9 +45,7 @@ class MainApp extends StatelessWidget {
         textTheme: AppTypography.textTheme,
       ),
 
-      home: Scaffold(body: _AuthGuard(),),
-
-      initialRoute: AppRoutes.login,
+      home: const _AuthGuard(),
 
       routes: {
         AppRoutes.dashboard: (context) => const DashboardScreen(),
@@ -81,16 +79,17 @@ class _AuthGuard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthenticationProvider>();
 
-    var authProvider = context.watch<AuthenticationProvider>();
     switch (authProvider.authStatus) {
       case AuthenticationStatus.authenticated:
-        return const Center(child: Text('Authenticated'));
+        return authProvider.isSalesperson
+            ? const SalespersonScreen()
+            : const DashboardScreen();
       case AuthenticationStatus.unauthenticated:
         return const LoginScreen();
       default:
         return const Center(child: CircularProgressIndicator());
     }
   }
-
 }
