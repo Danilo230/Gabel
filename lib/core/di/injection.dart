@@ -7,7 +7,6 @@ import 'package:gabel/presentation/providers/user_provider.dart';
 import 'package:gabel/services/authentication_service.dart';
 import 'package:gabel/services/user_service.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart';
 
 final getIt = GetIt.instance;
 
