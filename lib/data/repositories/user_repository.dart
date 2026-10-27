@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:gabel/core/constants/api_constants.dart';
 import 'package:gabel/core/errors/app_exception.dart';
