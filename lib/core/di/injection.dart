@@ -23,6 +23,6 @@ void setupDependencies() {
   getIt.registerLazySingleton<UserService>(() => UserService(getIt<UserRepository>()));
 
   //Register Provider
-  getIt.registerFactory<AuthenticationProvider>(() => AuthenticationProvider(getIt<AuthenticationService>()));
+getIt.registerLazySingleton<AuthenticationProvider>(() => AuthenticationProvider(getIt<AuthenticationService>()),);
   getIt.registerFactory<UserProvider>(() => UserProvider(getIt<UserService>()));
 }
