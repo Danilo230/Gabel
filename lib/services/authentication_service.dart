@@ -9,7 +9,7 @@ class AuthenticationService {
 
   AuthenticationService(this._authRepository, this._tokenRepository);
 
-  Future<void> login(String username, String password) async {
+  Future<TokenModel> login(String username, String password) async {
     final trimmedUsername = username.trim();
     final trimmedPassword = password.trim();
 
@@ -17,9 +17,12 @@ class AuthenticationService {
       throw Exception('Username and password cannot be empty.');
     }
 
-   final TokenModel token = await _authRepository.login(username, password);
+   final TokenModel token = await _authRepository.login(trimmedUsername, trimmedPassword);
    await _tokenRepository.saveToken(token);
+   return token;
   }
+
+  Future<TokenModel?> getStoredToken() => _tokenRepository.getToken();
 
   Future<UserModel> getCurrentUser() async {
     return await _authRepository.currentUser();
