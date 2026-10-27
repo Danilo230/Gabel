@@ -17,8 +17,8 @@ class UserRepository {
     return UserModel.fromJson(json);
   }
 
-  Future<void> update(int id, Map<String, dynamic> data) async {
-    await _apiClient.put('${ApiConstants.users}/$id', body: data);
+  Future<void> update(int id, UserModel data) async {
+    await _apiClient.put('${ApiConstants.users}/$id', body: data.toUpdateJson());
   }
 
   Future<void> delete(int id) async {

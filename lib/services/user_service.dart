@@ -9,7 +9,7 @@ class UserService {
     return await _userRepository.getById(id);
   }
 
-  Future<void> updateUser(int id, Map<String, dynamic> data) async{
+  Future<void> updateUser(int id, UserModel data) async{
     await _userRepository.update(id, data);
   }
 
