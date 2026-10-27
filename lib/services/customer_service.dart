@@ -27,6 +27,12 @@ class CustomerService {
     final phone = customer.customerPhone.trim();
     final trimmedPhone = customer.customerPhone.trim();
 
+    if (!CommonRegex.phoneRegex.hasMatch(trimmedPhone)) {
+      throw const FormatException(
+        'El número de teléfono no puede tener más de 8 caracteres',
+      );
+    }
+
     if (name.isEmpty || lastName.isEmpty || phone.isEmpty) {
       throw Exception('Los parámetros no pueden estar vacios');
     }

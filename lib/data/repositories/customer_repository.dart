@@ -57,7 +57,12 @@ class CustomerRepository {
     return CustomerModel.fromJson(json);
   }
 
-  Future<void> delete(int customerId) async {
-    await _apiClient.delete('${ApiConstants.customer}/$customerId');
+  Future<String> delete(int customerId, bool customerStatus) async {
+    final json = await _apiClient.delete(
+      '${ApiConstants.customer}/DeleteCustomer/$customerId',
+      body: {'customerStatus': customerStatus},
+    );
+    if (json is! Map<String, dynamic>) throw ParsingException();
+    return json['message'] as String;
   }
 }
