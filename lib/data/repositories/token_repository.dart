@@ -21,7 +21,7 @@ class TokenRepository {
       final Map<String, dynamic> jsonMap = jsonDecode(rawJson);
       return TokenModel.fromJson(jsonMap);
     } catch (e) {
-      await removeToken(); // Remove the invalid token from storage
+      await removeToken(); 
     }
 
     return null;

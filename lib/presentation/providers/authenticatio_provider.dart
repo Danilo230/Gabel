@@ -20,39 +20,47 @@ class AuthenticationProvider extends ChangeNotifier {
   bool _isSubmitting = false;
   bool get isSubmitting => _isSubmitting;
 
+  List<String> _roles = [];
+  List<String> get roles => _roles;
+  bool get isSalesperson =>
+      _roles.any((r) => r.toLowerCase() == 'vendedor');
+
   Future<void> login({required String username, required String password}) async {
     if (_isSubmitting) return;
 
     _isSubmitting = true;
+    _errorMessage = null;              
     notifyListeners();
 
     try {
-      await _authenticationService.login(username, password);
+      final token = await _authenticationService.login(username, password);
+      _roles = token.roles.toList();   
+      debugPrint('ROLES: $_roles');   
       _authStatus = AuthenticationStatus.authenticated;
     } on AppException catch (e) {
       _errorMessage = e.toString();
-    } 
-    on FormatException catch (e) {
+    } on FormatException catch (e) {
       _errorMessage = 'Error de formato: ${e.message}';
-    }
-    catch (e, stack) {
+    } catch (e, stack) {
       debugPrint('ERROR LOGIN: $e');
       debugPrint('$stack');
       _errorMessage = 'ocurrio un error inesperado. intentalo de nuevo mas tarde';
-    } 
+    }
 
     _isSubmitting = false;
     notifyListeners();
-
   }
 
-  Future<void> checkSession() async{
+  Future<void> checkSession() async {
     try {
-      await Future.delayed(const Duration(seconds: 3));
       final bool isAuthenticated = await _authenticationService.isLoggedIn();
+      if (isAuthenticated) {
+        final token = await _authenticationService.getStoredToken();
+        _roles = token?.roles.toList() ?? [];
+      }
       _authStatus = isAuthenticated
-        ? AuthenticationStatus.authenticated
-        : AuthenticationStatus.unauthenticated;
+          ? AuthenticationStatus.authenticated
+          : AuthenticationStatus.unauthenticated;
     } catch (e) {
       _errorMessage = 'An unexpected error occurred. please try again';
       _authStatus = AuthenticationStatus.unauthenticated;
@@ -60,5 +68,4 @@ class AuthenticationProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 }
