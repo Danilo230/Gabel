@@ -87,7 +87,6 @@ class CustomerCard extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => const CustomDeleteDialog(
-                          title: 'Eliminar cliente',
                           message:
                               '¿Estás seguro de que deseas eliminar este cliente?',
                         ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../products/models/productmodel.dart';
+import '../../../../data/models/product_model.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_confirm_dialog.dart';
 import '../../../widgets/custom_filter_dropdown.dart';
@@ -36,7 +36,7 @@ class _EditProductModalState extends State<EditProductModal> {
     _selectedCategory = widget.product.productCategory;
     _selectedSupplier = widget.product.productSupplier;
     _selectedBrand = widget.product.productBrand;
-    _selectedStatus = widget.product.productStatus;
+    _selectedStatus = widget.product.productStatus ? 'Activo' : 'Inactivo';
   }
 
   @override
@@ -64,7 +64,7 @@ class _EditProductModalState extends State<EditProductModal> {
           CustomFilterDropdown(
             label: 'Unidad de Medida',
             value: _selectedUnit,
-            items: const ['Kg', 'L', 'Unidad'],
+            items: const ['Kg', 'L', 'ml'],
             enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedUnit = val),
           ),
