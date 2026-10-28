@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../data/models/service_models.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_confirm_dialog.dart';
 import '../../../widgets/custom_filter_dropdown.dart';
@@ -18,9 +17,9 @@ class NewServiceModal extends StatefulWidget {
 }
 
 class _NewServiceModalState extends State<NewServiceModal> {
-  String? _selectedEstilist;
+  String? _selectedStilist;
 
-  List<String> serviceEstilists = ['Maria', 'Martha'];
+  List<String> serviceStilists = ['Maria', 'Martha'];
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +43,9 @@ class _NewServiceModalState extends State<NewServiceModal> {
 
           CustomFilterDropdown(
             label: 'Nombre del estilista',
-            value: _selectedEstilist,
-            items: serviceEstilists,
-            onChanged: (val) => setState(() => _selectedEstilist = val),
+            value: _selectedStilist,
+            items: serviceStilists,
+            onChanged: (val) => setState(() => _selectedStilist = val),
           ),
           const SizedBox(height: 14),
 
