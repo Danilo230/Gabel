@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gabel/presentation/providers/authenticatio_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../../widgets/app_routes.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_text_field.dart';
 
@@ -34,31 +33,6 @@ class _LoginFormState extends State<LoginForm> {
       username: usuario,
       password: password,
     );
-  }
-
-  void _iniciarSesion() {
-    final String usuario =
-        _usuarioController.text.trim().toLowerCase();
-
-    if (usuario == 'admin') {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.dashboard,
-        (route) => false,
-      );
-    } else if (usuario == 'vendedor') {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.salesperson,
-        (route) => false,
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Usuario no válido'),
-        ),
-      );
-    }
   }
 
   @override
