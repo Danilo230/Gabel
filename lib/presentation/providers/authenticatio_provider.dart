@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gabel/core/errors/app_exception.dart';
-import 'package:gabel/presentation/providers/authenticatio_provider.dart' as _authenticationService;
 import 'package:gabel/services/authentication_service.dart';
 
 enum AuthenticationStatus {
