@@ -1,3 +1,4 @@
+
 import 'package:gabel/core/constants/api_constants.dart';
 import 'package:gabel/core/errors/app_exception.dart';
 import 'package:gabel/core/network/api_client.dart';
@@ -14,6 +15,14 @@ class UserRepository {
     if (json is! Map<String, dynamic>) throw ParsingException();
     
     return UserModel.fromJson(json);
-
   }
+
+  Future<void> update(int id, UserModel data) async {
+    await _apiClient.put('${ApiConstants.users}/$id', body: data.toUpdateJson());
+  }
+
+  Future<void> delete(int id) async {
+    await _apiClient.delete("${ApiConstants.users}/$id");
+  }
+
 }

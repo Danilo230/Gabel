@@ -1,7 +1,9 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:gabel/core/di/injection.dart';
+import 'package:gabel/presentation/providers/authenticatio_provider.dart';
 import 'package:gabel/presentation/theme/app_typography.dart';
-
+import 'package:provider/provider.dart';
 import 'presentation/widgets/app_routes.dart';
 
 import 'presentation/screens/customers/customers.dart';
@@ -17,9 +19,18 @@ import 'presentation/screens/services/services.dart';
 import 'presentation/screens/settings/settings.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
+  setupDependencies();
 
-  runApp(const MainApp());
+  getIt<AuthenticationProvider>().checkSession();
+
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => getIt<AuthenticationProvider>(),
+      child: const MainApp(),
+    )
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -34,7 +45,7 @@ class MainApp extends StatelessWidget {
         textTheme: AppTypography.textTheme,
       ),
 
-      initialRoute: AppRoutes.login,
+      home: const _AuthGuard(),
 
       routes: {
         AppRoutes.dashboard: (context) => const DashboardScreen(),
@@ -60,5 +71,25 @@ class MainApp extends StatelessWidget {
         AppRoutes.salesperson: (context) => const SalespersonScreen(),
       },
     );
+  }
+}
+
+class _AuthGuard extends StatelessWidget {
+  const _AuthGuard();
+
+  @override
+  Widget build(BuildContext context) {
+    final authProvider = context.watch<AuthenticationProvider>();
+
+    switch (authProvider.authStatus) {
+      case AuthenticationStatus.authenticated:
+        return authProvider.isSalesperson
+            ? const SalespersonScreen()
+            : const DashboardScreen();
+      case AuthenticationStatus.unauthenticated:
+        return const LoginScreen();
+      default:
+        return const Center(child: CircularProgressIndicator());
+    }
   }
 }
