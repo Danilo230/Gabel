@@ -56,12 +56,12 @@ class ApiClient {
         .timeout(ApiConstants.timeoutDuration)
         .then(http.Response.fromStream);
     } on TimeoutException{
-      throw NetworkException('Request timed out. Please check your internet connection and try again.');
+      throw NetworkException('La solicitud ha caducado. Por favor, comprueba tu conexión a internet y vuelve a intentarlo.');
     } on http.ClientException catch (e){
       debugPrint('ClientException: $e');
       debugPrint('URL: $uri');
 
-      throw const NetworkException('Failed to send request. Please try again later.');
+      throw const NetworkException('No se pudo enviar la solicitud. Por favor, inténtalo de nuevo más tarde.');
     } 
 
     if (response.statusCode == 401) {
@@ -75,7 +75,7 @@ class ApiClient {
     if (response.statusCode < 200 || response.statusCode >= 300) {
       debugPrint('STATUS: ${response.statusCode}');
       debugPrint('BODY: ${response.body}');
-      throw ServerException('Request failed', statusCode: response.statusCode);
+      throw ServerException('La solicitud falló', statusCode: response.statusCode);
     }
 
     if (response.body.isEmpty) return null;

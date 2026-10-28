@@ -63,7 +63,7 @@ class AuthenticationProvider extends ChangeNotifier {
           ? AuthenticationStatus.authenticated
           : AuthenticationStatus.unauthenticated;
     } catch (e) {
-      _errorMessage = 'An unexpected error occurred. please try again';
+      _errorMessage = 'Se ha producido un error inesperado. Por favor, inténtalo de nuevo.';
       _authStatus = AuthenticationStatus.unauthenticated;
     } finally {
       notifyListeners();
