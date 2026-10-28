@@ -6,7 +6,7 @@ import '../../widgets/custom_pagination.dart';
 import '../../widgets/custom_filter_dropdown.dart';
 import '../../widgets/custom_filter_modal.dart';
 import '../../widgets/search_bar_add.dart';
-import 'models/customer.dart';
+import 'package:gabel/data/models/customer_model.dart';
 import '../../theme/app_colors.dart';
 import 'widgets/customer_card.dart';
 
@@ -67,39 +67,43 @@ class _CustomersScreenState extends State<CustomersScreen> {
               ),
               SizedBox(height: 12),
               CustomerCard(
-                customer: const Customer(
+                customer: CustomerModel(
+                  customerId: 1,
                   customerName: 'Juan',
                   customerLastName: 'Pérez',
                   customerPhone: '+505 88923213',
-                  customerStatus: 'Activo',
+                  customerStatus: true,
                 ),
               ),
               SizedBox(height: 12),
               CustomerCard(
-                customer: Customer(
+                customer: CustomerModel(
+                  customerId: 2,
                   customerName: 'María',
                   customerLastName: 'González',
                   customerPhone: '+505 88923214',
-                  customerStatus: 'Activo',
+                  customerStatus: true,
                 ),
               ),
 
               SizedBox(height: 12),
               CustomerCard(
-                customer: Customer(
+                customer: CustomerModel(
+                  customerId: 3,
                   customerName: 'Carlos',
                   customerLastName: 'Ramírez',
                   customerPhone: '+505 88923215',
-                  customerStatus: 'Activo',
+                  customerStatus: true,
                 ),
               ),
               SizedBox(height: 12),
               CustomerCard(
-                customer: const Customer(
+                customer: CustomerModel(
+                  customerId: 4,
                   customerName: 'Juan',
                   customerLastName: 'Pérez',
                   customerPhone: '+505 88923213',
-                  customerStatus: 'Activo',
+                  customerStatus: true,
                 ),
               ),
               SizedBox(height: 12),

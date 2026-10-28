@@ -16,12 +16,21 @@ class ApiClient {
 
   final http.Client _client = http.Client();
 
-  Future<dynamic> get(String path, {Map<String, String>? query}) async => _send('GET', path, query, null);
-  Future<dynamic> post(String path, {Object? body}) async => _send('POST', path, null, body);
-  Future<dynamic> put(String path, {Object? body}) async => _send('PUT', path, null, body);
-  Future<dynamic> delete(String path) async => _send('DELETE', path, null, null);
+  Future<dynamic> get(String path, {Map<String, String>? query}) async =>
+      _send('GET', path, query, null);
+  Future<dynamic> post(String path, {Object? body}) async =>
+      _send('POST', path, null, body);
+  Future<dynamic> put(String path, {Object? body}) async =>
+      _send('PUT', path, null, body);
+  Future<dynamic> delete(String path, {Object? body}) async =>
+      _send('DELETE', path, null, body);
 
-  Future<dynamic> _send(String method, String path, Map <String, String>? query, Object? body) async {
+  Future<dynamic> _send(
+    String method,
+    String path,
+    Map<String, String>? query,
+    Object? body,
+  ) async {
     final baseUrl = ApiConstants.instance.baseUrl;
     // Url base: https://localhost:7284/api
     // path: /Auth/Login
@@ -55,7 +64,7 @@ class ApiClient {
       throw const NetworkException('Failed to send request. Please try again later.');
     } 
 
-    if (response.statusCode ==401) {
+    if (response.statusCode == 401) {
       throw const UnauthorizedException();
     }
 
@@ -63,7 +72,6 @@ class ApiClient {
   }
 
   dynamic _decode(http.Response response) {
-
     if (response.statusCode < 200 || response.statusCode >= 300) {
       debugPrint('STATUS: ${response.statusCode}');
       debugPrint('BODY: ${response.body}');

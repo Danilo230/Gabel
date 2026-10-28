@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_confirm_dialog.dart';
 import '../../../widgets/custom_modal_sheet.dart';
-import '../models/servicemodels.dart';
+import '../../../../data/models/service_models.dart';
 import '../../../widgets/custom_filter_dropdown.dart';
 import '../../../widgets/custom_text_field.dart';
 
 class EditServiceModal extends StatefulWidget {
-  const EditServiceModal({super.key});
+  final ServiceModels service;
+  const EditServiceModal({super.key, required this.service});
 
-  static void show(BuildContext context) {
-    CustomModalSheet.show(context: context, child: const EditServiceModal());
+  static void show(BuildContext context, ServiceModels service) {
+    CustomModalSheet.show(
+      context: context,
+      child: EditServiceModal(service: service),
+    );
   }
 
   @override
@@ -19,8 +23,15 @@ class EditServiceModal extends StatefulWidget {
 
 class _EditServiceModalState extends State<EditServiceModal> {
   bool _isEditing = false;
-  String? _selectedEstilist = Service.estilists.first;
-  String? _selectedStatus = Service.statuses.first;
+  String? _selectedEstilist;
+  late String? _selectedStatus;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedEstilist = widget.service.serviceStilist;
+    _selectedStatus = widget.service.serviceStatus ? 'Activo' : 'Inactivo';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +58,7 @@ class _EditServiceModalState extends State<EditServiceModal> {
           CustomFilterDropdown(
             label: 'Nombre del estilista',
             value: _selectedEstilist,
-            items: Service.estilists,
+            items: const ['Maria', 'Nathalia', 'Martha'],
             enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedEstilist = val),
           ),
@@ -64,7 +75,7 @@ class _EditServiceModalState extends State<EditServiceModal> {
           CustomFilterDropdown(
             label: 'Estado',
             value: _selectedStatus,
-            items: Service.statuses,
+            items: const ['Activo', 'Inactivo'],
             enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedStatus = val),
           ),

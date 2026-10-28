@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/productmodel.dart';
+import '../../../../data/models/product_model.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_confirm_dialog.dart';
 import '../../../widgets/custom_filter_dropdown.dart';
@@ -7,10 +7,14 @@ import '../../../widgets/custom_modal_sheet.dart';
 import '../../../widgets/custom_text_field.dart';
 
 class EditProductModal extends StatefulWidget {
-  const EditProductModal({super.key});
+  final ProductModel product;
+  const EditProductModal({super.key, required this.product});
 
-  static void show(BuildContext context) {
-    CustomModalSheet.show(context: context, child: const EditProductModal());
+  static void show(BuildContext context, ProductModel product) {
+    CustomModalSheet.show(
+      context: context,
+      child: EditProductModal(product: product),
+    );
   }
 
   @override
@@ -19,11 +23,21 @@ class EditProductModal extends StatefulWidget {
 
 class _EditProductModalState extends State<EditProductModal> {
   bool _isEditing = false;
-  String? _selectedUnit = Product.units.first;
-  String? _selectedCategory = Product.categories.first;
-  String? _selectedSupplier = Product.suppliers.first;
-  String? _selectedBrand = Product.brands.first;
-  String? _selectedStatus = Product.statuses.first;
+  String? _selectedUnit;
+  String? _selectedCategory;
+  String? _selectedSupplier;
+  String? _selectedBrand;
+  String? _selectedStatus;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedUnit = widget.product.productUnit;
+    _selectedCategory = widget.product.productCategory;
+    _selectedSupplier = widget.product.productSupplier;
+    _selectedBrand = widget.product.productBrand;
+    _selectedStatus = widget.product.productStatus ? 'Activo' : 'Inactivo';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +64,7 @@ class _EditProductModalState extends State<EditProductModal> {
           CustomFilterDropdown(
             label: 'Unidad de Medida',
             value: _selectedUnit,
-            items: Product.units,
+            items: const ['Kg', 'L', 'ml'],
             enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedUnit = val),
           ),
@@ -59,7 +73,7 @@ class _EditProductModalState extends State<EditProductModal> {
           CustomFilterDropdown(
             label: 'Categoría',
             value: _selectedCategory,
-            items: Product.categories,
+            items: const ['Higiene', 'Cosméticos', 'Cuidado Personal'],
             enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedCategory = val),
           ),
@@ -68,7 +82,7 @@ class _EditProductModalState extends State<EditProductModal> {
           CustomFilterDropdown(
             label: 'Proveedor',
             value: _selectedSupplier,
-            items: Product.suppliers,
+            items: const ['Distribuidora Central', 'Proveedor General'],
             enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedSupplier = val),
           ),
@@ -77,7 +91,7 @@ class _EditProductModalState extends State<EditProductModal> {
           CustomFilterDropdown(
             label: 'Marca',
             value: _selectedBrand,
-            items: Product.brands,
+            items: const ['Pantene', 'Sedal', 'Garnier'],
             enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedBrand = val),
           ),
@@ -86,7 +100,7 @@ class _EditProductModalState extends State<EditProductModal> {
           CustomFilterDropdown(
             label: 'Estado',
             value: _selectedStatus,
-            items: Product.statuses,
+            items: const ['Activo', 'Inactivo'],
             enabled: _isEditing,
             onChanged: (val) => setState(() => _selectedStatus = val),
           ),

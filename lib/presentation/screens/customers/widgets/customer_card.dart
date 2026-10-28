@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
-import '../models/customer.dart';
+import 'package:gabel/data/models/customer_model.dart';
 import '../../customers/widgets/customer_edit_modal.dart';
 import '../../../widgets/custom_delete.dart';
 
 class CustomerCard extends StatelessWidget {
-  final Customer customer;
+  final CustomerModel customer;
 
   const CustomerCard({super.key, required this.customer});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: 135.0,
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -37,48 +35,65 @@ class CustomerCard extends StatelessWidget {
               color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 7.0),
-          Text(
-            customer.customerPhone,
-            style: const TextStyle(
-              fontSize: 14.0,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 2.0),
+          const SizedBox(height: 12),
+
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                icon: const Icon(
-                  Icons.visibility_outlined,
-                  color: AppColors.actionIcon,
-                  size: 20,
-                ),
-                onPressed: () {
-                  CustomerEditModal.show(context, customer);
-                },
-              ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                icon: const Icon(
-                  Icons.delete_outline_rounded,
-                  color: AppColors.deleteIcon,
-                  size: 20,
-                ),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => const CustomDeleteDialog(
-                      title: 'Eliminar cliente',
-                      message:
-                          '¿Estás seguro de que deseas eliminar este cliente?',
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Teléfono',
+                    style: TextStyle(
+                      color: AppColors.cardTextSecondary,
+                      fontSize: 12,
                     ),
-                  );
-                },
+                  ),
+                  Text(
+                    customer.customerPhone,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.primaryPurple,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(
+                      Icons.visibility_outlined,
+                      color: AppColors.actionIcon,
+                      size: 20,
+                    ),
+                    onPressed: () {
+                      CustomerEditModal.show(context, customer);
+                    },
+                  ),
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    icon: const Icon(
+                      Icons.delete_outline_rounded,
+                      color: AppColors.deleteIcon,
+                      size: 20,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const CustomDeleteDialog(
+                          message:
+                              '¿Estás seguro de que deseas eliminar este cliente?',
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

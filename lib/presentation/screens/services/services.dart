@@ -1,4 +1,5 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:gabel/data/models/service_models.dart';
 import '../../widgets/app_header.dart';
 import '../../widgets/custom_bottom_nav_bar.dart';
 import '../../widgets/custom_filter_dropdown.dart';
@@ -19,14 +20,14 @@ class ServicesScreen extends StatefulWidget {
 class _ServicesScreenState extends State<ServicesScreen> {
   static const List<String> filter = ['Estilista'];
 
-  static const List<String> estilist = [
+  static const List<String> Stilist = [
     'Seleccionar estilista',
     'María García',
     'Ana López',
     'Laura Martínez',
   ];
   String selectedFilter = filter.first;
-  String selectedEstilist = estilist.first;
+  String selectedStilist = Stilist.first;
 
   void _openFilterModal() {
     CustomFilterModal.show(
@@ -50,11 +51,11 @@ class _ServicesScreenState extends State<ServicesScreen> {
 
             CustomFilterDropdown(
               label: 'Servicio',
-              value: selectedEstilist,
-              items: estilist,
+              value: selectedStilist,
+              items: Stilist,
               onChanged: (val) {
                 if (val != null) {
-                  setModalState(() => selectedEstilist = val);
+                  setModalState(() => selectedStilist = val);
                 }
               },
             ),
@@ -85,18 +86,39 @@ class _ServicesScreenState extends State<ServicesScreen> {
               ),
               const SizedBox(height: 16),
 
-              const ServiceCard(
-                name: 'Corte de Cabello y Estilo',
-                price: '\$18.00',
+              ServiceCard(
+                service: ServiceModels(
+                  serviceId: 1,
+                  serviceName: 'Keratina',
+                  serviceDescription: 'Alizado permanante',
+                  servicePrice: '\$200',
+                  serviceStilist: 'Maria',
+                  serviceStatus: true,
+                ),
               ),
-              const SizedBox(height: 12),
-
-              const ServiceCard(
-                name: 'Tinte y Tratamiento Capilar',
-                price: '\$45.00',
+              const SizedBox(height: 16),
+              ServiceCard(
+                service: ServiceModels(
+                  serviceId: 2,
+                  serviceName: 'Alisado profecional',
+                  serviceDescription: 'Planchado',
+                  servicePrice: '\$100',
+                  serviceStilist: 'Nathalia',
+                  serviceStatus: true,
+                ),
               ),
-              const SizedBox(height: 20),
-
+              const SizedBox(height: 16),
+              ServiceCard(
+                service: ServiceModels(
+                  serviceId: 3,
+                  serviceName: 'Keratina permanante',
+                  serviceDescription: 'hidratacion capilar',
+                  servicePrice: '\$300',
+                  serviceStilist: 'Martha',
+                  serviceStatus: true,
+                ),
+              ),
+              const SizedBox(height: 16),
               // Paginación
               const CustomPagination(currentPage: 6),
               const SizedBox(height: 10),

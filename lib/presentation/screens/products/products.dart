@@ -8,6 +8,7 @@ import '../products/widgets/product_card.dart';
 import '../products/widgets/product_modal.dart';
 import '../../widgets/custom_filter_modal.dart';
 import '../../widgets/custom_filter_dropdown.dart';
+import '../../../data/models/product_model.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
@@ -26,6 +27,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
     'Garnier',
     'Head & Shoulders',
   ];
+
   String selectedBrand = brands.first;
   String selectedFilter = filter.first;
 
@@ -84,15 +86,53 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 },
                 onFilterPressed: _openFilterModal,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-              const ProductCard(name: 'Shampoo Revitalizante'),
+              ProductCard(
+                product: ProductModel(
+                  productId: 1,
+                  productName: 'Shampoo Revitalizante',
+                  productDescription:
+                      'Fórmula hidratante con keratina para cabello maltratado.',
+                  productBrand: 'Sedal',
+                  productUnit: 'Kg',
+                  productCategory: 'Cuidado Personal',
+                  productSupplier: 'Distribuidora Central',
+                  productPrice: '240.00',
+                  productStatus: true,
+                ),
+              ),
               const SizedBox(height: 12),
 
-              const ProductCard(name: 'Acondicionador Color\nProtec'),
+              ProductCard(
+                product: ProductModel(
+                  productId: 2,
+                  productName: 'Acondicionador Color Protec',
+                  productDescription: 'Protección de color y brillo intenso.',
+                  productBrand: 'Pantene',
+                  productUnit: 'ml',
+                  productCategory: 'Higiene',
+                  productSupplier: 'Distribuidora Central',
+                  productPrice: '260.00',
+                  productStatus: true,
+                ),
+              ),
               const SizedBox(height: 12),
 
-              const ProductCard(name: 'Mascarilla Hidratación\nProfunda'),
+              ProductCard(
+                product: ProductModel(
+                  productId: 3,
+                  productName: 'Mascarilla Hidratación Profunda',
+                  productDescription:
+                      'Reparación intensiva de puntas abiertas.',
+                  productBrand: 'Garnier',
+                  productUnit: 'L',
+                  productCategory: 'Cosméticos',
+                  productSupplier: 'Laboratorios Belleza S.A.',
+                  productPrice: '200.00',
+                  productStatus: true,
+                ),
+              ),
               const SizedBox(height: 20),
 
               const CustomPagination(currentPage: 6),

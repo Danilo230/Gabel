@@ -1,12 +1,13 @@
 ﻿import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_delete.dart';
+import '../../../../data/models/product_model.dart';
 import 'edit_product_modal.dart';
 
 class ProductCard extends StatelessWidget {
-  final String name;
+  final ProductModel product;
 
-  const ProductCard({super.key, required this.name});
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +31,12 @@ class ProductCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
+              Text(
+                product.productName,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
                 ),
               ),
             ],
@@ -45,8 +44,28 @@ class ProductCard extends StatelessWidget {
           const SizedBox(height: 12),
 
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Marca',
+                    style: TextStyle(
+                      color: AppColors.cardTextSecondary,
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    product.productBrand,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.primaryPurple,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
               Row(
                 children: [
                   IconButton(
@@ -58,10 +77,9 @@ class ProductCard extends StatelessWidget {
                       size: 20,
                     ),
                     onPressed: () {
-                      EditProductModal.show(context);
+                      EditProductModal.show(context, product);
                     },
                   ),
-                  const SizedBox(width: 16),
 
                   IconButton(
                     padding: EdgeInsets.zero,
@@ -75,7 +93,6 @@ class ProductCard extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => const CustomDeleteDialog(
-                          title: 'Eliminar',
                           message: '¿Deseas eliminar este producto?',
                         ),
                       );
