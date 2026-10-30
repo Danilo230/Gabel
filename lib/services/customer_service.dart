@@ -1,5 +1,6 @@
 import 'package:gabel/core/constants/regular_expressions.dart';
 import 'package:gabel/data/models/customer_model.dart';
+import 'package:gabel/data/models/paged_result_model.dart';
 import 'package:gabel/data/repositories/customer_repository.dart';
 
 class CustomerService {
@@ -11,10 +12,15 @@ class CustomerService {
     return await _customerRepository.getById(customerId);
   }
 
-  Future<List<CustomerModel>> getAll({
+  Future<PagedResultModel<CustomerModel>> getAll({
     int pageNumber = 1,
     int pageSize = 10,
   }) async {
+    if (pageNumber <= 0 || pageSize <= 0) {
+      throw const FormatException(
+        'Los parámetros de paginación no son validos',
+      );
+    }
     return await _customerRepository.getAll({
       'pageNumber': pageNumber.toString(),
       'pageSize': pageSize.toString(),
