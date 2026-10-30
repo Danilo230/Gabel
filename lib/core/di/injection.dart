@@ -7,6 +7,7 @@ import 'package:gabel/data/repositories/token_repository.dart';
 import 'package:gabel/data/repositories/user_repository.dart';
 import 'package:gabel/presentation/providers/authenticatio_provider.dart';
 import 'package:gabel/presentation/providers/damaged_product_provider.dart';
+import 'package:gabel/presentation/providers/customer_provider.dart';
 import 'package:gabel/presentation/providers/inventory_provider.dart';
 import 'package:gabel/presentation/providers/user_provider.dart';
 import 'package:gabel/services/authentication_service.dart';
@@ -96,4 +97,8 @@ void setupDependencies() {
     () => AuthenticationProvider(getIt<AuthenticationService>()),
   );
   getIt.registerFactory<UserProvider>(() => UserProvider(getIt<UserService>()));
+
+  getIt.registerFactory<CustomerProvider>(
+    () => CustomerProvider(getIt<CustomerService>()),
+  );
 }
