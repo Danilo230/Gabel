@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/presentation/widgets/custom_filter_modal.dart';
 
 import '../../theme/app_colors.dart';
 import '../../widgets/app_header.dart';
@@ -21,22 +22,93 @@ class SalesScreen extends StatefulWidget {
 }
 
 class _SalesScreenState extends State<SalesScreen> {
-  String selectedProduct = 'Todos los productos';
 
-  String selectedService = 'Todos los servicios';
-
-  final List<String> products = [
+  static const List<String> products = [
     'Todos los productos',
     'Shampoo Revitalizante',
     'Acondicionador',
   ];
+  String selectedProduct = products.first;
 
-  final List<String> services = [
+  static const List<String> services = [
     'Todos los servicios',
     'Corte de cabello',
     'Lavado de cabello',
     'Tratamiento capilar',
   ];
+  String selectedService = services.first;
+
+  void _openFilterModal() {
+    CustomFilterModal.show(
+      context,
+      title: 'Filtrar Ventas',
+      builder: (modalContext, setModalState) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomFilterDropdown(
+              label: 'Productos',
+              value: selectedProduct,
+              items: products,
+              onChanged: (val) {
+                if (val != null) {
+                  setModalState(() => selectedProduct = val);
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+          ],
+        );
+      },
+      onApply: () {
+        setState(() {});
+      },
+    );
+
+    CustomFilterModal.show(
+      context,
+      title: 'Filtrar Servicios',
+      builder: (modalContext, setModalState) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomFilterDropdown(
+              label: 'Servicios',
+              value: selectedService,
+              items: services,
+              onChanged: (val) {
+                if (val != null) {
+                  setModalState(() => selectedService = val);
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+          ],
+        );
+      },
+      onApply: () {
+        setState(() {});
+      },
+    );
+  }
+
+  Future<void> _selectStartDate(BuildContext context) async {
+    await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+  }
+
+  Future<void> _selectEndDate(BuildContext context) async {
+    await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +128,11 @@ class _SalesScreenState extends State<SalesScreen> {
           child: Column(
             children: [
 
-              const CustomDateFilter(),
+              CustomDateFilter(
+                onStartDateTap: () => _selectStartDate(context),
+                onEndDateTap: () => _selectEndDate(context),
+                onFilterPressed: _openFilterModal,
+              ),
 
               const SizedBox(height: 12),
 
@@ -96,27 +172,6 @@ class _SalesScreenState extends State<SalesScreen> {
                   ),
 
                   const SizedBox(width: 10),
-
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryPurple,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-
-                      },
-                      tooltip: 'Aplicar filtros',
-                      padding: EdgeInsets.zero,
-                      icon: const Icon(
-                        Icons.filter_alt_outlined,
-                        color: Colors.white,
-                        size: 22,
-                      ),
-                    ),
-                  ),
                 ],
               ),
 

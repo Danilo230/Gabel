@@ -20,16 +20,10 @@ import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
 void setupDependencies() {
-  getIt.registerLazySingleton<ApiClient>(
-    () =>
-        ApiClient(authTokenProvider: () => getIt<TokenRepository>().getToken()),
-    dispose: (client) => client.dispose(),
-  );
+  getIt.registerLazySingleton<ApiClient>(() => ApiClient(authTokenProvider: () => getIt<TokenRepository>().getToken()), dispose: (client) => client.dispose(),);
 
   // Register repository
-  getIt.registerLazySingleton<AuthRepository>(
-    () => AuthRepository(getIt<ApiClient>()),
-  );
+  getIt.registerLazySingleton<AuthRepository>(() => AuthRepository(getIt<ApiClient>()));
   getIt.registerLazySingleton<TokenRepository>(() => TokenRepository());
   getIt.registerLazySingleton<UserRepository>(() => UserRepository(getIt<ApiClient>()));
   getIt.registerLazySingleton<InventoryRepository>(() => InventoryRepository(getIt<ApiClient>()));
