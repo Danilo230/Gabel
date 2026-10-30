@@ -2,6 +2,7 @@ import 'package:gabel/core/constants/api_constants.dart';
 import 'package:gabel/core/errors/app_exception.dart';
 import 'package:gabel/core/network/api_client.dart';
 import 'package:gabel/data/models/customer_model.dart';
+import 'package:gabel/data/models/paged_result_model.dart';
 
 class CustomerRepository {
   final ApiClient _apiClient;
@@ -16,16 +17,13 @@ class CustomerRepository {
     return CustomerModel.fromJson(json);
   }
 
-  Future<List<CustomerModel>> getAll(Map<String, String>? params) async {
+  Future<PagedResultModel<CustomerModel>> getAll(
+    Map<String, String>? params,
+  ) async {
     final data = await _apiClient.get(ApiConstants.customer, query: params);
     if (data is! Map<String, dynamic>) throw ParsingException();
 
-    final items = data['items'];
-    if (items is! List) throw ParsingException();
-
-    return items
-        .map((json) => CustomerModel.fromJson(json as Map<String, dynamic>))
-        .toList();
+    return PagedResultModel.fromJson(data, CustomerModel.fromJson);
   }
 
   Future<CustomerModel> create(CustomerModel customer) async {

@@ -31,22 +31,45 @@ void setupDependencies() {
     () => AuthRepository(getIt<ApiClient>()),
   );
   getIt.registerLazySingleton<TokenRepository>(() => TokenRepository());
-  getIt.registerLazySingleton<UserRepository>(() => UserRepository(getIt<ApiClient>()));
-  getIt.registerLazySingleton<InventoryRepository>(() => InventoryRepository(getIt<ApiClient>()));
-  getIt.registerLazySingleton<DamagedProductRepository>(() => DamagedProductRepository(getIt<ApiClient>()));
+  getIt.registerLazySingleton<UserRepository>(
+    () => UserRepository(getIt<ApiClient>()),
+  );
+  getIt.registerLazySingleton<InventoryRepository>(
+    () => InventoryRepository(getIt<ApiClient>()),
+  );
+  getIt.registerLazySingleton<DamagedProductRepository>(
+    () => DamagedProductRepository(getIt<ApiClient>()),
+  );
 
   // Register service
-  getIt.registerLazySingleton<AuthenticationService>(() => AuthenticationService(getIt<AuthRepository>(), getIt<TokenRepository>()));
-  getIt.registerLazySingleton<UserService>(() => UserService(getIt<UserRepository>()));
-  getIt.registerLazySingleton<InventoryService>(() => InventoryService(getIt<InventoryRepository>()));
-  getIt.registerLazySingleton<DamagedProductService>(() => DamagedProductService(getIt<DamagedProductRepository>()));
+  getIt.registerLazySingleton<AuthenticationService>(
+    () => AuthenticationService(
+      getIt<AuthRepository>(),
+      getIt<TokenRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<UserService>(
+    () => UserService(getIt<UserRepository>()),
+  );
+  getIt.registerLazySingleton<InventoryService>(
+    () => InventoryService(getIt<InventoryRepository>()),
+  );
+  getIt.registerLazySingleton<DamagedProductService>(
+    () => DamagedProductService(getIt<DamagedProductRepository>()),
+  );
 
   //Register Provider
-  getIt.registerLazySingleton<AuthenticationProvider>(() => AuthenticationProvider(getIt<AuthenticationService>()),);
+  getIt.registerLazySingleton<AuthenticationProvider>(
+    () => AuthenticationProvider(getIt<AuthenticationService>()),
+  );
   getIt.registerFactory<UserProvider>(() => UserProvider(getIt<UserService>()));
-  getIt.registerFactory<InventoryProvider>(() => InventoryProvider(getIt<InventoryService>(), getIt<ProductService>()));
-  getIt.registerFactory<DamagedProductProvider>(() => DamagedProductProvider(getIt<DamagedProductService>()));
-}
+  getIt.registerFactory<InventoryProvider>(
+    () => InventoryProvider(getIt<InventoryService>(), getIt<ProductService>()),
+  );
+  getIt.registerFactory<DamagedProductProvider>(
+    () => DamagedProductProvider(getIt<DamagedProductService>()),
+  );
+
   getIt.registerLazySingleton<UserRepository>(
     () => UserRepository(getIt<ApiClient>()),
   );
