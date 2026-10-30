@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/presentation/widgets/custom_filter_modal.dart';
 
 import '../../theme/app_colors.dart';
 import '../../widgets/app_header.dart';
@@ -33,6 +34,70 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
     'Tratamiento Capilar',
     'Aceite para Cabello',
   ];
+  String selectedSupplier = 'Todos los proveedores';
+  
+  final List<String> suppliers =[
+    'Todos los proveedores',
+    'Amanda miguel',
+    'Juan gabriel',
+    'Carlos miguel',
+  ];
+
+  void _openFilterModal(){
+    CustomFilterModal.show(
+      context,
+      title: 'Filtrar Compras',
+      builder: (modalContext, setModalState){
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomFilterDropdown(
+              label: 'Productos', 
+              value: selectedProduct,
+              items: products,
+              onChanged: (val){
+                if (val !=null){
+                  setModalState(() => selectedProduct = val);
+                }
+              }
+            ),
+            const SizedBox(height: 16),
+            CustomFilterDropdown(
+              label: 'Proveedores', 
+              value: selectedSupplier,
+              items: suppliers,
+              onChanged: (val){
+                if (val !=null){
+                  setModalState(() => selectedSupplier = val);
+                }
+              }
+            ),
+          ],
+        );
+      },
+      onApply: (){
+        setState(() { });
+      }
+    );
+  }
+
+  Future<void> _selectStartDate(BuildContext context) async {
+    await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+  }
+
+  Future<void> _selectEndDate(BuildContext context) async {
+    await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +116,11 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
           ),
           child: Column(
             children: [
-              const CustomDateFilter(),
+              CustomDateFilter(
+                onStartDateTap: () => _selectStartDate(context),
+                onEndDateTap: () => _selectEndDate(context),
+                onFilterPressed: _openFilterModal,
+              ),
 
               const SizedBox(height: 12),
 
@@ -74,27 +143,21 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
                   ),
 
                   const SizedBox(width: 10),
-
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryPurple,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-
+                   Expanded(
+                    child: CustomFilterDropdown(
+                      label: 'Proveedor',
+                      value: selectedSupplier,
+                      items: suppliers,
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            selectedSupplier = value;
+                          });
+                        }
                       },
-                      tooltip: 'Aplicar filtros',
-                      padding: EdgeInsets.zero,
-                      icon: const Icon(
-                        Icons.filter_alt_outlined,
-                        color: Colors.white,
-                        size: 22,
-                      ),
                     ),
                   ),
+                  const SizedBox(width: 10),
                 ],
               ),
 

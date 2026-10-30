@@ -57,32 +57,16 @@ class _SalesScreenState extends State<SalesScreen> {
               },
             ),
             const SizedBox(height: 16),
-          ],
-        );
-      },
-      onApply: () {
-        setState(() {});
-      },
-    );
-
-    CustomFilterModal.show(
-      context,
-      title: 'Filtrar Servicios',
-      builder: (modalContext, setModalState) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
             CustomFilterDropdown(
               label: 'Servicios',
               value: selectedService,
               items: services,
-              onChanged: (val) {
-                if (val != null) {
+              onChanged: (val){
+                if(val != null){
                   setModalState(() => selectedService = val);
                 }
               },
             ),
-            const SizedBox(height: 16),
           ],
         );
       },
