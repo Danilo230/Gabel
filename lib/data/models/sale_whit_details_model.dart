@@ -1,13 +1,13 @@
 import 'package:gabel/data/models/sale_detail_model.dart';
 
-class SaleWhitDetailsModel {
+class SaleWithDetailsModel {
   final int saleId;
   final DateTime saleDate;
   final double totalPrice;
   final String customerName;
   final List<SaleDetailModel> details;
 
-    const SaleWhitDetailsModel({
+    const SaleWithDetailsModel({
     required this.saleId,
     required this.saleDate,
     required this.totalPrice,
@@ -15,8 +15,8 @@ class SaleWhitDetailsModel {
     required this.details,
   });
 
-  static SaleWhitDetailsModel fromJson(Map<String, dynamic> json) {
-    return SaleWhitDetailsModel(
+  static SaleWithDetailsModel fromJson(Map<String, dynamic> json) {
+    return SaleWithDetailsModel(
       saleId: json['saleId'] as int,
       saleDate: DateTime.parse(json['saleDate'] as String),
       totalPrice: (json['totalPrice'] as num).toDouble(),

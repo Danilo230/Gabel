@@ -1,18 +1,18 @@
-class SalesModel {
+class SaleModel {
   final int saleId;
   final DateTime saleDate;
   final double totalPrice;
   final String customerName;
 
-  const SalesModel({
+  const SaleModel({
     required this.saleId,
     required this.saleDate,
     required this.totalPrice,
     required this.customerName
   });
 
-  static SalesModel fromJson(Map<String, dynamic> json) {
-    return SalesModel(
+  static SaleModel fromJson(Map<String, dynamic> json) {
+    return SaleModel(
       saleId: json['saleId'] as int,
       saleDate: DateTime.parse(json['saleDate'] as String),
       totalPrice: (json['totalPrice'] as num).toDouble(),
