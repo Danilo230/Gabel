@@ -28,6 +28,20 @@ class InventoryProvider extends ChangeNotifier {
   int _totalPages = 1;
   int get totalPages => _totalPages;
 
+    String _query = '';
+
+  List<InventoryModel> get filteredItems {
+    if (_query.isEmpty) return _items;
+    return _items
+        .where((item) => item.productName.toLowerCase().contains(_query))
+        .toList();
+  }
+
+  void search(String query) {
+    _query = query.trim().toLowerCase();
+    notifyListeners();
+  }
+
   final Map<int, ProductModel> _productCache = {};
 
   String? _productErrorMessage;
