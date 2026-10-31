@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/core/utils/num_extensions.dart';
+import 'package:gabel/data/models/inventory_model.dart';
+import 'package:gabel/data/models/product_model.dart';
 
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_modal_sheet.dart';
-import '../models/product.dart';
 
 // modal que muestra el detalle de un producto en el inventario
 
 class ProductDetailModal extends StatelessWidget {
-  final Product product;
+  final InventoryModel item;
+  final Future<ProductModel?> product;
 
-  const ProductDetailModal({super.key, required this.product});
+  const ProductDetailModal({
+    super.key,
+    required this.item,
+    required this.product,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +26,7 @@ class ProductDetailModal extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            product.name,
+            item.productName,
             style: const TextStyle(
               fontSize: 19,
               fontWeight: FontWeight.bold,
@@ -28,20 +35,45 @@ class ProductDetailModal extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              _chip(
-                product.category,
-                background: AppColors.mediumPurple,
-                textColor: Colors.white,
-              ),
-              const SizedBox(width: 10),
-              _chip(
-                product.isActive ? 'Activo' : 'Inactivo',
-                background: AppColors.lightGrey,
-                textColor: AppColors.textSecondary,
-              ),
-            ],
+          FutureBuilder<ProductModel?>(
+            future: product,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const SizedBox(
+                  height: 32,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.primaryPurple,
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              final ProductModel? data = snapshot.data;
+              if (data == null) return const SizedBox.shrink();
+
+              return Row(
+                children: [
+                  _chip(
+                    data.productCategory,
+                    background: AppColors.mediumPurple,
+                    textColor: Colors.white,
+                  ),
+                  const SizedBox(width: 10),
+                  _chip(
+                    data.productStatus ? 'Activo' : 'Inactivo',
+                    background: AppColors.lightGrey,
+                    textColor: AppColors.textSecondary,
+                  ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 18),
           IntrinsicHeight(
@@ -52,7 +84,7 @@ class ProductDetailModal extends StatelessWidget {
                   child: _stockBox(
                     icon: Icons.inventory_2_rounded,
                     label: 'Stock Disponible',
-                    value: '${product.stock}',
+                    value: item.stock.toQuantityString(),
                     accent: AppColors.mediumPurple,
                     valueColor: AppColors.textPrimary,
                     labelColor: AppColors.textPrimary,
@@ -66,7 +98,7 @@ class ProductDetailModal extends StatelessWidget {
                   child: _stockBox(
                     icon: Icons.warning_rounded,
                     label: 'Stock Dañado',
-                    value: '${product.damagedStock}',
+                    value: '${item.damagedStock}',
                     accent: AppColors.red,
                     valueColor: AppColors.red,
                     labelColor: AppColors.red,
@@ -82,19 +114,13 @@ class ProductDetailModal extends StatelessWidget {
           _priceBox(
             icon: Icons.sell_outlined,
             label: 'Precio de Venta',
-            value: '\$${product.salePrice.toStringAsFixed(2)}',
-            trailingLabel: 'Margen',
-            trailingValue: '${product.margin}%',
-            trailingLabelColor: AppColors.primaryPurple,
+            value: '\$${item.salePrice.toStringAsFixed(2)}',
           ),
           const SizedBox(height: 14),
           _priceBox(
             icon: Icons.shopping_cart_outlined,
             label: 'Precio de Compra',
-            value: '\$${product.purchasePrice.toStringAsFixed(2)}',
-            trailingLabel: 'ultima compra',
-            trailingValue: product.lastPurchase,
-            trailingLabelColor: AppColors.textSecondary,
+            value: '\$${item.unitPrice.toStringAsFixed(2)}',
           ),
         ],
       ),
@@ -193,9 +219,6 @@ class ProductDetailModal extends StatelessWidget {
     required IconData icon,
     required String label,
     required String value,
-    required String trailingLabel,
-    required String trailingValue,
-    required Color trailingLabelColor,
   }) {
     return Container(
       width: double.infinity,
@@ -206,6 +229,7 @@ class ProductDetailModal extends StatelessWidget {
         border: Border.all(color: AppColors.borderGrey),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
@@ -218,35 +242,16 @@ class ProductDetailModal extends StatelessWidget {
                   color: AppColors.textPrimary,
                 ),
               ),
-              const Spacer(),
-              Text(
-                trailingLabel,
-                style: TextStyle(fontSize: 12, color: trailingLabelColor),
-              ),
             ],
           ),
           const SizedBox(height: 6),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-              const Spacer(),
-              Text(
-                trailingValue,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ],
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
           ),
         ],
       ),
