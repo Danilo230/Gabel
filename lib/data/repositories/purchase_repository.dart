@@ -26,4 +26,25 @@ class PurchaseRepository {
     
     return PurchaseWithDetailsModel.fromJson(json);
   }
+
+  Future<PagedResultModel<PurchaseModel>> getByProduct(String productName, {Map<String, String>? params,}) async {
+    final json = await _apiClient.get(
+      '${ApiConstants.purchasesHistory}/product',
+      query: {...?params, 'productName': productName},
+    );
+    if (json is! Map<String, dynamic>) throw ParsingException();
+
+    return PagedResultModel.fromJson(json, PurchaseModel.fromJson);
+  }
+
+  Future<PagedResultModel<PurchaseModel>> getBySupplier(String supplierName, {Map<String, String>? params,}) async {
+    final json = await _apiClient.get(
+      '${ApiConstants.purchasesHistory}/supplier',
+      query: {...?params, 'supplierName': supplierName},
+    );
+    if (json is! Map<String, dynamic>) throw ParsingException();
+
+    return PagedResultModel.fromJson(json, PurchaseModel.fromJson);
+  }
+
 }
