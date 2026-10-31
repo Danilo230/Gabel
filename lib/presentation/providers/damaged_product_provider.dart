@@ -56,6 +56,10 @@ class DamagedProductProvider extends ChangeNotifier {
     DamagedProductModel? result;
     try {
       result = await _damagedProductService.create(damagedProduct);
+    } on ServerException catch (e) {
+      _errorMessage = e.statusCode == 403
+          ? 'No tienes permiso para registrar productos dañados.'
+          : 'No se pudo registrar el producto dañado. Inténtalo de nuevo.';
     } on AppException catch (e) {
       _errorMessage = e.message;
     } on FormatException catch (e) {
