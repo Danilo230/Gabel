@@ -12,8 +12,20 @@ class CustomerService {
     return await _customerRepository.getById(customerId);
   }
 
-  Future<PagedResultModel<CustomerModel>> getAll() async {
-    return await _customerRepository.getAll();
+  Future<PagedResultModel<CustomerModel>> getAll({
+    int pageNumber = 1,
+    int pageSize = 10,
+  }) async {
+    if (pageNumber <= 0 || pageSize <= 0) {
+      throw const FormatException(
+        'Los parámetros de paginación no son válidos',
+      );
+    }
+
+    return await _customerRepository.getAll({
+      'pageNumber': pageNumber.toString(),
+      'pageSize': pageSize.toString(),
+    });
   }
 
   Future<CustomerModel> create(CustomerModel customer) async {

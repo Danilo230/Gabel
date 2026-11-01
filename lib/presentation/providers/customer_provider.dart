@@ -6,6 +6,8 @@ import 'package:gabel/services/customer_service.dart';
 enum ViewStatusCustomer { initial, loading, success, error }
 
 class CustomerProvider extends ChangeNotifier {
+  static const int _pageSize = 10;
+
   List<CustomerModel> _customers = [];
   List<CustomerModel> get customers => _customers;
 
@@ -15,25 +17,39 @@ class CustomerProvider extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
+  int _currentPage = 1;
+  int get currentPage => _currentPage;
+
+  int _totalPage = 1;
+  int get totalPage => _totalPage;
+
   bool _isSaving = false;
   bool get isSaving => _isSaving;
 
   final CustomerService _customerService;
   CustomerProvider(this._customerService);
 
-  Future<void> fetchCustomers() async {
+  Future<void> fetchCustomers({int pageNumber = 1}) async {
     if (_viewStatus == ViewStatusCustomer.loading) return;
     _viewStatus = ViewStatusCustomer.loading;
     _errorMessage = null;
 
     notifyListeners();
     try {
-      _customers = await _customerService.getAll();
+      final result = await _customerService.getAll(
+        pageNumber: pageNumber,
+        pageSize: _pageSize,
+      );
+      _customers = result.items;
+      _currentPage = result.pageNumber;
+      _totalPage = result.totalPages;
       _viewStatus = ViewStatusCustomer.success;
     } on AppException catch (e) {
       _errorMessage = e.message;
+      _viewStatus = ViewStatusCustomer.error;
     } on FormatException catch (e) {
       _errorMessage = e.message;
+      _viewStatus = ViewStatusCustomer.error;
     } catch (e, stack) {
       debugPrint('Error al obtener los clientes: $e');
       debugPrint('$stack');

@@ -1,29 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/core/di/injection.dart';
+import 'package:gabel/core/utils/num_extensions.dart';
+import 'package:gabel/data/models/damaged_product_model.dart';
+import 'package:gabel/data/models/inventory_model.dart';
+import 'package:gabel/presentation/providers/damaged_product_provider.dart';
 
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_modal_sheet.dart';
 import '../../../widgets/custom_text_field.dart';
-import '../models/product.dart';
 
 // modal que permite registrar un daño de un producto en el inventario
 
-class DamageRecord {
-  final int quantity;
-  final String reason;
-  final String stylist;
-
-  const DamageRecord({
-    required this.quantity,
-    required this.reason,
-    required this.stylist,
-  });
-}
-
 class RegisterDamageModal extends StatefulWidget {
-  final Product product;
+  final InventoryModel item;
 
-  const RegisterDamageModal({super.key, required this.product});
+  const RegisterDamageModal({super.key, required this.item});
 
   @override
   State<RegisterDamageModal> createState() => _RegisterDamageModalState();
@@ -33,13 +25,55 @@ class _RegisterDamageModalState extends State<RegisterDamageModal> {
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _reasonController = TextEditingController();
   final TextEditingController _stylistController = TextEditingController();
+  final DamagedProductProvider _damagedProductProvider =
+      getIt<DamagedProductProvider>();
+
+  String? _error;
 
   @override
   void dispose() {
     _quantityController.dispose();
     _reasonController.dispose();
     _stylistController.dispose();
+    _damagedProductProvider.dispose();
     super.dispose();
+  }
+
+  Future<void> _confirm() async {
+    final int? quantity = int.tryParse(_quantityController.text.trim());
+    final String reason = _reasonController.text.trim();
+
+    if (quantity == null || quantity <= 0) {
+      setState(() => _error = 'Ingresa una cantidad válida.');
+      return;
+    }
+    if (quantity > widget.item.stock) {
+      setState(() => _error = 'La cantidad supera el stock actual.');
+      return;
+    }
+    if (reason.isEmpty) {
+      setState(() => _error = 'El motivo del daño es requerido.');
+      return;
+    }
+
+    setState(() => _error = null);
+
+    final DamagedProductModel? result = await _damagedProductProvider.register(
+      CreateDamagedProductModel(
+        inventoryId: widget.item.inventoryId,
+        quantity: quantity,
+        damageReason: reason,
+      ),
+    );
+
+    if (!mounted) return;
+
+    if (result == null) {
+      setState(() => _error = _damagedProductProvider.errorMessage);
+      return;
+    }
+
+    Navigator.of(context).pop(result);
   }
 
   @override
@@ -76,12 +110,30 @@ class _RegisterDamageModalState extends State<RegisterDamageModal> {
             hintText: 'Nombre del estilista',
             controller: _stylistController,
           ),
+          if (_error != null) ...[
+            const SizedBox(height: 14),
+            Text(
+              _error!,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: AppColors.red,
+              ),
+            ),
+          ],
           const SizedBox(height: 24),
-          CustomButton(
-            text: 'Confirmar Perdida',
-            type: ButtonType.danger,
-            icon: Icons.disabled_by_default_outlined,
-            onPressed: null,
+          ListenableBuilder(
+            listenable: _damagedProductProvider,
+            builder: (context, _) {
+              final bool isSaving = _damagedProductProvider.isSaving;
+
+              return CustomButton(
+                text: isSaving ? 'Guardando...' : 'Confirmar Perdida',
+                type: ButtonType.danger,
+                icon: Icons.disabled_by_default_outlined,
+                onPressed: isSaving ? null : _confirm,
+              );
+            },
           ),
         ],
       ),
@@ -89,7 +141,7 @@ class _RegisterDamageModalState extends State<RegisterDamageModal> {
   }
 
   Widget _productHeader() {
-    final Product product = widget.product;
+    final InventoryModel item = widget.item;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -111,7 +163,7 @@ class _RegisterDamageModalState extends State<RegisterDamageModal> {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  product.name,
+                  item.productName,
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -123,7 +175,7 @@ class _RegisterDamageModalState extends State<RegisterDamageModal> {
           ),
           const SizedBox(height: 10),
           Text(
-            'Stock actual: ${product.stock} uds',
+            'Stock actual: ${item.stock.toQuantityString()} uds',
             style: const TextStyle(
               fontSize: 14,
               color: AppColors.textSecondary,
