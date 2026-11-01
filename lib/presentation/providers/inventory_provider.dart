@@ -8,6 +8,7 @@ import 'package:gabel/services/product_service.dart';
 
 class InventoryProvider extends ChangeNotifier {
   static const int _pageSize = 10;
+  static const int _searchPageSize = 50;
 
   final InventoryService _inventoryService;
   final ProductService _productService;
@@ -27,6 +28,26 @@ class InventoryProvider extends ChangeNotifier {
 
   int _totalPages = 1;
   int get totalPages => _totalPages;
+
+  String _query = '';
+  bool get isSearching => _query.isNotEmpty;
+
+  List<InventoryModel> _allItems = [];
+  bool _hasAllItems = false;
+  Future<void>? _allItemsRequest;
+
+  bool _isSearchLoading = false;
+  bool get isSearchLoading => _isSearchLoading;
+
+  String? _searchErrorMessage;
+  String? get searchErrorMessage => _searchErrorMessage;
+
+  List<InventoryModel> get filteredItems {
+    if (_query.isEmpty) return _items;
+    return _allItems
+        .where((item) => item.productName.toLowerCase().contains(_query))
+        .toList();
+  }
 
   final Map<int, ProductModel> _productCache = {};
 
@@ -66,7 +87,61 @@ class InventoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> refresh() => fetchInventory(pageNumber: _currentPage);
+  Future<void> refresh() async {
+    _hasAllItems = false;
+    await fetchInventory(pageNumber: _currentPage);
+    if (_query.isNotEmpty) await _loadAllItems();
+  }
+
+  Future<void> search(String query) async {
+    _query = query.trim().toLowerCase();
+    notifyListeners();
+    if (_query.isNotEmpty) await _loadAllItems();
+  }
+
+  Future<void> retrySearch() => _loadAllItems();
+
+  Future<void> _loadAllItems() {
+    if (_hasAllItems) return Future.value();
+    return _allItemsRequest ??= _fetchAllItems();
+  }
+
+  Future<void> _fetchAllItems() async {
+    _isSearchLoading = true;
+    _searchErrorMessage = null;
+    notifyListeners();
+
+    try {
+      final List<InventoryModel> all = [];
+      int page = 1;
+      int totalPages = 1;
+
+      do {
+        final result = await _inventoryService.getAll(
+          pageNumber: page,
+          pageSize: _searchPageSize,
+        );
+        all.addAll(result.items);
+        totalPages = result.totalPages;
+        page++;
+      } while (page <= totalPages);
+
+      _allItems = all;
+      _hasAllItems = true;
+    } on AppException catch (e) {
+      _searchErrorMessage = e.message;
+    } on FormatException catch (e) {
+      _searchErrorMessage = e.message;
+    } catch (e, stack) {
+      debugPrint('ERROR FETCH ALL INVENTORY: $e');
+      debugPrint('$stack');
+      _searchErrorMessage = 'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.';
+    }
+
+    _allItemsRequest = null;
+    _isSearchLoading = false;
+    notifyListeners();
+  }
 
   Future<ProductModel?> fetchProduct(int productId) async {
     final cached = _productCache[productId];

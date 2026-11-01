@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/core/utils/num_extensions.dart';
+import 'package:gabel/data/models/inventory_model.dart';
 
 import '../../../theme/app_colors.dart';
-import '../models/product.dart';
 
 class ProductInventoryCard extends StatelessWidget {
-  final Product product;
+  static const int _lowStockThreshold = 5;
+
+  final InventoryModel item;
   final VoidCallback? onViewDetail;
   final VoidCallback? onRegisterDamage;
 
   const ProductInventoryCard({
     super.key,
-    required this.product,
+    required this.item,
     this.onViewDetail,
     this.onRegisterDamage,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bool lowStock = product.isLowStock;
+    final bool lowStock = item.stock <= _lowStockThreshold;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
@@ -53,7 +56,7 @@ class ProductInventoryCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      product.name,
+                      item.productName,
                       style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -75,7 +78,7 @@ class ProductInventoryCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '\$${product.salePrice.toStringAsFixed(2)}',
+                    '\$${item.salePrice.toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
@@ -99,7 +102,7 @@ class ProductInventoryCard extends StatelessWidget {
               ),
               const SizedBox(width: 6),
               Text(
-                'Stock: ${product.stock} uds',
+                'Stock: ${item.stock.toQuantityString()} uds',
                 style: TextStyle(
                   fontSize: 14,
                   color: lowStock ? AppColors.red : AppColors.textSecondary,
