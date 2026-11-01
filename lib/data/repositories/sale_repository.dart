@@ -10,8 +10,11 @@ class SaleRepository {
 
   SaleRepository(this._apiClient);
 
-  Future<PagedResultModel<SaleModel>> getAll(Map<String, String> map, {Map<String, String>? params,}) async {
-    final data = await _apiClient.get(ApiConstants.salesHistory, query: params);
+  Future<PagedResultModel<SaleModel>> getAll({Map<String, String>? params,}) async {
+    final data = await _apiClient.get(
+      ApiConstants.salesHistory,
+      query: params,
+    );
     if (data is! Map<String, dynamic>) throw const ParsingException();
 
     return PagedResultModel.fromJson(data, SaleModel.fromJson);
