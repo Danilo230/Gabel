@@ -131,8 +131,38 @@ class InventoryScreen extends StatelessWidget {
                           ),
                         ),
                       )
-                    else ...[
-                      if (inventory.filteredItems.isEmpty)
+                    else if (inventory.isSearching) ...[
+                      if (inventory.isSearchLoading &&
+                          inventory.filteredItems.isEmpty)
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 32),
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primaryPurple,
+                            ),
+                          ),
+                        )
+                      else if (inventory.searchErrorMessage != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 32),
+                          child: Column(
+                            children: [
+                              Text(
+                                inventory.searchErrorMessage!,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              CustomButton(
+                                text: 'Reintentar',
+                                onPressed: inventory.retrySearch,
+                              ),
+                            ],
+                          ),
+                        )
+                      else if (inventory.filteredItems.isEmpty)
                         const Center(
                           child: Text(
                             'No se encontraron productos.',
@@ -150,6 +180,15 @@ class InventoryScreen extends StatelessWidget {
                             onRegisterDamage: () =>
                                 _openDamageForm(context, inventory, item),
                           ),
+                    ] else ...[
+                      for (final item in inventory.items)
+                        ProductInventoryCard(
+                          item: item,
+                          onViewDetail: () =>
+                              _openDetail(context, inventory, item),
+                          onRegisterDamage: () =>
+                              _openDamageForm(context, inventory, item),
+                        ),
                       const SizedBox(height: 6),
                       Center(
                         child: CustomPagination(
