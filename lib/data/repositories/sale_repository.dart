@@ -46,19 +46,20 @@ class SaleRepository {
   }
 
   Future<PagedResultModel<SaleModel>> getByDateRange({required DateTime startDate,required DateTime endDate,
-  Map<String, String>? params,}) async {
-  final json = await _apiClient.get(
-    '${ApiConstants.salesHistory}/historialPorFecha',
-    query: {
-      ...?params,
-      'startDate': _formatDate(startDate),
-      'endDate': _formatDate(endDate),
-    },
-  );
-  if (json is! Map<String, dynamic>) throw const ParsingException();
+  Map<String, String>? params,
+  }) async {
+    final json = await _apiClient.get(
+      '${ApiConstants.salesHistory}/historialPorFecha',
+      query: {
+        ...?params,
+        'startDate': _formatDate(startDate),
+        'endDate': _formatDate(endDate),
+      },
+    );
+    if (json is! Map<String, dynamic>) throw const ParsingException();
 
-  return PagedResultModel.fromJson(json, SaleModel.fromJson);
-}
+    return PagedResultModel.fromJson(json, SaleModel.fromJson);
+  }
 
   String _formatDate(DateTime d) =>
   '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';

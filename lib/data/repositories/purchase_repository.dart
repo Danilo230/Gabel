@@ -10,7 +10,7 @@ class PurchaseRepository {
 
   PurchaseRepository(this._apiClient);
 
-  Future<PagedResultModel<PurchaseModel>> getAll({Map<String, String>? params,}) async {
+  Future<PagedResultModel<PurchaseModel>> getAll(Map<String, String> map, {Map<String, String>? params,}) async {
     final data = await _apiClient.get(
       '${ApiConstants.purchasesHistory}/master',
       query: params,
@@ -21,8 +21,7 @@ class PurchaseRepository {
   }
 
   Future<PurchaseWithDetailsModel> getById(int purchaseId) async {
-    final json = await _apiClient
-        .get('${ApiConstants.purchasesHistory}/$purchaseId/details');
+    final json = await _apiClient.get('${ApiConstants.purchasesHistory}/$purchaseId/details');
     if (json == null) throw const NotFoundException();
     if (json is! Map<String, dynamic>) throw const ParsingException();
 
@@ -51,29 +50,17 @@ class PurchaseRepository {
   Future<PagedResultModel<PurchaseModel>> getByDateRange({required DateTime startDate, required DateTime endDate,
   Map<String, String>? params,}) async {
 
-    try {
-      final json = await _apiClient.get(
-        '${ApiConstants.purchasesHistory}/HistorialPorFecha',
-        query: {
-          ...?params,
-          'startDate': _formatDate(startDate),
-          'endDate': _formatDate(endDate),
-        },
-      );
-      if (json is! Map<String, dynamic>) throw const ParsingException();
+    final json = await _apiClient.get(
+      '${ApiConstants.purchasesHistory}/HistorialPorFecha',
+      query: {
+        ...?params,
+        'startDate': _formatDate(startDate),
+        'endDate': _formatDate(endDate),
+      },
+    );
+    if (json is! Map<String, dynamic>) throw const ParsingException();
 
-      return PagedResultModel.fromJson(json, PurchaseModel.fromJson);
-    } on ServerException catch (e) {
-      if (e.statusCode == 404) {
-        return const PagedResultModel(
-          items: [],
-          totalRecords: 0,
-          pageNumber: 1,
-          pageSize: 10,
-        );
-      }
-      rethrow;
-    }
+    return PagedResultModel.fromJson(json, PurchaseModel.fromJson);
   }
 
   String _formatDate(DateTime d) =>
