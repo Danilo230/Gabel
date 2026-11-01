@@ -10,7 +10,7 @@ class PurchaseRepository {
 
   PurchaseRepository(this._apiClient);
 
-  Future<PagedResultModel<PurchaseModel>> getAll(Map<String, String> map, {Map<String, String>? params,}) async {
+  Future<PagedResultModel<PurchaseModel>> getAll({Map<String, String>? params,}) async {
     final data = await _apiClient.get(
       '${ApiConstants.purchasesHistory}/master',
       query: params,

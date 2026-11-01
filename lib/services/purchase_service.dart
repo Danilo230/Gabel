@@ -12,20 +12,15 @@ class PurchaseService {
     int pageNumber = 1,
     int pageSize = 10,
   }) async {
-    if (pageNumber <= 0 || pageSize <= 0) {
-      throw const FormatException(
-        'Los parámetros de paginación no son válidos',
-      );
-    }
+    _validatePaging(pageNumber, pageSize);
 
-    return await _purchaseRepository.getAll({
-      'pageNumber': pageNumber.toString(),
-      'pageSize': pageSize.toString(),
-    });
+    return _purchaseRepository.getAll(
+      params: _pagingParams(pageNumber, pageSize),
+    );
   }
 
   Future<PurchaseWithDetailsModel> getById(int purchaseId) async {
-    return await _purchaseRepository.getById(purchaseId);
+    return _purchaseRepository.getById(purchaseId);
   }
 
   Future<PagedResultModel<PurchaseModel>> getByDateRange({
@@ -34,52 +29,69 @@ class PurchaseService {
     int pageNumber = 1,
     int pageSize = 10,
   }) async {
-    if (pageNumber <= 0 || pageSize <= 0) {
-      throw const FormatException(
-        'Los parámetros de paginación no son válidos',
-      );
-    }
+    _validatePaging(pageNumber, pageSize);
+    _validateDates(startDate, endDate);
 
-    return await _purchaseRepository.getByDateRange(
+    return _purchaseRepository.getByDateRange(
       startDate: startDate,
       endDate: endDate,
-      params: {
-        'pageNumber': pageNumber.toString(),
-        'pageSize': pageSize.toString(),
-      },
+      params: _pagingParams(pageNumber, pageSize),
     );
   }
 
-  Future<PagedResultModel<PurchaseModel>> getBySupplier(int supplierId, {
+  Future<PagedResultModel<PurchaseModel>> getBySupplier(
+    int supplierId, {
     int pageNumber = 1,
     int pageSize = 10,
   }) async {
+    _validatePaging(pageNumber, pageSize);
+
+    return _purchaseRepository.getBySupplier(
+      supplierId,
+      params: _pagingParams(pageNumber, pageSize),
+    );
+  }
+
+  Future<PagedResultModel<PurchaseModel>> getByProduct(
+    int productId, {
+    int pageNumber = 1,
+    int pageSize = 10,
+  }) async {
+    _validatePaging(pageNumber, pageSize);
+
+    return _purchaseRepository.getByProduct(
+      productId,
+      params: _pagingParams(pageNumber, pageSize),
+    );
+  }
+
+  void _validatePaging(int pageNumber, int pageSize) {
     if (pageNumber <= 0 || pageSize <= 0) {
       throw const FormatException(
         'Los parámetros de paginación no son válidos',
       );
     }
-
-    return await _purchaseRepository.getBySupplier(supplierId, params: {
-      'pageNumber': pageNumber.toString(),
-      'pageSize': pageSize.toString(),
-    });
   }
 
-  Future<PagedResultModel<PurchaseModel>> getByProduct(int productId, {
-    int pageNumber = 1,
-    int pageSize = 10,
-  }) async {
-    if (pageNumber <= 0 || pageSize <= 0) {
+  void _validateDates(DateTime startDate, DateTime endDate) {
+    if (startDate.isAfter(endDate)) {
       throw const FormatException(
-        'Los parámetros de paginación no son válidos',
+        'La fecha de inicio no puede ser mayor que la fecha de fin',
       );
     }
 
-    return await _purchaseRepository.getByProduct(productId, params: {
-      'pageNumber': pageNumber.toString(),
-      'pageSize': pageSize.toString(),
-    });
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final endDay = DateTime(endDate.year, endDate.month, endDate.day);
+    if (endDay.isAfter(today)) {
+      throw const FormatException(
+        'No se permiten fechas futuras en la consulta',
+      );
+    }
   }
 
+  Map<String, String> _pagingParams(int pageNumber, int pageSize) => {
+        'pageNumber': pageNumber.toString(),
+        'pageSize': pageSize.toString(),
+      };
 }
