@@ -22,8 +22,24 @@ class CustomerProvider extends ChangeNotifier {
   CustomerProvider(this._customerService);
 
   Future<void> fetchCustomers() async {
+    if (_viewStatus == ViewStatusCustomer.loading) return;
     _viewStatus = ViewStatusCustomer.loading;
+    _errorMessage = null;
+
     notifyListeners();
+    try {
+      _customers = await _customerService.getAll();
+      _viewStatus = ViewStatusCustomer.success;
+    } on AppException catch (e) {
+      _errorMessage = e.message;
+    } on FormatException catch (e) {
+      _errorMessage = e.message;
+    } catch (e, stack) {
+      debugPrint('Error al obtener los clientes: $e');
+      debugPrint('$stack');
+      _errorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
+      _viewStatus = ViewStatusCustomer.error;
+    }
   }
 
   Future<CustomerModel?> register(CustomerModel customer) async {
@@ -44,6 +60,7 @@ class CustomerProvider extends ChangeNotifier {
       debugPrint('Error al registrar al cliente: $e');
       debugPrint('$stack');
       _errorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
+      _viewStatus = ViewStatusCustomer.error;
     }
 
     _isSaving = false;
