@@ -17,7 +17,7 @@ class InventoryModel {
     required this.damagedStock,
   });
 
-  factory InventoryModel.fromJson(Map<String, dynamic> json) {
+    static InventoryModel fromJson(Map<String, dynamic> json) {
     return InventoryModel(
       inventoryId: json['inventoryId'] as int,
       productId: json['productId'] as int,
