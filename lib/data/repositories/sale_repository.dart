@@ -3,14 +3,14 @@ import 'package:gabel/core/errors/app_exception.dart';
 import 'package:gabel/core/network/api_client.dart';
 import 'package:gabel/data/models/paged_result_model.dart';
 import 'package:gabel/data/models/sale_model.dart';
-import 'package:gabel/data/models/sale_whit_details_model.dart';
+import 'package:gabel/data/models/sale_with_details_model.dart';
 
 class SaleRepository {
   final ApiClient _apiClient;
 
   SaleRepository(this._apiClient);
 
-  Future<PagedResultModel<SaleModel>> getAll({Map<String, String>? params,}) async {
+  Future<PagedResultModel<SaleModel>> getAll(Map<String, String> map, {Map<String, String>? params,}) async {
     final data = await _apiClient.get(ApiConstants.salesHistory, query: params);
     if (data is! Map<String, dynamic>) throw const ParsingException();
 
