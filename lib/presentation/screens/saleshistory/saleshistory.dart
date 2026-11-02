@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/core/di/injection.dart';
+import 'package:gabel/core/utils/format_date.dart';
+import 'package:gabel/presentation/providers/sale_provider.dart';
 import 'package:gabel/presentation/widgets/custom_filter_modal.dart';
+import 'package:gabel/presentation/widgets/custom_refresh_scroll_view.dart'; // ajusta al nombre real
+import 'package:gabel/presentation/widgets/error_view.dart';
+import 'package:gabel/presentation/widgets/loading_view.dart';
+import 'package:provider/provider.dart';
 
 import '../../theme/app_colors.dart';
 import '../../widgets/app_header.dart';
@@ -9,20 +16,33 @@ import '../../widgets/custom_filter_dropdown.dart';
 import '../../widgets/custom_modal_sheet.dart';
 import '../../widgets/custom_pagination.dart';
 
-import 'models/salesmodel.dart';
-import 'models/salesdetailmodel.dart';
 import 'widgets/saleshistory_card.dart';
 import 'widgets/saleshistory_detail_modal.dart';
 
-class SalesScreen extends StatefulWidget {
+class SalesScreen extends StatelessWidget {
   const SalesScreen({super.key});
 
   @override
-  State<SalesScreen> createState() => _SalesScreenState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => getIt<SaleProvider>()..fetchSales(),
+      child: const _SalesView(),
+    );
+  }
 }
 
-class _SalesScreenState extends State<SalesScreen> {
+class _SalesView extends StatefulWidget {
+  const _SalesView();
 
+  @override
+  State<_SalesView> createState() => _SalesViewState();
+}
+
+class _SalesViewState extends State<_SalesView> {
+  DateTime? _startDate;
+  DateTime? _endDate;
+
+  // Filtros de producto/servicio: se dejan como estaban (aún no conectados)
   static const List<String> products = [
     'Todos los productos',
     'Shampoo Revitalizante',
@@ -51,9 +71,7 @@ class _SalesScreenState extends State<SalesScreen> {
               value: selectedProduct,
               items: products,
               onChanged: (val) {
-                if (val != null) {
-                  setModalState(() => selectedProduct = val);
-                }
+                if (val != null) setModalState(() => selectedProduct = val);
               },
             ),
             const SizedBox(height: 16),
@@ -61,246 +79,161 @@ class _SalesScreenState extends State<SalesScreen> {
               label: 'Servicios',
               value: selectedService,
               items: services,
-              onChanged: (val){
-                if(val != null){
-                  setModalState(() => selectedService = val);
-                }
+              onChanged: (val) {
+                if (val != null) setModalState(() => selectedService = val);
               },
             ),
           ],
         );
       },
-      onApply: () {
-        setState(() {});
-      },
+      onApply: () => setState(() {}),
     );
   }
 
-  Future<void> _selectStartDate(BuildContext context) async {
-    await showDatePicker(
+  Future<void> _selectStartDate() async {
+    final picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _startDate ?? DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
     );
+    if (picked == null || !mounted) return;
+    setState(() => _startDate = picked);
+    _applyDateFilter();
   }
 
-  Future<void> _selectEndDate(BuildContext context) async {
-    await showDatePicker(
+  Future<void> _selectEndDate() async {
+    final picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _endDate ?? DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
+    );
+    if (picked == null || !mounted) return;
+    setState(() => _endDate = picked);
+    _applyDateFilter();
+  }
+
+  void _applyDateFilter() {
+    final start = _startDate;
+    final end = _endDate;
+    if (start == null || end == null) return; // espera a tener las dos
+
+    if (start.isAfter(end)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('La fecha de inicio no puede ser mayor que la de fin'),
+        ),
+      );
+      return;
+    }
+    context.read<SaleProvider>().filterByDateRange(start, end);
+  }
+
+  void _clearFilter() {
+    setState(() {
+      _startDate = null;
+      _endDate = null;
+    });
+    context.read<SaleProvider>().clearFilter();
+  }
+
+  void _showDetail(int saleId) {
+    final provider = context.read<SaleProvider>();
+    provider.fetchSaleDetail(saleId);
+
+    CustomModalSheet.show(
+      context: context,
+      child: ChangeNotifierProvider.value(
+        value: provider,
+        child: const SalesDetailSheet(),
+      ),
+    );
+  }
+
+  Widget _buildContent(SaleProvider p) {
+    if (p.viewStatus == ViewStatusSale.error) {
+      return SizedBox(
+        height: 320,
+        child: ErrorView(
+          errorMessage: p.errorMessage ?? 'Error desconocido',
+          onRetry: p.refresh,
+        ),
+      );
+    }
+
+    if (p.viewStatus != ViewStatusSale.success) {
+      return const SizedBox(
+        height: 320,
+        child: LoadingView(message: 'Cargando ventas...'),
+      );
+    }
+
+    if (p.sales.isEmpty) {
+      return const SizedBox(
+        height: 200,
+        child: Center(child: Text('No hay ventas')),
+      );
+    }
+
+    return Column(
+      children: [
+        for (final sale in p.sales) ...[
+          SalesCard(
+            sale: sale,
+            onViewDetail: () => _showDetail(sale.saleId),
+          ),
+          const SizedBox(height: 12),
+        ],
+        const SizedBox(height: 4),
+        CustomPagination(
+          currentPage: p.currentPage,
+          totalPages: p.totalPages,
+          onPageTap: (page) => p.fetchSales(pageNumber: page),
+        ),
+        const SizedBox(height: 20),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<SaleProvider>();
+
     return Scaffold(
       backgroundColor: AppColors.bgtextColor,
-
-      appBar: const AppHeader(
-        title: 'Historial de ventas',
-      ),
-
+      appBar: const AppHeader(title: 'Historial de ventas'),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 14.0,
-          ),
+        child: CustomRefreshScrollView(
+          onRefresh: provider.refresh,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
           child: Column(
             children: [
-
               CustomDateFilter(
-                onStartDateTap: () => _selectStartDate(context),
-                onEndDateTap: () => _selectEndDate(context),
+                startDate:
+                    _startDate == null ? 'Fecha inicial' : formatDate(_startDate!),
+                endDate:
+                    _endDate == null ? 'Fecha final' : formatDate(_endDate!),
+                onStartDateTap: _selectStartDate,
+                onEndDateTap: _selectEndDate,
                 onFilterPressed: _openFilterModal,
               ),
-
+              if (provider.isFiltering)
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton.icon(
+                    onPressed: _clearFilter,
+                    icon: const Icon(Icons.close),
+                    label: const Text('Quitar filtro'),
+                  ),
+                ),
               const SizedBox(height: 16),
-
-              SalesCard(
-                sale: const Sales(
-                  customerName: 'Juan',
-                  saleDate: '2023-10-01',
-                  totalPrice: 500.00,
-                ),
-                onViewDetail: () {
-                  _mostrarDetalleJuan(context);
-                },
-              ),
-
-              const SizedBox(height: 12),
-
-              SalesCard(
-                sale: const Sales(
-                  customerName: 'María',
-                  saleDate: '2023-10-02',
-                  totalPrice: 150.00,
-                ),
-                onViewDetail: () {
-                  _mostrarDetalleMaria(context);
-                },
-              ),
-
-              const SizedBox(height: 12),
-
-              SalesCard(
-                sale: const Sales(
-                  customerName: 'Carlos',
-                  saleDate: '2023-10-03',
-                  totalPrice: 200.00,
-                ),
-                onViewDetail: () {
-                  _mostrarDetalleCarlos(context);
-                },
-              ),
-
-              const SizedBox(height: 12),
-
-              SalesCard(
-                sale: const Sales(
-                  customerName: 'Ana',
-                  saleDate: '2023-10-04',
-                  totalPrice: 250.00,
-                ),
-                onViewDetail: () {
-                  _mostrarDetalleAna(context);
-                },
-              ),
-
-              const SizedBox(height: 12),
-
-              const CustomPagination(
-                currentPage: 3,
-              ),
-
-              const SizedBox(height: 20),
+              _buildContent(provider),
             ],
           ),
         ),
       ),
-
-      bottomNavigationBar: const CustomBottomNavBar(
-        activeTab: 'Ventas',
-      ),
-    );
-  }
-
-  void _mostrarDetalleJuan(BuildContext context) {
-    const sale = Sales(
-      customerName: 'Juan',
-      saleDate: '2023-10-01',
-      totalPrice: 500.00,
-    );
-
-    const details = [
-      SaleDetail(
-        itemType: 'PRODUCT',
-        productName: 'Shampoo Revitalizante',
-        serviceName: null,
-        saleQuantity: 2,
-        salePrice: 150.00,
-        lineTotal: 300.00,
-      ),
-      SaleDetail(
-        itemType: 'SERVICE',
-        productName: null,
-        serviceName: 'Corte de cabello',
-        saleQuantity: 1,
-        salePrice: 200.00,
-        lineTotal: 200.00,
-      ),
-    ];
-
-    CustomModalSheet.show(
-      context: context,
-      child: const SalesDetailModal(
-        sale: sale,
-        details: details,
-      ),
-    );
-  }
-
-  void _mostrarDetalleMaria(BuildContext context) {
-    const sale = Sales(
-      customerName: 'María',
-      saleDate: '2023-10-02',
-      totalPrice: 150.00,
-    );
-
-    const details = [
-      SaleDetail(
-        itemType: 'SERVICE',
-        productName: null,
-        serviceName: 'Lavado de cabello',
-        saleQuantity: 1,
-        salePrice: 150.00,
-        lineTotal: 150.00,
-      ),
-    ];
-
-    CustomModalSheet.show(
-      context: context,
-      child: const SalesDetailModal(
-        sale: sale,
-        details: details,
-      ),
-    );
-  }
-
-  void _mostrarDetalleCarlos(BuildContext context) {
-    const sale = Sales(
-      customerName: 'Carlos',
-      saleDate: '2023-10-03',
-      totalPrice: 200.00,
-    );
-
-    const details = [
-      SaleDetail(
-        itemType: 'PRODUCT',
-        productName: 'Acondicionador',
-        serviceName: null,
-        saleQuantity: 1,
-        salePrice: 200.00,
-        lineTotal: 200.00,
-      ),
-    ];
-
-    CustomModalSheet.show(
-      context: context,
-      child: const SalesDetailModal(
-        sale: sale,
-        details: details,
-      ),
-    );
-  }
-
-  void _mostrarDetalleAna(BuildContext context) {
-    const sale = Sales(
-      customerName: 'Ana',
-      saleDate: '2023-10-04',
-      totalPrice: 250.00,
-    );
-
-    const details = [
-      SaleDetail(
-        itemType: 'SERVICE',
-        productName: null,
-        serviceName: 'Tratamiento capilar',
-        saleQuantity: 1,
-        salePrice: 250.00,
-        lineTotal: 250.00,
-      ),
-    ];
-
-    CustomModalSheet.show(
-      context: context,
-      child: const SalesDetailModal(
-        sale: sale,
-        details: details,
-      ),
+      bottomNavigationBar: const CustomBottomNavBar(activeTab: 'Ventas'),
     );
   }
 }
