@@ -22,22 +22,42 @@ import '../../widgets/custom_pagination.dart';
 import 'widgets/saleshistory_card.dart';
 import 'widgets/saleshistory_detail_modal.dart';
 
-class SalesScreen extends StatelessWidget {
+class SalesScreen extends StatefulWidget {
   const SalesScreen({super.key});
+
+  @override
+  State<SalesScreen> createState() => _SalesScreenState();
+}
+
+class _SalesScreenState extends State<SalesScreen> {
+  late final SaleProvider _saleProvider;
+  late final ProductProvider _productProvider;
+  late final ServicesProvider _servicesProvider;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _saleProvider = getIt<SaleProvider>();
+    _productProvider = getIt<ProductProvider>();
+    _servicesProvider = getIt<ServicesProvider>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      _saleProvider.fetchSales();
+      _productProvider.fetchProducts();
+      _servicesProvider.fetchServices();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => getIt<SaleProvider>()..fetchSales(),
-        ),
-        ChangeNotifierProvider.value(
-          value: getIt<ProductProvider>()..fetchProducts(),
-        ),
-        ChangeNotifierProvider.value(
-          value: getIt<ServicesProvider>()..fetchServices(),
-        ),
+        ChangeNotifierProvider.value(value: _saleProvider),
+        ChangeNotifierProvider.value(value: _productProvider),
+        ChangeNotifierProvider.value(value: _servicesProvider),
       ],
       child: const _SalesView(),
     );
@@ -64,6 +84,10 @@ class _SalesViewState extends State<_SalesView> {
   void _openFilterModal() {
     final productProvider = context.read<ProductProvider>();
     final servicesProvider = context.read<ServicesProvider>();
+
+    debugPrint('ESTADO SERVICIOS: ${servicesProvider.viewStatus}');
+    debugPrint('CANTIDAD SERVICIOS: ${servicesProvider.items.length}');
+    debugPrint('ERROR SERVICIOS: ${servicesProvider.errorMessage}');
 
     final productItems = [
       _allProducts,

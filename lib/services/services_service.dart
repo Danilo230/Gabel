@@ -22,8 +22,8 @@ class ServicesService {
 
   Future<ServiceModels> createService(ServiceModels service) async {
     final name = service.serviceName.trim();
-    final price = service.servicePrice.trim();
-    final stilist = service.serviceStilist.trim();
+    final price = service.servicePrice.toStringAsFixed(2);
+    final stilist = service.stylistName.trim();
     final description = service.serviceDescription.trim();
 
     if (name.isEmpty || price.isEmpty || stilist.isEmpty) {
@@ -34,8 +34,8 @@ class ServicesService {
       ServiceModels(
         serviceId: service.serviceId,
         serviceName: name,
-        servicePrice: price,
-        serviceStilist: stilist,
+        servicePrice: service.servicePrice,
+        stylistName: stilist,
         serviceDescription: description,
         serviceStatus: true,
       ),
@@ -47,8 +47,8 @@ class ServicesService {
     ServiceModels service,
   ) async {
     final name = service.serviceName.trim();
-    final price = service.servicePrice.trim();
-    final stilist = service.serviceStilist.trim();
+    final price = service.servicePrice.toStringAsFixed(2);
+    final stilist = service.stylistName.trim();
     final description = service.serviceDescription.trim();
 
     if (name.isEmpty || price.isEmpty || stilist.isEmpty) {
@@ -60,8 +60,8 @@ class ServicesService {
       ServiceModels(
         serviceId: serviceId,
         serviceName: name,
-        servicePrice: price,
-        serviceStilist: stilist,
+        servicePrice: service.servicePrice,
+        stylistName: stilist,
         serviceDescription: description,
         serviceStatus: service.serviceStatus,
       ),

@@ -1,10 +1,12 @@
+
 import 'package:flutter/material.dart';
 import 'package:gabel/core/di/injection.dart';
 import 'package:gabel/core/utils/format_date.dart';
 import 'package:gabel/presentation/providers/product_provider.dart';
 import 'package:gabel/presentation/providers/purchase_provider.dart';
+import 'package:gabel/presentation/providers/supplier_provider.dart';
 import 'package:gabel/presentation/widgets/custom_filter_modal.dart';
-import 'package:gabel/presentation/widgets/custom_refresh_scroll_view.dart'; // ajusta al nombre real del archivo
+import 'package:gabel/presentation/widgets/custom_refresh_scroll_view.dart';
 import 'package:gabel/presentation/widgets/error_view.dart';
 import 'package:gabel/presentation/widgets/loading_view.dart';
 import 'package:provider/provider.dart';
@@ -16,13 +18,13 @@ import '../../widgets/custom_date_filter.dart';
 import '../../widgets/custom_filter_dropdown.dart';
 import '../../widgets/custom_modal_sheet.dart';
 import '../../widgets/custom_pagination.dart';
-import 'package:gabel/presentation/providers/supplier_provider.dart';
+
 import 'widgets/purchaseshistory_card.dart';
 import 'widgets/purchaseshistory_detail_modal.dart';
 
 class PurchaseHistoryScreen extends StatelessWidget {
   const PurchaseHistoryScreen({super.key});
-    
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -33,8 +35,8 @@ class PurchaseHistoryScreen extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => getIt<SupplierProvider>()..fetchSuppliers(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => getIt<ProductProvider>()..fetchProducts(pageSize:100),
+        ChangeNotifierProvider.value(
+          value: getIt<ProductProvider>(),
         ),
       ],
       child: const _PurchaseHistoryView(),
@@ -54,11 +56,19 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
   DateTime? _endDate;
 
   String selectedProduct = 'Todos los productos';
-
   String selectedSupplier = 'Todos los proveedores';
 
+  @override
+  void initState() {
+    super.initState();
 
- 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      context.read<ProductProvider>().fetchProducts(pageSize: 100);
+    });
+  }
+
   void _openFilterModal() {
     final supplierProvider = context.read<SupplierProvider>();
     final productProvider = context.read<ProductProvider>();
@@ -133,11 +143,11 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
           purchaseProvider.filterBySupplier(supplier.supplierId);
           return;
         }
+
         purchaseProvider.clearFilter();
       },
     );
   }
-
 
   Future<void> _selectStartDate() async {
     final picked = await showDatePicker(
@@ -146,10 +156,11 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
     );
+
     if (picked == null || !mounted) return;
-    _startDate = picked;
-    _applyDateFilter();
+
     setState(() => _startDate = picked);
+    _applyDateFilter();
   }
 
   Future<void> _selectEndDate() async {
@@ -159,25 +170,30 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
     );
+
     if (picked == null || !mounted) return;
-    _endDate = picked;
-    _applyDateFilter();
+
     setState(() => _endDate = picked);
+    _applyDateFilter();
   }
 
   void _applyDateFilter() {
     final start = _startDate;
     final end = _endDate;
-    if (start == null || end == null) return; 
+
+    if (start == null || end == null) return;
 
     if (start.isAfter(end)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('La fecha de inicio no puede ser mayor que la de fin'),
+          content: Text(
+            'La fecha de inicio no puede ser mayor que la de fin',
+          ),
         ),
       );
       return;
     }
+
     context.read<PurchaseProvider>().filterByDateRange(start, end);
   }
 
@@ -185,7 +201,10 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
     setState(() {
       _startDate = null;
       _endDate = null;
+      selectedProduct = 'Todos los productos';
+      selectedSupplier = 'Todos los proveedores';
     });
+
     context.read<PurchaseProvider>().clearFilter();
   }
 
@@ -237,7 +256,11 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
           const SizedBox(height: 12),
         ],
         const SizedBox(height: 4),
-        CustomPagination(currentPage: p.currentPage,totalPages: p.totalPages,onPageTap: (page) => p.fetchPurchases(pageNumber: page),),
+        CustomPagination(
+          currentPage: p.currentPage,
+          totalPages: p.totalPages,
+          onPageTap: (page) => p.fetchPurchases(pageNumber: page),
+        ),
         const SizedBox(height: 20),
       ],
     );
@@ -253,12 +276,19 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
       body: SafeArea(
         child: CustomRefreshScrollView(
           onRefresh: provider.refresh,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 14.0,
+          ),
           child: Column(
             children: [
               CustomDateFilter(
-                startDate: _startDate == null ? 'Fecha inicial' : formatDate(_startDate!),
-                endDate: _endDate == null ? 'Fecha final' : formatDate(_endDate!),
+                startDate: _startDate == null
+                    ? 'Fecha inicial'
+                    : formatDate(_startDate!),
+                endDate: _endDate == null
+                    ? 'Fecha final'
+                    : formatDate(_endDate!),
                 onStartDateTap: _selectStartDate,
                 onEndDateTap: _selectEndDate,
                 onFilterPressed: _openFilterModal,
@@ -278,7 +308,9 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
           ),
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavBar(activeTab: 'Compras'),
+      bottomNavigationBar: const CustomBottomNavBar(
+        activeTab: 'Compras',
+      ),
     );
   }
 }

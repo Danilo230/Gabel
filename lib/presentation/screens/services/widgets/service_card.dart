@@ -59,7 +59,7 @@ class ServiceCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    service.servicePrice,
+                    service.servicePrice.toStringAsFixed(2),
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,

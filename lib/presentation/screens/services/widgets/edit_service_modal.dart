@@ -29,7 +29,7 @@ class _EditServiceModalState extends State<EditServiceModal> {
   @override
   void initState() {
     super.initState();
-    _selectedEstilist = widget.service.serviceStilist;
+    _selectedEstilist = widget.service.stylistName;
     _selectedStatus = widget.service.serviceStatus ? 'Activo' : 'Inactivo';
   }
 
