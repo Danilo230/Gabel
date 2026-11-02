@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../theme/app_colors.dart';
-import '../models/purchasesmodel.dart';
+import 'package:gabel/core/utils/format_date.dart';
+import 'package:gabel/data/models/purchase_model.dart';
 
 class PurchaseCard extends StatelessWidget {
-  final Purchase purchase;
+  final PurchaseModel purchase;
   final VoidCallback? onViewDetail;
 
   const PurchaseCard({
@@ -97,7 +98,7 @@ class PurchaseCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                purchase.purchaseDate,
+                formatDate(purchase.purchaseDate),
                 style: const TextStyle(
                   fontSize: 14,
                   color: AppColors.textSecondary,
