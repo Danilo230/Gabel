@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/presentation/screens/saleshistory/models/salesdetailmodel.dart';
+import 'package:gabel/presentation/screens/saleshistory/models/salesmodel.dart';
+import 'package:gabel/presentation/screens/saleshistory/widgets/saleshistory_card.dart';
+import 'package:gabel/presentation/screens/saleshistory/widgets/saleshistory_detail_modal.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/app_header.dart';
 import '../../../widgets/custom_botton_navbar_sales.dart';
@@ -34,110 +38,124 @@ class SalespersonScreen extends StatelessWidget {
               const CustomDateFilter(),
               const SizedBox(height: 16),
 
-              PurchaseCard(
-                purchase: const Purchase(
-                  supplierName: 'Distribuidora Bella',
-                  purchaseDate: '2026-09-27',
-                  totalAmount: 1000.00,
+              SalesCard(
+                sale: const Sales(
+                  customerName: 'Distribuidora Bella',
+                  saleDate: '2026-09-27',
+                  totalPrice: 1000.00,
                 ),
                 onViewDetail: () => _showDetail(
                   context,
-                  supplierName: 'Distribuidora Bella',
-                  purchaseDate: '2026-09-27',
-                  totalAmount: 1000.00,
+                  customerName: 'Distribuidora Bella',
+                  saleDate: '2026-09-27',
+                  totalPrice: 1000.00,
                   details: const [
-                    PurchaseDetail(
-                      productName: 'Sérum Verb',
-                      purchaseQuantity: 5,
-                      unitPrice: 125.00,
-                      lineTotal: 625.00,
+                    SaleDetail(
+                      itemType: 'SERVICE',
+                      productName: null,
+                      serviceName: 'Lavado de cabello',
+                      saleQuantity: 1,
+                      salePrice: 150.00,
+                      lineTotal: 150.00,
                     ),
-                    PurchaseDetail(
-                      productName: 'Shampoo Revitalizante',
-                      purchaseQuantity: 3,
-                      unitPrice: 125.00,
-                      lineTotal: 375.00,
+                    SaleDetail(
+                      itemType: 'SERVICE',
+                      productName: null,
+                      serviceName: 'Lavado de cabello',
+                      saleQuantity: 1,
+                      salePrice: 150.00,
+                      lineTotal: 150.00,
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 12),
 
-              PurchaseCard(
-                purchase: const Purchase(
-                  supplierName: 'Productos Salón',
-                  purchaseDate: '2026-09-25',
-                  totalAmount: 750.00,
+              SalesCard(
+                sale: const Sales(
+                  customerName: 'Productos Salón',
+                  saleDate: '2026-09-25',
+                  totalPrice: 750.00,
                 ),
                 onViewDetail: () => _showDetail(
                   context,
-                  supplierName: 'Productos Salón',
-                  purchaseDate: '2026-09-25',
-                  totalAmount: 750.00,
+                  customerName: 'Productos Salón',
+                  saleDate: '2026-09-25',
+                  totalPrice: 750.00,
                   details: const [
-                    PurchaseDetail(
-                      productName: 'Acondicionador Profesional',
-                      purchaseQuantity: 5,
-                      unitPrice: 100.00,
-                      lineTotal: 500.00,
+                    SaleDetail(
+                      itemType: 'SERVICE',
+                      productName: null,
+                      serviceName: 'Lavado de cabello',
+                      saleQuantity: 1,
+                      salePrice: 150.00,
+                      lineTotal: 150.00,
                     ),
-                    PurchaseDetail(
-                      productName: 'Mascarilla Capilar',
-                      purchaseQuantity: 2,
-                      unitPrice: 125.00,
-                      lineTotal: 250.00,
+                    SaleDetail(
+                      itemType: 'SERVICE',
+                      productName: null,
+                      serviceName: 'Lavado de cabello',
+                      saleQuantity: 1,
+                      salePrice: 150.00,
+                      lineTotal: 150.00,
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 12),
 
-              PurchaseCard(
-                purchase: const Purchase(
-                  supplierName: 'Belleza Profesional',
-                  purchaseDate: '2026-09-20',
-                  totalAmount: 1200.00,
+              SalesCard(
+                sale: const Sales(
+                  customerName: 'Belleza Profesional',
+                  saleDate: '2026-09-20',
+                  totalPrice: 1200.00,
                 ),
                 onViewDetail: () => _showDetail(
                   context,
-                  supplierName: 'Belleza Profesional',
-                  purchaseDate: '2026-09-20',
-                  totalAmount: 1200.00,
-                  details: const [
-                    PurchaseDetail(
-                      productName: 'Tratamiento Capilar',
-                      purchaseQuantity: 4,
-                      unitPrice: 200.00,
-                      lineTotal: 800.00,
+                  customerName: 'Belleza Profesional',
+                  saleDate: '2026-09-20',
+                  totalPrice: 1200.00,
+                  details: [
+                    SaleDetail(
+                      itemType: 'SERVICE',
+                      productName: null,
+                      serviceName: 'Lavado de cabello',
+                      saleQuantity: 1,
+                      salePrice: 150.00,
+                      lineTotal: 150.00,
                     ),
-                    PurchaseDetail(
-                      productName: 'Aceite para Cabello',
-                      purchaseQuantity: 4,
-                      unitPrice: 100.00,
-                      lineTotal: 400.00,
+                    SaleDetail(
+                      itemType: 'SERVICE',
+                      productName: null,
+                      serviceName: 'Lavado de cabello',
+                      saleQuantity: 1,
+                      salePrice: 150.00,
+                      lineTotal: 150.00,
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 12),
 
-              PurchaseCard(
-                purchase: const Purchase(
-                  supplierName: 'Distribuidora Central',
-                  purchaseDate: '2026-09-15',
-                  totalAmount: 625.00,
+              SalesCard(
+                sale: const Sales(
+                  customerName: 'Distribuidora Central',
+                  saleDate: '2026-09-15',
+                  totalPrice: 625.00,
                 ),
                 onViewDetail: () => _showDetail(
                   context,
-                  supplierName: 'Distribuidora Central',
-                  purchaseDate: '2026-09-15',
-                  totalAmount: 625.00,
+                  customerName: 'Distribuidora Central',
+                  saleDate: '2026-09-15',
+                  totalPrice: 625.00,
                   details: const [
-                    PurchaseDetail(
-                      productName: 'Sérum Verb',
-                      purchaseQuantity: 5,
-                      unitPrice: 125.00,
-                      lineTotal: 625.00,
+                    SaleDetail(
+                      itemType: 'SERVICE',
+                      productName: null,
+                      serviceName: 'Lavado de cabello',
+                      saleQuantity: 1,
+                      salePrice: 150.00,
+                      lineTotal: 150.00,
                     ),
                   ],
                 ),
@@ -155,18 +173,18 @@ class SalespersonScreen extends StatelessWidget {
 
   void _showDetail(
     BuildContext context, {
-    required String supplierName,
-    required String purchaseDate,
-    required double totalAmount,
-    required List<PurchaseDetail> details,
+    required String customerName,
+    required String saleDate,
+    required double totalPrice,
+    required List<SaleDetail> details,
   }) {
     CustomModalSheet.show(
       context: context,
-      child: PurchaseDetailModal(
-        purchase: Purchase(
-          supplierName: supplierName,
-          purchaseDate: purchaseDate,
-          totalAmount: totalAmount,
+      child: SalesDetailModal(
+        sale: Sales(
+          customerName: customerName,
+          saleDate: saleDate,
+          totalPrice: totalPrice,
         ),
         details: details,
       ),
