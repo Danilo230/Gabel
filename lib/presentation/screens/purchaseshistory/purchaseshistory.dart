@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gabel/core/di/injection.dart';
+import 'package:gabel/core/utils/format_date.dart';
 import 'package:gabel/presentation/providers/purchase_provider.dart';
 import 'package:gabel/presentation/widgets/custom_filter_modal.dart';
 import 'package:gabel/presentation/widgets/custom_refresh_scroll_view.dart'; // ajusta al nombre real del archivo
@@ -96,6 +97,7 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
     if (picked == null || !mounted) return;
     _startDate = picked;
     _applyDateFilter();
+    setState(() => _startDate = picked);
   }
 
   Future<void> _selectEndDate() async {
@@ -108,6 +110,7 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
     if (picked == null || !mounted) return;
     _endDate = picked;
     _applyDateFilter();
+    setState(() => _endDate = picked);
   }
 
   void _applyDateFilter() {
@@ -182,7 +185,7 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
           const SizedBox(height: 12),
         ],
         const SizedBox(height: 4),
-        CustomPagination(currentPage: p.currentPage),
+        CustomPagination(currentPage: p.currentPage,totalPages: p.totalPages,onPageTap: (page) => p.fetchPurchases(pageNumber: page),),
         const SizedBox(height: 20),
       ],
     );
@@ -202,6 +205,8 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
           child: Column(
             children: [
               CustomDateFilter(
+                startDate: _startDate == null ? 'Fecha inicial' : formatDate(_startDate!),
+                endDate: _endDate == null ? 'Fecha final' : formatDate(_endDate!),
                 onStartDateTap: _selectStartDate,
                 onEndDateTap: _selectEndDate,
                 onFilterPressed: _openFilterModal,

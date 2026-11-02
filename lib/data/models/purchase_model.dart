@@ -13,8 +13,8 @@ class PurchaseModel {
 
   static PurchaseModel fromJson(Map<String, dynamic> json) {
     return PurchaseModel(
-      purchaseId: json['purchasesId'] as int,
-      supplierName: json['suppliersName'] as String,
+      purchaseId: json['purchaseId'] as int,
+      supplierName: json['supplierName'] as String,
       purchaseDate: DateTime.parse(json['purchaseDate'] as String),
       totalAmount: (json['totalAmount'] as num).toDouble()
     );

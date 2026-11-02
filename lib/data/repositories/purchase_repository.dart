@@ -4,6 +4,7 @@ import 'package:gabel/core/network/api_client.dart';
 import 'package:gabel/data/models/paged_result_model.dart';
 import 'package:gabel/data/models/purchase_model.dart';
 import 'package:gabel/data/models/purchase_with_details_model.dart';
+import 'package:flutter/foundation.dart';
 
 class PurchaseRepository {
   final ApiClient _apiClient;
@@ -15,6 +16,7 @@ class PurchaseRepository {
       '${ApiConstants.purchasesHistory}/master',
       query: params,
     );
+    debugPrint('MASTER JSON: $data');   
     if (data is! Map<String, dynamic>) throw const ParsingException();
 
     return PagedResultModel.fromJson(data, PurchaseModel.fromJson);
