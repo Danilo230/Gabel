@@ -81,7 +81,7 @@ class PurchaseProvider extends ChangeNotifier {
     switch (_filter) {
       case PurchaseFilter.product:
         return _purchaseService.getByProduct(
-          _filterId!,
+          _filterId!, 
           pageNumber: page,
           pageSize: _pageSize,
         );
