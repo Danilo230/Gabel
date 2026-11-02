@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/core/utils/format_date.dart';
+import 'package:gabel/data/models/sale_model.dart';
 
 import '../../../theme/app_colors.dart';
-import '../models/salesmodel.dart';
 
 class SalesCard extends StatelessWidget {
-  final Sales sale;
+  final SaleModel sale;
   final VoidCallback? onViewDetail;
 
   const SalesCard({
@@ -101,7 +102,7 @@ class SalesCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                sale.saleDate,
+                formatDate(sale.saleDate),
                 style: const TextStyle(
                   fontSize: 14,
                   color: AppColors.textSecondary,
