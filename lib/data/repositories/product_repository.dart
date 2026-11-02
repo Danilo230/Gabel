@@ -34,10 +34,10 @@ class ProductRepository {
       body: {
         'productName': product.productName,
         'productDescription': product.productDescription,
-        'productBrand': product.productBrand,
-        'productUnit': product.productUnit,
-        'productCategory': product.productCategory,
-        'productSupplier': product.productSupplier,
+        'productBrand': product.brand,
+        'productUnit': product.unitName,
+        'productCategory': product.categoryName,
+        'productSupplier': product.supplierName,
       },
     );
     if (json is! Map<String, dynamic>) throw ParsingException();
@@ -53,10 +53,10 @@ class ProductRepository {
       body: {
         'productName': product.productName,
         'productDescription': product.productDescription,
-        'productBrand': product.productBrand,
-        'productUnit': product.productUnit,
-        'productCategory': product.productCategory,
-        'productSupplier': product.productSupplier,
+        'productBrand': product.brand,
+        'productUnit': product.unitName,
+        'productCategory': product.categoryName,
+        'productSupplier': product.supplierName,
         'productStatus': product.productStatus,
       },
     );

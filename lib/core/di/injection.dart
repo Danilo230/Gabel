@@ -100,8 +100,4 @@ void setupDependencies() {
   getIt.registerLazySingleton<ServicesProvider>(
     () => ServicesProvider(getIt<ServicesService>()),
   );
-
-  getIt.registerLazySingleton<AuthenticationProvider>(
-    () => AuthenticationProvider(getIt<AuthenticationService>()),
-  );
 }
