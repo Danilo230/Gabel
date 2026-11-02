@@ -117,7 +117,7 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
             (product) => product.productName == selectedProduct,
           );
 
-          purchaseProvider.filterByProduct(product.productId!);
+          purchaseProvider.filterByProduct(product.productId);
           return;
         }
 
