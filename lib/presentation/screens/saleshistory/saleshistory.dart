@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gabel/core/di/injection.dart';
 import 'package:gabel/core/utils/format_date.dart';
+import 'package:gabel/presentation/providers/product_provider.dart';
 import 'package:gabel/presentation/providers/sale_provider.dart';
+import 'package:gabel/presentation/providers/service_provider.dart';
 import 'package:gabel/presentation/widgets/custom_filter_modal.dart';
 import 'package:gabel/presentation/widgets/custom_refresh_scroll_view.dart'; // ajusta al nombre real
 import 'package:gabel/presentation/widgets/error_view.dart';
@@ -24,8 +26,18 @@ class SalesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => getIt<SaleProvider>()..fetchSales(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => getIt<SaleProvider>()..fetchSales(),
+        ),
+        ChangeNotifierProvider.value(
+          value: getIt<ProductProvider>()..fetchProducts(),
+        ),
+        ChangeNotifierProvider.value(
+          value: getIt<ServicesProvider>()..fetchServices(),
+        ),
+      ],
       child: const _SalesView(),
     );
   }
