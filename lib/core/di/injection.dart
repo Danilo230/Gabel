@@ -76,3 +76,4 @@ void setupDependencies() {
   getIt.registerLazySingleton<ServicesProvider>(() => ServicesProvider(getIt<ServicesService>()),);
   getIt.registerFactory<SupplierProvider>(() => SupplierProvider(getIt<SupplierService>()),);
 }
+
