@@ -28,7 +28,7 @@ class ProductRepository {
         .toList();
   }
 
-  Future<ProductModel> create(ProductModel product) async {
+  Future<ProductModel> createProduct(ProductModel product) async {
     final json = await _apiClient.post(
       ApiConstants.products,
       body: {
@@ -38,14 +38,16 @@ class ProductRepository {
         'productUnit': product.productUnit,
         'productCategory': product.productCategory,
         'productSupplier': product.productSupplier,
-        'productPrice': product.productPrice,
       },
     );
     if (json is! Map<String, dynamic>) throw ParsingException();
     return ProductModel.fromJson(json);
   }
 
-  Future<ProductModel> update(int productId, ProductModel product) async {
+  Future<ProductModel> updateProduct(
+    int productId,
+    ProductModel product,
+  ) async {
     final json = await _apiClient.put(
       '${ApiConstants.products}/$productId',
       body: {
@@ -55,7 +57,6 @@ class ProductRepository {
         'productUnit': product.productUnit,
         'productCategory': product.productCategory,
         'productSupplier': product.productSupplier,
-        'productPrice': product.productPrice,
         'productStatus': product.productStatus,
       },
     );
@@ -65,12 +66,28 @@ class ProductRepository {
     return ProductModel.fromJson(json);
   }
 
-  Future<String> delete(int productId, bool productStatus) async {
+  Future<String> deleteProduct(int productId, bool productStatus) async {
     final json = await _apiClient.delete(
       '${ApiConstants.products}/DeleteProduct/$productId',
       body: {'productStatus': productStatus},
     );
     if (json is! Map<String, dynamic>) throw ParsingException();
     return json['message'] as String;
+  }
+
+  // para obtener las listas en inputs de seleccion
+  Future<List<String>> getCatalog(String endpoint, String nameField) async {
+    final data = await _apiClient.get(endpoint);
+    final list = data is Map<String, dynamic> ? data['items'] : data;
+    if (list is! List) throw ParsingException();
+
+    return list
+        .map(
+          (e) => e is Map<String, dynamic>
+              ? (e[nameField] ?? '').toString()
+              : e.toString(),
+        )
+        .where((name) => name.trim().isNotEmpty)
+        .toList();
   }
 }

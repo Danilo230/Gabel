@@ -1,7 +1,9 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:gabel/presentation/providers/product_provider.dart';
+import '../../../../data/models/product_model.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_delete.dart';
-import '../../../../data/models/product_model.dart';
 import 'edit_product_modal.dart';
 
 class ProductCard extends StatelessWidget {
@@ -28,21 +30,15 @@ class ProductCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                product.productName,
-                style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
-                ),
-              ),
-            ],
+          Text(
+            product.productName,
+            style: const TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
           ),
           const SizedBox(height: 12),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -76,10 +72,9 @@ class ProductCard extends StatelessWidget {
                       color: AppColors.actionIcon,
                       size: 20,
                     ),
-                    onPressed: () {
-                      EditProductModal.show(context, product);
-                    },
+                    onPressed: () => EditProductModal.show(context, product),
                   ),
+                  const SizedBox(width: 8),
 
                   IconButton(
                     padding: EdgeInsets.zero,
@@ -89,20 +84,44 @@ class ProductCard extends StatelessWidget {
                       color: AppColors.deleteIcon,
                       size: 20,
                     ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => const CustomDeleteDialog(
-                          message: '¿Deseas eliminar este producto?',
-                        ),
-                      );
-                    },
+                    onPressed: () => _handleDelete(context),
                   ),
                 ],
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  void _handleDelete(BuildContext context) {
+    final provider = context.read<ProductProvider>();
+    final messenger = ScaffoldMessenger.of(context);
+    final id = product.productId;
+
+    showDialog(
+      context: context,
+      builder: (_) => CustomDeleteDialog(
+        message: '¿Deseas eliminar este producto?',
+        onConfirm: () async {
+          final ok = await provider.deleteProduct(id);
+
+          messenger.showSnackBar(
+            SnackBar(
+              content: Text(
+                ok
+                    ? 'Producto eliminado exitosamente.'
+                    : provider.errorMessage ??
+                          'No se pudo eliminar el producto.',
+              ),
+              backgroundColor: ok
+                  ? AppColors.primaryPurple
+                  : AppColors.strongRed,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        },
       ),
     );
   }
