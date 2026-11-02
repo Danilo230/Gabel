@@ -29,7 +29,7 @@ Future<void> main() async {
     ChangeNotifierProvider(
       create: (_) => getIt<AuthenticationProvider>(),
       child: const MainApp(),
-    )
+    ),
   );
 }
 

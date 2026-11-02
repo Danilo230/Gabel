@@ -15,7 +15,7 @@ class ServiceModels {
     required this.serviceStatus,
   });
 
-  factory ServiceModels.fromJson(Map<String, dynamic> json) {
+  static ServiceModels fromJson(Map<String, dynamic> json) {
     return ServiceModels(
       serviceId: json['serviceId'] as int,
       serviceName: json['serviceName'] as String,

@@ -6,7 +6,6 @@ class ProductModel {
   final String productUnit;
   final String productCategory;
   final String productSupplier;
-  final String productPrice;
   final bool productStatus;
 
   const ProductModel({
@@ -17,11 +16,10 @@ class ProductModel {
     required this.productUnit,
     required this.productCategory,
     required this.productSupplier,
-    required this.productPrice,
     required this.productStatus,
   });
 
-  factory ProductModel.fromJson(Map<String, dynamic> json) {
+  static ProductModel fromJson(Map<String, dynamic> json) {
     return ProductModel(
       productId: json['productId'] as int,
       productName: json['productName'] as String,
@@ -30,7 +28,6 @@ class ProductModel {
       productUnit: json['productUnit'] as String,
       productCategory: json['productCategory'] as String,
       productSupplier: json['productSupplier'] as String,
-      productPrice: json['productPrice'] as String,
       productStatus: json['productStatus'] as bool,
     );
   }
@@ -44,7 +41,6 @@ class ProductModel {
       'productUnit': productUnit,
       'productCategory': productCategory,
       'productSupplier': productSupplier,
-      'productPrice': productPrice,
       'productStatus': productStatus,
     };
   }
