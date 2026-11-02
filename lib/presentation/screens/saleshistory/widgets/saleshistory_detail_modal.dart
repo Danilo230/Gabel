@@ -61,7 +61,7 @@ class SalesDetailModal extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    sale.totalPrice as String,
+                    sale.totalPrice.toStringAsFixed(2),
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -127,7 +127,7 @@ class SalesDetailModal extends StatelessWidget {
                 ),
               ),
               Text(
-                sale.totalPrice as String,
+                sale.totalPrice.toStringAsFixed(2),
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
