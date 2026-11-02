@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gabel/core/di/injection.dart';
 import 'package:gabel/core/utils/format_date.dart';
+import 'package:gabel/presentation/providers/product_provider.dart';
 import 'package:gabel/presentation/providers/purchase_provider.dart';
 import 'package:gabel/presentation/widgets/custom_filter_modal.dart';
 import 'package:gabel/presentation/widgets/custom_refresh_scroll_view.dart'; // ajusta al nombre real del archivo
@@ -32,6 +33,9 @@ class PurchaseHistoryScreen extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => getIt<SupplierProvider>()..fetchSuppliers(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => getIt<ProductProvider>()..fetchProducts(),
+        ),
       ],
       child: const _PurchaseHistoryView(),
     );
@@ -50,16 +54,15 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
   DateTime? _endDate;
 
   String selectedProduct = 'Todos los productos';
-  final List<String> products = [
-    'Todos los productos',
-    'Sérum Verb',
-    'Shampoo Revitalizante',
-  ];
+
   String selectedSupplier = 'Todos los proveedores';
 
 
+ 
   void _openFilterModal() {
     final supplierProvider = context.read<SupplierProvider>();
+    final productProvider = context.read<ProductProvider>();
+
     CustomFilterModal.show(
       context,
       title: 'Filtrar Compras',
@@ -70,9 +73,16 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
             CustomFilterDropdown(
               label: 'Productos',
               value: selectedProduct,
-              items: products,
+              items: [
+                'Todos los productos',
+                ...productProvider.items.map(
+                  (product) => product.productName,
+                ),
+              ],
               onChanged: (val) {
-                if (val != null) setModalState(() => selectedProduct = val);
+                if (val != null) {
+                  setModalState(() => selectedProduct = val);
+                }
               },
             ),
             const SizedBox(height: 16),
@@ -86,38 +96,44 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
                 ),
               ],
               onChanged: (val) {
-                if (val != null) {setModalState(() => selectedSupplier = val);}
+                if (val != null) {
+                  setModalState(() => selectedSupplier = val);
+                }
               },
             ),
           ],
         );
-      },    
+      },
       onApply: () {
-        if (selectedSupplier == 'Todos los proveedores') {
-          setState(() {
-            _startDate = null;
-            _endDate = null;
-          });
-
-          context.read<PurchaseProvider>().clearFilter();
-          return;
-        }
-
-        final supplier = supplierProvider.suppliers.firstWhere(
-          (supplier) => supplier.supplierName == selectedSupplier,
-        );
+        final purchaseProvider = context.read<PurchaseProvider>();
 
         setState(() {
           _startDate = null;
           _endDate = null;
         });
 
-        context.read<PurchaseProvider>().filterBySupplier(
-          supplier.supplierId,
-        );
+        if (selectedProduct != 'Todos los productos') {
+          final product = productProvider.items.firstWhere(
+            (product) => product.productName == selectedProduct,
+          );
+
+          purchaseProvider.filterByProduct(product.productId!);
+          return;
+        }
+
+        if (selectedSupplier != 'Todos los proveedores') {
+          final supplier = supplierProvider.suppliers.firstWhere(
+            (supplier) => supplier.supplierName == selectedSupplier,
+          );
+
+          purchaseProvider.filterBySupplier(supplier.supplierId);
+          return;
+        }
+        purchaseProvider.clearFilter();
       },
     );
   }
+
 
   Future<void> _selectStartDate() async {
     final picked = await showDatePicker(
