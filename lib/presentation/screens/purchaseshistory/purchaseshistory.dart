@@ -15,17 +15,24 @@ import '../../widgets/custom_date_filter.dart';
 import '../../widgets/custom_filter_dropdown.dart';
 import '../../widgets/custom_modal_sheet.dart';
 import '../../widgets/custom_pagination.dart';
-
+import 'package:gabel/presentation/providers/supplier_provider.dart';
 import 'widgets/purchaseshistory_card.dart';
 import 'widgets/purchaseshistory_detail_modal.dart';
 
 class PurchaseHistoryScreen extends StatelessWidget {
   const PurchaseHistoryScreen({super.key});
-
+    
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => getIt<PurchaseProvider>()..fetchPurchases(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => getIt<PurchaseProvider>()..fetchPurchases(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => getIt<SupplierProvider>()..fetchSuppliers(),
+        ),
+      ],
       child: const _PurchaseHistoryView(),
     );
   }
@@ -49,13 +56,10 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
     'Shampoo Revitalizante',
   ];
   String selectedSupplier = 'Todos los proveedores';
-  final List<String> suppliers = [
-    'Todos los proveedores',
-    'Amanda miguel',
-    'Juan gabriel',
-  ];
+
 
   void _openFilterModal() {
+    final supplierProvider = context.read<SupplierProvider>();
     CustomFilterModal.show(
       context,
       title: 'Filtrar Compras',
@@ -75,15 +79,43 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
             CustomFilterDropdown(
               label: 'Proveedores',
               value: selectedSupplier,
-              items: suppliers,
+              items: [
+                'Todos los proveedores',
+                ...supplierProvider.suppliers.map(
+                  (supplier) => supplier.supplierName,
+                ),
+              ],
               onChanged: (val) {
-                if (val != null) setModalState(() => selectedSupplier = val);
+                if (val != null) {setModalState(() => selectedSupplier = val);}
               },
             ),
           ],
         );
+      },    
+      onApply: () {
+        if (selectedSupplier == 'Todos los proveedores') {
+          setState(() {
+            _startDate = null;
+            _endDate = null;
+          });
+
+          context.read<PurchaseProvider>().clearFilter();
+          return;
+        }
+
+        final supplier = supplierProvider.suppliers.firstWhere(
+          (supplier) => supplier.supplierName == selectedSupplier,
+        );
+
+        setState(() {
+          _startDate = null;
+          _endDate = null;
+        });
+
+        context.read<PurchaseProvider>().filterBySupplier(
+          supplier.supplierId,
+        );
       },
-      onApply: () => setState(() {}),
     );
   }
 
