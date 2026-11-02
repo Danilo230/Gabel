@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
+import 'package:provider/provider.dart';
+import 'package:gabel/presentation/providers/customer_provider.dart';
 import 'package:gabel/data/models/customer_model.dart';
 import '../../customers/widgets/customer_edit_modal.dart';
 import '../../../widgets/custom_delete.dart';
@@ -8,6 +10,40 @@ class CustomerCard extends StatelessWidget {
   final CustomerModel customer;
 
   const CustomerCard({super.key, required this.customer});
+
+  Future<void> _deleteCustomer(BuildContext context) async {
+    final provider = context.read<CustomerProvider>();
+    final messenger = ScaffoldMessenger.of(context);
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => const CustomDeleteDialog(
+        message: '¿Estás seguro de que deseas eliminar este cliente?',
+      ),
+    );
+    if (confirmed != true) return;
+    final message = await provider.delete(customer.customerId);
+
+    if (message != null) {
+      await provider.refresh();
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: AppColors.deleteIcon,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } else {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            provider.errorMessage ?? 'Error al eliminar el cliente.',
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,15 +119,7 @@ class CustomerCard extends StatelessWidget {
                       color: AppColors.deleteIcon,
                       size: 20,
                     ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => const CustomDeleteDialog(
-                          message:
-                              '¿Estás seguro de que deseas eliminar este cliente?',
-                        ),
-                      );
-                    },
+                    onPressed: () => _deleteCustomer(context),
                   ),
                 ],
               ),

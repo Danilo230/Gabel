@@ -35,45 +35,105 @@ import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
 void setupDependencies() {
-  getIt.registerLazySingleton<ApiClient>(() => ApiClient(authTokenProvider: () => getIt<TokenRepository>().getToken()), dispose: (client) => client.dispose(),);
+  getIt.registerLazySingleton<ApiClient>(
+    () =>
+        ApiClient(authTokenProvider: () => getIt<TokenRepository>().getToken()),
+    dispose: (client) => client.dispose(),
+  );
 
   // Register repository
   getIt.registerLazySingleton<AuthRepository>(
     () => AuthRepository(getIt<ApiClient>()),
   );
   getIt.registerLazySingleton<TokenRepository>(() => TokenRepository());
-  getIt.registerLazySingleton<UserRepository>(() => UserRepository(getIt<ApiClient>()));
-  getIt.registerLazySingleton<InventoryRepository>(() => InventoryRepository(getIt<ApiClient>()));
-  getIt.registerLazySingleton<DamagedProductRepository>(() => DamagedProductRepository(getIt<ApiClient>()));
-  getIt.registerLazySingleton<CustomerRepository>(() => CustomerRepository(getIt<ApiClient>()),);
-  getIt.registerLazySingleton<PurchaseRepository>(() => PurchaseRepository(getIt<ApiClient>()));
-  getIt.registerLazySingleton<SaleRepository>(() => SaleRepository(getIt<ApiClient>()));
-  getIt.registerLazySingleton<ProductRepository>(() => ProductRepository(getIt<ApiClient>()),);
-  getIt.registerLazySingleton<ServiceRepository>(() => ServiceRepository(getIt<ApiClient>()),);
-  getIt.registerLazySingleton<SupplierRepository>(() => SupplierRepository(getIt<ApiClient>()),);
+  getIt.registerLazySingleton<UserRepository>(
+    () => UserRepository(getIt<ApiClient>()),
+  );
+  getIt.registerLazySingleton<InventoryRepository>(
+    () => InventoryRepository(getIt<ApiClient>()),
+  );
+  getIt.registerLazySingleton<DamagedProductRepository>(
+    () => DamagedProductRepository(getIt<ApiClient>()),
+  );
+  getIt.registerLazySingleton<CustomerRepository>(
+    () => CustomerRepository(getIt<ApiClient>()),
+  );
+  getIt.registerLazySingleton<PurchaseRepository>(
+    () => PurchaseRepository(getIt<ApiClient>()),
+  );
+  getIt.registerLazySingleton<SaleRepository>(
+    () => SaleRepository(getIt<ApiClient>()),
+  );
+  getIt.registerLazySingleton<ProductRepository>(
+    () => ProductRepository(getIt<ApiClient>()),
+  );
+  getIt.registerLazySingleton<ServiceRepository>(
+    () => ServiceRepository(getIt<ApiClient>()),
+  );
+  getIt.registerLazySingleton<SupplierRepository>(
+    () => SupplierRepository(getIt<ApiClient>()),
+  );
 
   // Register service
-  getIt.registerLazySingleton<AuthenticationService>(() => AuthenticationService(getIt<AuthRepository>(), getIt<TokenRepository>()));
-  getIt.registerLazySingleton<UserService>(() => UserService(getIt<UserRepository>()));
-  getIt.registerLazySingleton<InventoryService>(() => InventoryService(getIt<InventoryRepository>()));
-  getIt.registerLazySingleton<DamagedProductService>(() => DamagedProductService(getIt<DamagedProductRepository>()));
-  getIt.registerLazySingleton<CustomerService>(() => CustomerService(getIt<CustomerRepository>()));
-  getIt.registerLazySingleton<PurchaseService>(() => PurchaseService(getIt<PurchaseRepository>()));
-  getIt.registerLazySingleton<SaleService>(() => SaleService(getIt<SaleRepository>()));
-  getIt.registerLazySingleton<ProductService>(() => ProductService(getIt<ProductRepository>()),);
-  getIt.registerLazySingleton<ServicesService>(() => ServicesService(getIt<ServiceRepository>()),);
-  getIt.registerLazySingleton<SupplierService>(() => SupplierService(getIt<SupplierRepository>()),);
+  getIt.registerLazySingleton<AuthenticationService>(
+    () => AuthenticationService(
+      getIt<AuthRepository>(),
+      getIt<TokenRepository>(),
+    ),
+  );
+  getIt.registerLazySingleton<UserService>(
+    () => UserService(getIt<UserRepository>()),
+  );
+  getIt.registerLazySingleton<InventoryService>(
+    () => InventoryService(getIt<InventoryRepository>()),
+  );
+  getIt.registerLazySingleton<DamagedProductService>(
+    () => DamagedProductService(getIt<DamagedProductRepository>()),
+  );
+  getIt.registerLazySingleton<CustomerService>(
+    () => CustomerService(getIt<CustomerRepository>()),
+  );
+  getIt.registerLazySingleton<PurchaseService>(
+    () => PurchaseService(getIt<PurchaseRepository>()),
+  );
+  getIt.registerLazySingleton<SaleService>(
+    () => SaleService(getIt<SaleRepository>()),
+  );
+  getIt.registerLazySingleton<ProductService>(
+    () => ProductService(getIt<ProductRepository>()),
+  );
+  getIt.registerLazySingleton<ServicesService>(
+    () => ServicesService(getIt<ServiceRepository>()),
+  );
+  getIt.registerLazySingleton<SupplierService>(
+    () => SupplierService(getIt<SupplierRepository>()),
+  );
 
   //Register Provider
-  getIt.registerLazySingleton<AuthenticationProvider>(() => AuthenticationProvider(getIt<AuthenticationService>()),);
+  getIt.registerLazySingleton<AuthenticationProvider>(
+    () => AuthenticationProvider(getIt<AuthenticationService>()),
+  );
   getIt.registerFactory<UserProvider>(() => UserProvider(getIt<UserService>()));
-  getIt.registerLazySingleton<InventoryProvider>(() => InventoryProvider(getIt<InventoryService>(), getIt<ProductService>()));
-  getIt.registerFactory<DamagedProductProvider>(() => DamagedProductProvider(getIt<DamagedProductService>()));
-  getIt.registerLazySingleton<CustomerProvider>(() => CustomerProvider(getIt<CustomerService>()));
-  getIt.registerFactory<PurchaseProvider>(() => PurchaseProvider(getIt<PurchaseService>()));
+  getIt.registerLazySingleton<InventoryProvider>(
+    () => InventoryProvider(getIt<InventoryService>(), getIt<ProductService>()),
+  );
+  getIt.registerFactory<DamagedProductProvider>(
+    () => DamagedProductProvider(getIt<DamagedProductService>()),
+  );
+  getIt.registerFactory<CustomerProvider>(
+    () => CustomerProvider(getIt<CustomerService>()),
+  );
+  getIt.registerFactory<PurchaseProvider>(
+    () => PurchaseProvider(getIt<PurchaseService>()),
+  );
   getIt.registerFactory<SaleProvider>(() => SaleProvider(getIt<SaleService>()));
-  getIt.registerLazySingleton<ProductProvider>(() => ProductProvider(getIt<ProductService>()),);
-  getIt.registerLazySingleton<ServicesProvider>(() => ServicesProvider(getIt<ServicesService>()),);
-  getIt.registerFactory<SupplierProvider>(() => SupplierProvider(getIt<SupplierService>()),);
+  getIt.registerLazySingleton<ProductProvider>(
+    () => ProductProvider(getIt<ProductService>()),
+  );
+  getIt.registerLazySingleton<ServicesProvider>(
+    () => ServicesProvider(getIt<ServicesService>()),
+  );
+  getIt.registerFactory<SupplierProvider>(
+    () => SupplierProvider(getIt<SupplierService>()),
+  );
 }
-

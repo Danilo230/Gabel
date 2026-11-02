@@ -10,7 +10,9 @@ class DamagedProductService {
     return await _damagedProductRepository.getAll();
   }
 
-  Future<DamagedProductModel> create(CreateDamagedProductModel damagedProduct) async {
+  Future<DamagedProductModel> create(
+    CreateDamagedProductModel damagedProduct,
+  ) async {
     final reason = damagedProduct.damageReason.trim();
 
     if (damagedProduct.inventoryId <= 0) {
