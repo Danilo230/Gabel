@@ -20,7 +20,7 @@ class ServicesService {
     });
   }
 
-  Future<ServiceModels> create(ServiceModels service) async {
+  Future<ServiceModels> createService(ServiceModels service) async {
     final name = service.serviceName.trim();
     final price = service.servicePrice.trim();
     final stilist = service.serviceStilist.trim();
@@ -42,7 +42,10 @@ class ServicesService {
     );
   }
 
-  Future<ServiceModels> update(int serviceId, ServiceModels service) async {
+  Future<ServiceModels> updateService(
+    int serviceId,
+    ServiceModels service,
+  ) async {
     final name = service.serviceName.trim();
     final price = service.servicePrice.trim();
     final stilist = service.serviceStilist.trim();
@@ -52,7 +55,8 @@ class ServicesService {
       throw Exception('Los parámetros no pueden estar vacios');
     }
 
-    return await _serviceRepository.create(
+    return await _serviceRepository.update(
+      serviceId,
       ServiceModels(
         serviceId: serviceId,
         serviceName: name,
@@ -64,7 +68,7 @@ class ServicesService {
     );
   }
 
-  Future<String> delete(int serviceId, bool serviceStatus) async {
+  Future<String> deleteService(int serviceId, bool serviceStatus) async {
     if (serviceId <= 0) {
       throw Exception('Id de servicio no es válido');
     }
