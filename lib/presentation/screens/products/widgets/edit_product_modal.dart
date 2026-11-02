@@ -52,10 +52,10 @@ class _EditProductModalState extends State<EditProductModal> {
     _nameController = TextEditingController(text: p.productName);
     _descriptionController = TextEditingController(text: p.productDescription);
 
-    _selectedBrand = p.brand;
-    _selectedUnit = p.unitName;
-    _selectedCategory = p.categoryName;
-    _selectedSupplier = p.supplierName;
+    _selectedBrand = p.productBrand;
+    _selectedUnit = p.productUnit;
+    _selectedCategory = p.productCategory;
+    _selectedSupplier = p.productSupplier;
     _selectedStatus = p.productStatus ? _active : _inactive;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -212,10 +212,10 @@ class _EditProductModalState extends State<EditProductModal> {
               productId: widget.product.productId,
               productName: _nameController.text,
               productDescription: _descriptionController.text,
-              brand: _selectedBrand,
-              unitName: _selectedUnit,
-              categoryName: _selectedCategory,
-              supplierName: _selectedSupplier,
+              productBrand: _selectedBrand,
+              productUnit: _selectedUnit,
+              productCategory: _selectedCategory,
+              productSupplier: _selectedSupplier,
               productStatus: _selectedStatus == _active,
             ),
           );

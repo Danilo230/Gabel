@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:gabel/core/errors/app_exception.dart';
 import 'package:gabel/data/models/service_models.dart';
@@ -31,7 +32,10 @@ class ServicesProvider extends ChangeNotifier {
   String? _serviceErrorMessage;
   String? get serviceErrorMessage => _serviceErrorMessage;
 
-  Future<void> fetchServices({int pageNumber = 1}) async {
+  Future<void> fetchServices({
+    int pageNumber = 1,
+    int pageSize = _pageSize,
+  }) async {
     if (_viewStatus == ViewStatus.loading) return;
 
     _viewStatus = ViewStatus.loading;
@@ -42,11 +46,12 @@ class ServicesProvider extends ChangeNotifier {
     try {
       final result = await _servicesService.getAll(
         pageNumber: pageNumber,
-        pageSize: _pageSize,
+        pageSize: pageSize,
       );
-      _items = items;
+
+      _items = result;
       _currentPage = pageNumber;
-      _totalPages = totalPages;
+      _totalPages = 1;
 
       _viewStatus = ViewStatus.success;
     } on AppException catch (e) {

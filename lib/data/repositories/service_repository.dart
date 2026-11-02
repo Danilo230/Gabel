@@ -1,3 +1,4 @@
+
 import 'package:gabel/core/network/api_client.dart';
 import 'package:gabel/core/errors/app_exception.dart';
 import 'package:gabel/core/constants/api_constants.dart';
@@ -9,7 +10,10 @@ class ServiceRepository {
   ServiceRepository(this._apiClient);
 
   Future<ServiceModels> getById(int serviceId) async {
-    final json = await _apiClient.get('${ApiConstants.services}/$serviceId');
+    final json = await _apiClient.get(
+      '${ApiConstants.services}/$serviceId',
+    );
+
     if (json == null) throw const NotFoundException();
     if (json is! Map<String, dynamic>) throw ParsingException();
 
@@ -17,15 +21,24 @@ class ServiceRepository {
   }
 
   Future<List<ServiceModels>> getAll(Map<String, String>? params) async {
-    final data = await _apiClient.get(ApiConstants.services, query: params);
+    final data = await _apiClient.get(
+      ApiConstants.services,
+      query: params,
+    );
+
     if (data is! Map<String, dynamic>) throw ParsingException();
 
     final items = data['items'];
+
     if (items is! List) throw ParsingException();
 
-    return items
-        .map((json) => ServiceModels.fromJson(json as Map<String, dynamic>))
-        .toList();
+    return items.map((json) {
+      if (json is! Map<String, dynamic>) {
+        throw ParsingException();
+      }
+
+      return ServiceModels.fromJson(json);
+    }).toList();
   }
 
   Future<ServiceModels> create(ServiceModels service) async {
@@ -34,11 +47,13 @@ class ServiceRepository {
       body: {
         'serviceName': service.serviceName,
         'servicePrice': service.servicePrice,
-        'serviceStilist': service.serviceStilist,
+        'stylistId': service.stylistId,
         'serviceDescription': service.serviceDescription,
       },
     );
+
     if (json is! Map<String, dynamic>) throw ParsingException();
+
     return ServiceModels.fromJson(json);
   }
 
@@ -48,11 +63,12 @@ class ServiceRepository {
       body: {
         'serviceName': service.serviceName,
         'servicePrice': service.servicePrice,
-        'serviceStilist': service.serviceStilist,
+        'stylistId': service.stylistId,
         'serviceDescription': service.serviceDescription,
         'serviceStatus': service.serviceStatus,
       },
     );
+
     if (json == null) throw const NotFoundException();
     if (json is! Map<String, dynamic>) throw ParsingException();
 
@@ -64,7 +80,9 @@ class ServiceRepository {
       '${ApiConstants.services}/DeleteService/$serviceId',
       body: {'serviceStatus': serviceStatus},
     );
+
     if (json is! Map<String, dynamic>) throw ParsingException();
+
     return json['message'] as String;
   }
 }

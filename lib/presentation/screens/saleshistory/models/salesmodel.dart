@@ -1,7 +1,7 @@
 class Sales {
   final String customerName;
   final String saleDate;
-  final String totalPrice;
+  final double totalPrice;
 
   const Sales({
     required this.customerName,

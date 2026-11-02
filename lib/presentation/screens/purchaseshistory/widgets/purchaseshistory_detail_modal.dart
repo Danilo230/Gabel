@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/presentation/providers/purchase_provider.dart';
+import 'package:gabel/presentation/widgets/custom_modal_sheet.dart';
+import 'package:gabel/presentation/widgets/error_view.dart';
+import 'package:gabel/presentation/widgets/loading_view.dart';
+import 'package:provider/provider.dart';
 
 import '../../../theme/app_colors.dart';
-import '../../../widgets/custom_modal_sheet.dart';
-import '../models/purchasesmodel.dart';
+import 'package:gabel/core/utils/format_date.dart';
+import 'package:gabel/data/models/purchase_detail_model.dart';
+import 'package:gabel/data/models/purchase_with_details_model.dart';
 
 class PurchaseDetailModal extends StatelessWidget {
-  final Purchase purchase;
-  final List<PurchaseDetail> details;
+  final PurchaseWithDetailsModel purchase;
 
-  const PurchaseDetailModal({
-    super.key,
-    required this.purchase,
-    required this.details,
-  });
+  const PurchaseDetailModal({super.key, required this.purchase});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class PurchaseDetailModal extends StatelessWidget {
           const SizedBox(height: 6),
 
           Text(
-            purchase.purchaseDate,
+            formatDate(purchase.purchaseDate),
             style: const TextStyle(
               fontSize: 14,
               color: AppColors.textSecondary,
@@ -59,7 +60,7 @@ class PurchaseDetailModal extends StatelessWidget {
 
           const SizedBox(height: 14),
 
-          ...details.map(
+          ...purchase.details.map(
             (detail) => _productDetail(detail),
           ),
 
@@ -100,7 +101,7 @@ class PurchaseDetailModal extends StatelessWidget {
     );
   }
 
-  Widget _productDetail(PurchaseDetail detail) {
+  Widget _productDetail(PurchaseDetailModel detail) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 12),
@@ -142,7 +143,7 @@ class PurchaseDetailModal extends StatelessWidget {
 
           _detailRow(
             'Subtotal',
-            'C\$${detail.lineTotal.toStringAsFixed(2)}',
+            'C\$${detail.totalAmount.toStringAsFixed(2)}',
             highlight: true,
           ),
         ],
@@ -176,6 +177,40 @@ class PurchaseDetailModal extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class PurchaseDetailSheet extends StatelessWidget {
+  const PurchaseDetailSheet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.watch<PurchaseProvider>();
+    final purchase = p.selectedPurchase;
+
+    if (p.detailStatus == ViewStatusPurchase.success && purchase != null) {
+      return PurchaseDetailModal(purchase: purchase);
+    }
+
+    if (p.detailStatus == ViewStatusPurchase.error) {
+      return CustomModalSheet(
+        title: 'Detalle de compra',
+        child: SizedBox(
+          height: 220,
+          child: ErrorView(
+            errorMessage: p.detailErrorMessage ?? 'Error desconocido',
+          ),
+        ),
+      );
+    }
+
+    return const CustomModalSheet(
+      title: 'Detalle de compra',
+      child: SizedBox(
+        height: 220,
+        child: LoadingView(message: 'Cargando detalle...'),
+      ),
     );
   }
 }

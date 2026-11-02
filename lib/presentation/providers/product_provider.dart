@@ -62,7 +62,7 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchProducts({int pageNumber = 1}) async {
+  Future<void> fetchProducts({int pageNumber = 1, int pageSize = _pageSize,}) async {
     if (_viewStatus == ViewStatus.loading) return;
 
     _viewStatus = ViewStatus.loading;
@@ -73,7 +73,7 @@ class ProductProvider extends ChangeNotifier {
     try {
       final result = await _productService.getAll(
         pageNumber: pageNumber,
-        pageSize: _pageSize,
+        pageSize: pageSize,
       );
 
       _items = result;

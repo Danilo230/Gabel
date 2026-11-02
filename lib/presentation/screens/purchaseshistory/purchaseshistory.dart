@@ -1,4 +1,15 @@
+
 import 'package:flutter/material.dart';
+import 'package:gabel/core/di/injection.dart';
+import 'package:gabel/core/utils/format_date.dart';
+import 'package:gabel/presentation/providers/product_provider.dart';
+import 'package:gabel/presentation/providers/purchase_provider.dart';
+import 'package:gabel/presentation/providers/supplier_provider.dart';
+import 'package:gabel/presentation/widgets/custom_filter_modal.dart';
+import 'package:gabel/presentation/widgets/custom_refresh_scroll_view.dart';
+import 'package:gabel/presentation/widgets/error_view.dart';
+import 'package:gabel/presentation/widgets/loading_view.dart';
+import 'package:provider/provider.dart';
 
 import '../../theme/app_colors.dart';
 import '../../widgets/app_header.dart';
@@ -8,280 +19,297 @@ import '../../widgets/custom_filter_dropdown.dart';
 import '../../widgets/custom_modal_sheet.dart';
 import '../../widgets/custom_pagination.dart';
 
-import '../purchaseshistory/models/purchasesmodel.dart';
-
 import 'widgets/purchaseshistory_card.dart';
 import 'widgets/purchaseshistory_detail_modal.dart';
 
-class PurchaseHistoryScreen extends StatefulWidget {
+class PurchaseHistoryScreen extends StatelessWidget {
   const PurchaseHistoryScreen({super.key});
 
   @override
-  State<PurchaseHistoryScreen> createState() =>
-      _PurchaseHistoryScreenState();
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => getIt<PurchaseProvider>()..fetchPurchases(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => getIt<SupplierProvider>()..fetchSuppliers(),
+        ),
+        ChangeNotifierProvider.value(
+          value: getIt<ProductProvider>(),
+        ),
+      ],
+      child: const _PurchaseHistoryView(),
+    );
+  }
 }
 
-class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
-  String selectedProduct = 'Todos los productos';
+class _PurchaseHistoryView extends StatefulWidget {
+  const _PurchaseHistoryView();
 
-  final List<String> products = [
-    'Todos los productos',
-    'Sérum Verb',
-    'Shampoo Revitalizante',
-    'Acondicionador Profesional',
-    'Mascarilla Capilar',
-    'Tratamiento Capilar',
-    'Aceite para Cabello',
-  ];
+  @override
+  State<_PurchaseHistoryView> createState() => _PurchaseHistoryViewState();
+}
+
+class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
+  DateTime? _startDate;
+  DateTime? _endDate;
+
+  String selectedProduct = 'Todos los productos';
+  String selectedSupplier = 'Todos los proveedores';
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      context.read<ProductProvider>().fetchProducts(pageSize: 100);
+    });
+  }
+
+  void _openFilterModal() {
+    final supplierProvider = context.read<SupplierProvider>();
+    final productProvider = context.read<ProductProvider>();
+
+    debugPrint('ESTADO PRODUCTOS: ${productProvider.viewStatus}');
+    debugPrint('CANTIDAD PRODUCTOS: ${productProvider.items.length}');
+    debugPrint('ERROR PRODUCTOS: ${productProvider.errorMessage}');
+
+    CustomFilterModal.show(
+      context,
+      title: 'Filtrar Compras',
+      builder: (modalContext, setModalState) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomFilterDropdown(
+              label: 'Productos',
+              value: selectedProduct,
+              items: [
+                'Todos los productos',
+                ...productProvider.items.map(
+                  (product) => product.productName,
+                ),
+              ],
+              onChanged: (val) {
+                if (val != null) {
+                  setModalState(() => selectedProduct = val);
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+            CustomFilterDropdown(
+              label: 'Proveedores',
+              value: selectedSupplier,
+              items: [
+                'Todos los proveedores',
+                ...supplierProvider.suppliers.map(
+                  (supplier) => supplier.supplierName,
+                ),
+              ],
+              onChanged: (val) {
+                if (val != null) {
+                  setModalState(() => selectedSupplier = val);
+                }
+              },
+            ),
+          ],
+        );
+      },
+      onApply: () {
+        final purchaseProvider = context.read<PurchaseProvider>();
+
+        setState(() {
+          _startDate = null;
+          _endDate = null;
+        });
+
+        if (selectedProduct != 'Todos los productos') {
+          final product = productProvider.items.firstWhere(
+            (product) => product.productName == selectedProduct,
+          );
+
+          purchaseProvider.filterByProduct(product.productId);
+          return;
+        }
+
+        if (selectedSupplier != 'Todos los proveedores') {
+          final supplier = supplierProvider.suppliers.firstWhere(
+            (supplier) => supplier.supplierName == selectedSupplier,
+          );
+
+          purchaseProvider.filterBySupplier(supplier.supplierId);
+          return;
+        }
+
+        purchaseProvider.clearFilter();
+      },
+    );
+  }
+
+  Future<void> _selectStartDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _startDate ?? DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked == null || !mounted) return;
+
+    setState(() => _startDate = picked);
+    _applyDateFilter();
+  }
+
+  Future<void> _selectEndDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _endDate ?? DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked == null || !mounted) return;
+
+    setState(() => _endDate = picked);
+    _applyDateFilter();
+  }
+
+  void _applyDateFilter() {
+    final start = _startDate;
+    final end = _endDate;
+
+    if (start == null || end == null) return;
+
+    if (start.isAfter(end)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'La fecha de inicio no puede ser mayor que la de fin',
+          ),
+        ),
+      );
+      return;
+    }
+
+    context.read<PurchaseProvider>().filterByDateRange(start, end);
+  }
+
+  void _clearFilter() {
+    setState(() {
+      _startDate = null;
+      _endDate = null;
+      selectedProduct = 'Todos los productos';
+      selectedSupplier = 'Todos los proveedores';
+    });
+
+    context.read<PurchaseProvider>().clearFilter();
+  }
+
+  void _showDetail(int purchaseId) {
+    final provider = context.read<PurchaseProvider>();
+    provider.fetchPurchaseDetail(purchaseId);
+
+    CustomModalSheet.show(
+      context: context,
+      child: ChangeNotifierProvider.value(
+        value: provider,
+        child: const PurchaseDetailSheet(),
+      ),
+    );
+  }
+
+  Widget _buildContent(PurchaseProvider p) {
+    if (p.viewStatus == ViewStatusPurchase.error) {
+      return SizedBox(
+        height: 320,
+        child: ErrorView(
+          errorMessage: p.errorMessage ?? 'Error desconocido',
+          onRetry: p.refresh,
+        ),
+      );
+    }
+
+    if (p.viewStatus != ViewStatusPurchase.success) {
+      return const SizedBox(
+        height: 320,
+        child: LoadingView(message: 'Cargando compras...'),
+      );
+    }
+
+    if (p.purchases.isEmpty) {
+      return const SizedBox(
+        height: 200,
+        child: Center(child: Text('No hay compras')),
+      );
+    }
+
+    return Column(
+      children: [
+        for (final purchase in p.purchases) ...[
+          PurchaseCard(
+            purchase: purchase,
+            onViewDetail: () => _showDetail(purchase.purchaseId),
+          ),
+          const SizedBox(height: 12),
+        ],
+        const SizedBox(height: 4),
+        CustomPagination(
+          currentPage: p.currentPage,
+          totalPages: p.totalPages,
+          onPageTap: (page) => p.fetchPurchases(pageNumber: page),
+        ),
+        const SizedBox(height: 20),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<PurchaseProvider>();
+
     return Scaffold(
       backgroundColor: AppColors.bgtextColor,
-
-      appBar: const AppHeader(
-        title: 'Historial de compras',
-      ),
-
+      appBar: const AppHeader(title: 'Historial de compras'),
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: CustomRefreshScrollView(
+          onRefresh: provider.refresh,
           padding: const EdgeInsets.symmetric(
             horizontal: 16.0,
             vertical: 14.0,
           ),
           child: Column(
             children: [
-              const CustomDateFilter(),
-
-              const SizedBox(height: 12),
-
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: CustomFilterDropdown(
-                      label: 'Producto',
-                      value: selectedProduct,
-                      items: products,
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            selectedProduct = value;
-                          });
-                        }
-                      },
-                    ),
+              CustomDateFilter(
+                startDate: _startDate == null
+                    ? 'Fecha inicial'
+                    : formatDate(_startDate!),
+                endDate: _endDate == null
+                    ? 'Fecha final'
+                    : formatDate(_endDate!),
+                onStartDateTap: _selectStartDate,
+                onEndDateTap: _selectEndDate,
+                onFilterPressed: _openFilterModal,
+              ),
+              if (provider.isFiltering)
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton.icon(
+                    onPressed: _clearFilter,
+                    icon: const Icon(Icons.close),
+                    label: const Text('Quitar filtro'),
                   ),
-
-                  const SizedBox(width: 10),
-
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryPurple,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: IconButton(
-                      onPressed: () {
-
-                      },
-                      tooltip: 'Aplicar filtros',
-                      padding: EdgeInsets.zero,
-                      icon: const Icon(
-                        Icons.filter_alt_outlined,
-                        color: Colors.white,
-                        size: 22,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
+                ),
               const SizedBox(height: 16),
-
-              PurchaseCard(
-                purchase: const Purchase(
-                  supplierName: 'Distribuidora Bella',
-                  purchaseDate: '2026-09-27',
-                  totalAmount: 1000.00,
-                ),
-                onViewDetail: () {
-                  _mostrarDetalleCompra1(context);
-                },
-              ),
-
-              const SizedBox(height: 12),
-
-              PurchaseCard(
-                purchase: const Purchase(
-                  supplierName: 'Productos Salón',
-                  purchaseDate: '2026-09-25',
-                  totalAmount: 750.00,
-                ),
-                onViewDetail: () {
-                  _mostrarDetalleCompra2(context);
-                },
-              ),
-
-              const SizedBox(height: 12),
-
-              PurchaseCard(
-                purchase: const Purchase(
-                  supplierName: 'Belleza Profesional',
-                  purchaseDate: '2026-09-20',
-                  totalAmount: 1200.00,
-                ),
-                onViewDetail: () {
-                  _mostrarDetalleCompra3(context);
-                },
-              ),
-
-              const SizedBox(height: 12),
-
-              PurchaseCard(
-                purchase: const Purchase(
-                  supplierName: 'Distribuidora Central',
-                  purchaseDate: '2026-09-15',
-                  totalAmount: 625.00,
-                ),
-                onViewDetail: () {
-                  _mostrarDetalleCompra4(context);
-                },
-              ),
-
-              const SizedBox(height: 16),
-
-              const CustomPagination(
-                currentPage: 1,
-              ),
-
-              const SizedBox(height: 20),
+              _buildContent(provider),
             ],
           ),
         ),
       ),
-
       bottomNavigationBar: const CustomBottomNavBar(
         activeTab: 'Compras',
-      ),
-    );
-  }
-
-  void _mostrarDetalleCompra1(BuildContext context) {
-    const purchase = Purchase(
-      supplierName: 'Distribuidora Bella',
-      purchaseDate: '2026-09-27',
-      totalAmount: 1000.00,
-    );
-
-    const details = [
-      PurchaseDetail(
-        productName: 'Sérum Verb',
-        purchaseQuantity: 5,
-        unitPrice: 125.00,
-        lineTotal: 625.00,
-      ),
-      PurchaseDetail(
-        productName: 'Shampoo Revitalizante',
-        purchaseQuantity: 3,
-        unitPrice: 125.00,
-        lineTotal: 375.00,
-      ),
-    ];
-
-    CustomModalSheet.show(
-      context: context,
-      child: const PurchaseDetailModal(
-        purchase: purchase,
-        details: details,
-      ),
-    );
-  }
-
-  void _mostrarDetalleCompra2(BuildContext context) {
-    const purchase = Purchase(
-      supplierName: 'Productos Salón',
-      purchaseDate: '2026-09-25',
-      totalAmount: 750.00,
-    );
-
-    const details = [
-      PurchaseDetail(
-        productName: 'Acondicionador Profesional',
-        purchaseQuantity: 5,
-        unitPrice: 100.00,
-        lineTotal: 500.00,
-      ),
-      PurchaseDetail(
-        productName: 'Mascarilla Capilar',
-        purchaseQuantity: 2,
-        unitPrice: 125.00,
-        lineTotal: 250.00,
-      ),
-    ];
-
-    CustomModalSheet.show(
-      context: context,
-      child: const PurchaseDetailModal(
-        purchase: purchase,
-        details: details,
-      ),
-    );
-  }
-
-  void _mostrarDetalleCompra3(BuildContext context) {
-    const purchase = Purchase(
-      supplierName: 'Belleza Profesional',
-      purchaseDate: '2026-09-20',
-      totalAmount: 1200.00,
-    );
-
-    const details = [
-      PurchaseDetail(
-        productName: 'Tratamiento Capilar',
-        purchaseQuantity: 4,
-        unitPrice: 200.00,
-        lineTotal: 800.00,
-      ),
-      PurchaseDetail(
-        productName: 'Aceite para Cabello',
-        purchaseQuantity: 4,
-        unitPrice: 100.00,
-        lineTotal: 400.00,
-      ),
-    ];
-
-    CustomModalSheet.show(
-      context: context,
-      child: const PurchaseDetailModal(
-        purchase: purchase,
-        details: details,
-      ),
-    );
-  }
-
-  void _mostrarDetalleCompra4(BuildContext context) {
-    const purchase = Purchase(
-      supplierName: 'Distribuidora Central',
-      purchaseDate: '2026-09-15',
-      totalAmount: 625.00,
-    );
-
-    const details = [
-      PurchaseDetail(
-        productName: 'Sérum Verb',
-        purchaseQuantity: 5,
-        unitPrice: 125.00,
-        lineTotal: 625.00,
-      ),
-    ];
-
-    CustomModalSheet.show(
-      context: context,
-      child: const PurchaseDetailModal(
-        purchase: purchase,
-        details: details,
       ),
     );
   }
