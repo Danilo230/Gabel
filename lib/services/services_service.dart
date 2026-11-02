@@ -20,10 +20,10 @@ class ServicesService {
     });
   }
 
-  Future<ServiceModels> create(ServiceModels service) async {
+  Future<ServiceModels> createService(ServiceModels service) async {
     final name = service.serviceName.trim();
-    final price = service.servicePrice.trim();
-    final stilist = service.serviceStilist.trim();
+    final price = service.servicePrice.toStringAsFixed(2);
+    final stilist = service.stylistName.trim();
     final description = service.serviceDescription.trim();
 
     if (name.isEmpty || price.isEmpty || stilist.isEmpty) {
@@ -34,37 +34,41 @@ class ServicesService {
       ServiceModels(
         serviceId: service.serviceId,
         serviceName: name,
-        servicePrice: price,
-        serviceStilist: stilist,
+        servicePrice: service.servicePrice,
+        stylistName: stilist,
         serviceDescription: description,
         serviceStatus: true,
       ),
     );
   }
 
-  Future<ServiceModels> update(int serviceId, ServiceModels service) async {
+  Future<ServiceModels> updateService(
+    int serviceId,
+    ServiceModels service,
+  ) async {
     final name = service.serviceName.trim();
-    final price = service.servicePrice.trim();
-    final stilist = service.serviceStilist.trim();
+    final price = service.servicePrice.toStringAsFixed(2);
+    final stilist = service.stylistName.trim();
     final description = service.serviceDescription.trim();
 
     if (name.isEmpty || price.isEmpty || stilist.isEmpty) {
       throw Exception('Los parámetros no pueden estar vacios');
     }
 
-    return await _serviceRepository.create(
+    return await _serviceRepository.update(
+      serviceId,
       ServiceModels(
         serviceId: serviceId,
         serviceName: name,
-        servicePrice: price,
-        serviceStilist: stilist,
+        servicePrice: service.servicePrice,
+        stylistName: stilist,
         serviceDescription: description,
         serviceStatus: service.serviceStatus,
       ),
     );
   }
 
-  Future<String> delete(int serviceId, bool serviceStatus) async {
+  Future<String> deleteService(int serviceId, bool serviceStatus) async {
     if (serviceId <= 0) {
       throw Exception('Id de servicio no es válido');
     }

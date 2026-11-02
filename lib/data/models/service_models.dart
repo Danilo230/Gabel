@@ -1,28 +1,32 @@
+
 class ServiceModels {
   final int serviceId;
   final String serviceName;
-  final String servicePrice;
-  final String serviceStilist;
-  final String serviceDescription;
+  final double servicePrice;
   final bool serviceStatus;
+  final String serviceDescription;
+  final int? stylistId;
+  final String stylistName;
 
   ServiceModels({
     required this.serviceId,
     required this.serviceName,
     required this.servicePrice,
-    required this.serviceStilist,
-    required this.serviceDescription,
     required this.serviceStatus,
+    required this.serviceDescription,
+    this.stylistId,
+    required this.stylistName,
   });
 
-  factory ServiceModels.fromJson(Map<String, dynamic> json) {
+  static ServiceModels fromJson(Map<String, dynamic> json) {
     return ServiceModels(
       serviceId: json['serviceId'] as int,
       serviceName: json['serviceName'] as String,
-      servicePrice: json['servicePrice'] as String,
-      serviceStilist: json['serviceStilist'] as String,
-      serviceDescription: json['serviceDescription'] as String,
+      servicePrice: (json['servicePrice'] as num).toDouble(),
       serviceStatus: json['serviceStatus'] as bool,
+      serviceDescription: json['serviceDescription'] as String,
+      stylistId: json['stylistId'] as int?,
+      stylistName: json['stylistName'] as String? ?? '',
     );
   }
 
@@ -31,9 +35,10 @@ class ServiceModels {
       'serviceId': serviceId,
       'serviceName': serviceName,
       'servicePrice': servicePrice,
-      'serviceStilist': serviceStilist,
-      'serviceDescription': serviceDescription,
       'serviceStatus': serviceStatus,
+      'serviceDescription': serviceDescription,
+      'stylistId': stylistId,
+      'stylistName': stylistName,
     };
   }
 }

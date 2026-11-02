@@ -68,7 +68,7 @@ class MainApp extends StatelessWidget {
 
         AppRoutes.login: (context) => const LoginScreen(),
 
-        AppRoutes.salesperson: (context) => const SalespersonScreen(),
+        AppRoutes.salesperson: (context) => const SalesPersonScreen(),
       },
     );
   }
@@ -84,7 +84,7 @@ class _AuthGuard extends StatelessWidget {
     switch (authProvider.authStatus) {
       case AuthenticationStatus.authenticated:
         return authProvider.isSalesperson
-            ? const SalespersonScreen()
+            ? const SalesPersonScreen()
             : const DashboardScreen();
       case AuthenticationStatus.unauthenticated:
         return const LoginScreen();

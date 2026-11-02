@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gabel/core/errors/app_exception.dart';
-import 'package:gabel/presentation/providers/authenticatio_provider.dart' as _authenticationService;
 import 'package:gabel/services/authentication_service.dart';
 
 enum AuthenticationStatus {
@@ -63,7 +62,7 @@ class AuthenticationProvider extends ChangeNotifier {
           ? AuthenticationStatus.authenticated
           : AuthenticationStatus.unauthenticated;
     } catch (e) {
-      _errorMessage = 'An unexpected error occurred. please try again';
+      _errorMessage = 'Se ha producido un error inesperado. Por favor, inténtalo de nuevo.';
       _authStatus = AuthenticationStatus.unauthenticated;
     } finally {
       notifyListeners();
