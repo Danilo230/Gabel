@@ -66,7 +66,7 @@ class SaleProvider extends ChangeNotifier {
       _errorMessage = e.message;
       _viewStatus = ViewStatusSale.error;
     } catch (e, stack) {
-      debugPrint('ERROR FETCH PURCHASES: $e');
+      debugPrint('ERROR FETCH SALES: $e');
       debugPrint('$stack');
       _errorMessage = 'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.';
       _viewStatus = ViewStatusSale.error;
