@@ -42,7 +42,6 @@ class _SalesViewState extends State<_SalesView> {
   DateTime? _startDate;
   DateTime? _endDate;
 
-  // Filtros de producto/servicio: se dejan como estaban (aún no conectados)
   static const List<String> products = [
     'Todos los productos',
     'Shampoo Revitalizante',
