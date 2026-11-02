@@ -53,7 +53,7 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    product.productBrand,
+                    product.brand,
                     style: const TextStyle(
                       fontSize: 14,
                       color: AppColors.primaryPurple,
