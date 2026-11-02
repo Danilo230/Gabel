@@ -20,5 +20,11 @@ class ApiConstants {
   static const String customer = '/Customer';
   static const String damagedProducts = '/DamagedProducts';
 
+  // Catálogos, (solamente lectura)
+  static const String productBrands = '/Products/Brands';
+  static const String productUnits = '/Products/Units';
+  static const String productCategories = '/Products/Categories';
+  static const String productSuppliers = '/Products/Suppliers';
+
   static const Duration timeoutDuration = Duration(seconds: 30);
 }
