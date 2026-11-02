@@ -3,10 +3,10 @@ import 'package:gabel/core/errors/app_exception.dart';
 import 'package:gabel/data/models/paged_result_model.dart';
 import 'package:gabel/data/models/purchase_model.dart';
 import 'package:gabel/data/models/purchase_with_details_model.dart';
-import 'package:gabel/presentation/providers/user_provider.dart' show ViewStatus;
 import 'package:gabel/services/purchase_service.dart';
 
 enum PurchaseFilter { none, product, supplier, dateRange }
+enum ViewStatusPurchase { initial, loading, success, error}
 
 class PurchaseProvider extends ChangeNotifier {
   static const int _pageSize = 10;
@@ -17,8 +17,8 @@ class PurchaseProvider extends ChangeNotifier {
   List<PurchaseModel> _purchases = [];
   List<PurchaseModel> get purchases => _purchases;
 
-  ViewStatus _viewStatus = ViewStatus.initial;
-  ViewStatus get viewStatus => _viewStatus;
+  ViewStatusPurchase _viewStatus = ViewStatusPurchase.initial;
+  ViewStatusPurchase get viewStatus => _viewStatus;
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
@@ -40,16 +40,16 @@ class PurchaseProvider extends ChangeNotifier {
   PurchaseWithDetailsModel? _selectedPurchase;
   PurchaseWithDetailsModel? get selectedPurchase => _selectedPurchase;
 
-  ViewStatus _detailStatus = ViewStatus.initial;
-  ViewStatus get detailStatus => _detailStatus;
+  ViewStatusPurchase _detailStatus = ViewStatusPurchase.initial;
+  ViewStatusPurchase get detailStatus => _detailStatus;
 
   String? _detailErrorMessage;
   String? get detailErrorMessage => _detailErrorMessage;
 
   Future<void> fetchPurchases({int pageNumber = 1}) async {
-    if (_viewStatus == ViewStatus.loading) return;
+    if (_viewStatus == ViewStatusPurchase.loading) return;
 
-    _viewStatus = ViewStatus.loading;
+    _viewStatus = ViewStatusPurchase.loading;
     _errorMessage = null;
     notifyListeners();
 
@@ -58,18 +58,18 @@ class PurchaseProvider extends ChangeNotifier {
       _purchases = result.items;
       _currentPage = result.pageNumber;
       _totalPages = result.totalPages;
-      _viewStatus = ViewStatus.success;
+      _viewStatus = ViewStatusPurchase.success;
     } on AppException catch (e) {
       _errorMessage = e.message;
-      _viewStatus = ViewStatus.error;
+      _viewStatus = ViewStatusPurchase.error;
     } on FormatException catch (e) {
       _errorMessage = e.message;
-      _viewStatus = ViewStatus.error;
+      _viewStatus = ViewStatusPurchase.error;
     } catch (e, stack) {
       debugPrint('ERROR FETCH PURCHASES: $e');
       debugPrint('$stack');
       _errorMessage = 'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.';
-      _viewStatus = ViewStatus.error;
+      _viewStatus = ViewStatusPurchase.error;
     }
 
     notifyListeners();
@@ -131,29 +131,29 @@ class PurchaseProvider extends ChangeNotifier {
   }
 
   Future<void> fetchPurchaseDetail(int purchaseId) async {
-    _detailStatus = ViewStatus.loading;
+    _detailStatus = ViewStatusPurchase.loading;
     _detailErrorMessage = null;
     _selectedPurchase = null;
     notifyListeners();
 
     try {
       _selectedPurchase = await _purchaseService.getById(purchaseId);
-      _detailStatus = ViewStatus.success;
+      _detailStatus = ViewStatusPurchase.success;
     } on ServerException catch (e) {
       _detailErrorMessage =
           e.statusCode == 404 ? 'Compra no encontrada' : e.message;
-      _detailStatus = ViewStatus.error;
+      _detailStatus = ViewStatusPurchase.error;
     } on AppException catch (e) {
       _detailErrorMessage = e.message;
-      _detailStatus = ViewStatus.error;
+      _detailStatus = ViewStatusPurchase.error;
     } on FormatException catch (e) {
       _detailErrorMessage = e.message;
-      _detailStatus = ViewStatus.error;
+      _detailStatus = ViewStatusPurchase.error;
     } catch (e, stack) {
       debugPrint('ERROR FETCH PURCHASE DETAIL: $e');
       debugPrint('$stack');
       _detailErrorMessage = 'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.';
-      _detailStatus = ViewStatus.error;
+      _detailStatus = ViewStatusPurchase.error;
     }
 
     notifyListeners();
@@ -161,7 +161,7 @@ class PurchaseProvider extends ChangeNotifier {
 
   void clearDetail() {
     _selectedPurchase = null;
-    _detailStatus = ViewStatus.initial;
+    _detailStatus = ViewStatusPurchase.initial;
     _detailErrorMessage = null;
     notifyListeners();
   }
