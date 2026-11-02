@@ -117,14 +117,14 @@ class _SalesScreenState extends State<SalesScreen> {
                 onEndDateTap: () => _selectEndDate(context),
                 onFilterPressed: _openFilterModal,
               ),
-              
+
               const SizedBox(height: 16),
 
               SalesCard(
                 sale: const Sales(
                   customerName: 'Juan',
                   saleDate: '2023-10-01',
-                  totalPrice: 'C\$500.00',
+                  totalPrice: 500.00,
                 ),
                 onViewDetail: () {
                   _mostrarDetalleJuan(context);
@@ -137,7 +137,7 @@ class _SalesScreenState extends State<SalesScreen> {
                 sale: const Sales(
                   customerName: 'María',
                   saleDate: '2023-10-02',
-                  totalPrice: 'C\$150.00',
+                  totalPrice: 150.00,
                 ),
                 onViewDetail: () {
                   _mostrarDetalleMaria(context);
@@ -150,7 +150,7 @@ class _SalesScreenState extends State<SalesScreen> {
                 sale: const Sales(
                   customerName: 'Carlos',
                   saleDate: '2023-10-03',
-                  totalPrice: 'C\$200.00',
+                  totalPrice: 200.00,
                 ),
                 onViewDetail: () {
                   _mostrarDetalleCarlos(context);
@@ -163,7 +163,7 @@ class _SalesScreenState extends State<SalesScreen> {
                 sale: const Sales(
                   customerName: 'Ana',
                   saleDate: '2023-10-04',
-                  totalPrice: 'C\$250.00',
+                  totalPrice: 250.00,
                 ),
                 onViewDetail: () {
                   _mostrarDetalleAna(context);
@@ -192,7 +192,7 @@ class _SalesScreenState extends State<SalesScreen> {
     const sale = Sales(
       customerName: 'Juan',
       saleDate: '2023-10-01',
-      totalPrice: 'C\$500.00',
+      totalPrice: 500.00,
     );
 
     const details = [
@@ -227,7 +227,7 @@ class _SalesScreenState extends State<SalesScreen> {
     const sale = Sales(
       customerName: 'María',
       saleDate: '2023-10-02',
-      totalPrice: 'C\$150.00',
+      totalPrice: 150.00,
     );
 
     const details = [
@@ -254,7 +254,7 @@ class _SalesScreenState extends State<SalesScreen> {
     const sale = Sales(
       customerName: 'Carlos',
       saleDate: '2023-10-03',
-      totalPrice: 'C\$200.00',
+      totalPrice: 200.00,
     );
 
     const details = [
@@ -281,7 +281,7 @@ class _SalesScreenState extends State<SalesScreen> {
     const sale = Sales(
       customerName: 'Ana',
       saleDate: '2023-10-04',
-      totalPrice: 'C\$250.00',
+      totalPrice: 250.00,
     );
 
     const details = [
