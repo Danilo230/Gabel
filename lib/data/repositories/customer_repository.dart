@@ -39,7 +39,10 @@ class CustomerRepository {
     return CustomerModel.fromJson(json);
   }
 
-  Future<CustomerModel> update(int customerId, CustomerModel customer) async {
+  Future<CustomerModel> updateCustomer(
+    int customerId,
+    CustomerModel customer,
+  ) async {
     final json = await _apiClient.put(
       '${ApiConstants.customer}/$customerId',
       body: {

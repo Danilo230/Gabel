@@ -62,7 +62,8 @@ class CustomerService {
     if (name.isEmpty || lastName.isEmpty || phone.isEmpty) {
       throw Exception('Los parámetros no pueden estar vacios');
     }
-    return await _customerRepository.create(
+    return await _customerRepository.updateCustomer(
+      customerId,
       CustomerModel(
         customerId: customerId,
         customerName: name,
