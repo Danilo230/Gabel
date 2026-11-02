@@ -5,12 +5,16 @@ class SearchBarAdd extends StatelessWidget {
   final String hintText;
   final VoidCallback? onAddPressed;
   final VoidCallback? onFilterPressed;
+  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
 
   const SearchBarAdd({
     super.key,
     this.hintText = 'Buscar...',
+    this.controller,
     this.onAddPressed,
     this.onFilterPressed,
+    this.onChanged,
   });
 
   @override
@@ -37,11 +41,21 @@ class SearchBarAdd extends StatelessWidget {
                 const Icon(Icons.search, color: Color(0xFF9E9E9E), size: 22),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(
-                    hintText,
+                  child: TextField(
+                    controller: controller,
+                    onChanged: onChanged,
                     style: const TextStyle(
-                      color: Color(0xFF9E9E9E),
+                      color: AppColors.textPrimary,
                       fontSize: 14,
+                    ),
+                    decoration: InputDecoration(
+                      hintText: hintText,
+                      hintStyle: const TextStyle(
+                        color: Color(0xFF9E9E9E),
+                        fontSize: 14,
+                      ),
+                      border: InputBorder.none,
+                      isDense: true,
                     ),
                   ),
                 ),

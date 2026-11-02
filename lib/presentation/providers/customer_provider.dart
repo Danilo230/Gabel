@@ -30,6 +30,9 @@ class CustomerProvider extends ChangeNotifier {
   String _query = '';
   bool get isSearching => _query.isNotEmpty;
 
+  bool? _selectedStatus;
+  bool? get selectedStatus => _selectedStatus;
+
   bool _isSaving = false;
   bool get isSaving => _isSaving;
 
@@ -44,15 +47,18 @@ class CustomerProvider extends ChangeNotifier {
   String? get searchErrorMessage => _searchErrorMessage;
 
   List<CustomerModel> get filteredCustomers {
-    if (_query.isEmpty) return _customers;
-    return _allCustomers
-        .where(
-          (customer) => customer.customerName.toLowerCase().contains(_query),
-        )
-        .toList();
+    if (_query.isNotEmpty) {
+      return _allCustomers.where((customer) {
+        return customer.customerName.toLowerCase().contains(_query);
+      }).toList();
+    }
+    if (_selectedStatus != null) {
+      return _allCustomers.where((customer) {
+        return customer.customerStatus == _selectedStatus;
+      }).toList();
+    }
+    return _customers;
   }
-
-  final Map<int, CustomerModel> _customerCache = {};
 
   String? _customerErrorMessage;
   String? get customerErrorMessage => _customerErrorMessage;
@@ -61,7 +67,6 @@ class CustomerProvider extends ChangeNotifier {
     if (_viewStatus == ViewStatusCustomer.loading) return;
     _viewStatus = ViewStatusCustomer.loading;
     _errorMessage = null;
-    _customerCache.clear();
 
     notifyListeners();
     try {
@@ -85,23 +90,37 @@ class CustomerProvider extends ChangeNotifier {
       _errorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
       _viewStatus = ViewStatusCustomer.error;
     }
+    notifyListeners();
   }
 
   Future<void> refresh() async {
     _hasAllCustomers = false;
     await fetchCustomers(pageNumber: _currentPage);
-    if (_query.isNotEmpty) {
+    if (_query.isNotEmpty || _selectedStatus != null) {
       await _loadAllItems();
     }
   }
 
   Future<void> search(String query) async {
     _query = query.trim().toLowerCase();
+
+    _selectedStatus = null;
     notifyListeners();
-    if (_query.isEmpty) await _loadAllItems();
+    if (_query.isNotEmpty) await _loadAllItems();
   }
 
-  Future<void> retrySearch() => _loadAllItems();
+  Future<void> setStatusFilter(bool? status) async {
+    _selectedStatus = status;
+    _query = '';
+    notifyListeners();
+    if (_selectedStatus != null) await _loadAllItems();
+  }
+
+  Future<void> retrySearch() {
+    _hasAllCustomers = false;
+    _allCustomersRequest = null;
+    return _loadAllItems();
+  }
 
   Future<void> _loadAllItems() {
     if (_hasAllCustomers) return Future.value();
@@ -187,5 +206,28 @@ class CustomerProvider extends ChangeNotifier {
     _isSaving = false;
     notifyListeners();
     return result;
+  }
+
+  Future<String?> delete(int customerId) async {
+    if (_isSaving) return null;
+    _isSaving = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    String? message;
+    try {
+      message = await _customerService.delete(customerId, false);
+    } on AppException catch (e) {
+      _errorMessage = e.message;
+    } on FormatException catch (e) {
+      _errorMessage = e.message;
+    } catch (e, stack) {
+      debugPrint('Error al eliminar al cliente: $e');
+      debugPrint('$stack');
+      _errorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
+    }
+    _isSaving = false;
+    notifyListeners();
+    return message;
   }
 }

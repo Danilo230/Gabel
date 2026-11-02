@@ -76,7 +76,7 @@ void setupDependencies() {
   getIt.registerFactory<DamagedProductProvider>(
     () => DamagedProductProvider(getIt<DamagedProductService>()),
   );
-  getIt.registerLazySingleton<CustomerProvider>(
+  getIt.registerFactory<CustomerProvider>(
     () => CustomerProvider(getIt<CustomerService>()),
   );
 }
