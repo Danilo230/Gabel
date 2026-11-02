@@ -122,45 +122,6 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
                 onFilterPressed: _openFilterModal,
               ),
 
-              const SizedBox(height: 12),
-
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: CustomFilterDropdown(
-                      label: 'Producto',
-                      value: selectedProduct,
-                      items: products,
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            selectedProduct = value;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(width: 10),
-                   Expanded(
-                    child: CustomFilterDropdown(
-                      label: 'Proveedor',
-                      value: selectedSupplier,
-                      items: suppliers,
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            selectedSupplier = value;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                ],
-              ),
-
               const SizedBox(height: 16),
 
               PurchaseCard(

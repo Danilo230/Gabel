@@ -117,48 +117,7 @@ class _SalesScreenState extends State<SalesScreen> {
                 onEndDateTap: () => _selectEndDate(context),
                 onFilterPressed: _openFilterModal,
               ),
-
-              const SizedBox(height: 12),
-
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: CustomFilterDropdown(
-                      label: 'Producto',
-                      value: selectedProduct,
-                      items: products,
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            selectedProduct = value;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(width: 10),
-
-                  Expanded(
-                    child: CustomFilterDropdown(
-                      label: 'Servicio',
-                      value: selectedService,
-                      items: services,
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            selectedService = value;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(width: 10),
-                ],
-              ),
-
+              
               const SizedBox(height: 16),
 
               SalesCard(
