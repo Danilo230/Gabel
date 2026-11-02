@@ -8,6 +8,19 @@ class DamagedProductProvider extends ChangeNotifier {
   final DamagedProductService _damagedProductService;
   DamagedProductProvider(this._damagedProductService);
 
+  bool _disposed = false;
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
+  @override
+  void notifyListeners() {
+    if (!_disposed) super.notifyListeners();
+  }
+
   List<DamagedProductModel> _history = [];
   List<DamagedProductModel> get history => _history;
 
