@@ -4,9 +4,12 @@ import 'package:gabel/core/utils/num_extensions.dart';
 import 'package:gabel/data/models/damaged_product_model.dart';
 import 'package:gabel/data/models/inventory_model.dart';
 import 'package:gabel/presentation/providers/damaged_product_provider.dart';
+import 'package:gabel/presentation/providers/stylist_provider.dart';
+import 'package:gabel/presentation/providers/user_provider.dart' show ViewStatus;
 
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_button.dart';
+import '../../../widgets/custom_dropdown_field.dart';
 import '../../../widgets/custom_modal_sheet.dart';
 import '../../../widgets/custom_text_field.dart';
 
@@ -24,19 +27,31 @@ class RegisterDamageModal extends StatefulWidget {
 class _RegisterDamageModalState extends State<RegisterDamageModal> {
   final TextEditingController _quantityController = TextEditingController();
   final TextEditingController _reasonController = TextEditingController();
-  final TextEditingController _stylistController = TextEditingController();
   final DamagedProductProvider _damagedProductProvider =
       getIt<DamagedProductProvider>();
+  final StylistProvider _stylistProvider = getIt<StylistProvider>()
+    ..fetchStylists();
 
+  static const String _noStylist = 'Sin estilista';
+
+  String? _selectedStylist;
   String? _error;
 
   @override
   void dispose() {
     _quantityController.dispose();
     _reasonController.dispose();
-    _stylistController.dispose();
     _damagedProductProvider.dispose();
+    _stylistProvider.dispose();
     super.dispose();
+  }
+
+  int? _selectedStylistId() {
+    final stylist = _stylistProvider.stylists
+        .where((stylist) => stylist.stylistName == _selectedStylist)
+        .firstOrNull;
+
+    return stylist?.stylistId;
   }
 
   Future<void> _confirm() async {
@@ -61,6 +76,7 @@ class _RegisterDamageModalState extends State<RegisterDamageModal> {
     final DamagedProductModel? result = await _damagedProductProvider.register(
       CreateDamagedProductModel(
         inventoryId: widget.item.inventoryId,
+        stylistId: _selectedStylistId(),
         quantity: quantity,
         damageReason: reason,
       ),
@@ -105,10 +121,36 @@ class _RegisterDamageModalState extends State<RegisterDamageModal> {
             maxLines: 4,
           ),
           const SizedBox(height: 16),
-          CustomTextField(
-            label: 'Estilista Responsable (Opcional)',
-            hintText: 'Nombre del estilista',
-            controller: _stylistController,
+          ListenableBuilder(
+            listenable: _stylistProvider,
+            builder: (context, _) {
+              final ViewStatus status = _stylistProvider.viewStatus;
+              final bool isLoading =
+                  status == ViewStatus.initial || status == ViewStatus.loading;
+              final bool hasError = status == ViewStatus.error;
+              final bool isEmpty = _stylistProvider.stylists.isEmpty;
+
+              String hint = _noStylist;
+              if (isLoading) {
+                hint = 'Cargando estilistas...';
+              } else if (hasError) {
+                hint = 'No se pudieron cargar los estilistas';
+              } else if (isEmpty) {
+                hint = 'No hay estilistas disponibles';
+              }
+
+              return CustomDropdownField(
+                label: 'Estilista Responsable (Opcional)',
+                hint: hint,
+                value: _selectedStylist,
+                enabled: !isLoading && !hasError && !isEmpty,
+                items: [
+                  _noStylist,
+                  ..._stylistProvider.stylists.map((stylist) => stylist.stylistName),
+                ],
+                onChanged: (name) => setState(() => _selectedStylist = name),
+              );
+            },
           ),
           if (_error != null) ...[
             const SizedBox(height: 14),
