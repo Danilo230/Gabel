@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/core/di/injection.dart';
+import 'package:gabel/presentation/providers/purchase_provider.dart';
 import 'package:gabel/presentation/widgets/custom_filter_modal.dart';
+import 'package:gabel/presentation/widgets/custom_refresh_scroll_view.dart'; // ajusta al nombre real del archivo
+import 'package:gabel/presentation/widgets/error_view.dart';
+import 'package:gabel/presentation/widgets/loading_view.dart';
+import 'package:provider/provider.dart';
 
 import '../../theme/app_colors.dart';
 import '../../widgets/app_header.dart';
@@ -9,304 +15,213 @@ import '../../widgets/custom_filter_dropdown.dart';
 import '../../widgets/custom_modal_sheet.dart';
 import '../../widgets/custom_pagination.dart';
 
-import '../purchaseshistory/models/purchasesmodel.dart';
-
 import 'widgets/purchaseshistory_card.dart';
 import 'widgets/purchaseshistory_detail_modal.dart';
 
-class PurchaseHistoryScreen extends StatefulWidget {
+class PurchaseHistoryScreen extends StatelessWidget {
   const PurchaseHistoryScreen({super.key});
 
   @override
-  State<PurchaseHistoryScreen> createState() =>
-      _PurchaseHistoryScreenState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => getIt<PurchaseProvider>()..fetchPurchases(),
+      child: const _PurchaseHistoryView(),
+    );
+  }
 }
 
-class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
-  String selectedProduct = 'Todos los productos';
+class _PurchaseHistoryView extends StatefulWidget {
+  const _PurchaseHistoryView();
 
+  @override
+  State<_PurchaseHistoryView> createState() => _PurchaseHistoryViewState();
+}
+
+class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
+  DateTime? _startDate;
+  DateTime? _endDate;
+
+  String selectedProduct = 'Todos los productos';
   final List<String> products = [
     'Todos los productos',
     'Sérum Verb',
     'Shampoo Revitalizante',
-    'Acondicionador Profesional',
-    'Mascarilla Capilar',
-    'Tratamiento Capilar',
-    'Aceite para Cabello',
   ];
   String selectedSupplier = 'Todos los proveedores';
-  
-  final List<String> suppliers =[
+  final List<String> suppliers = [
     'Todos los proveedores',
     'Amanda miguel',
     'Juan gabriel',
-    'Carlos miguel',
   ];
 
-  void _openFilterModal(){
+  void _openFilterModal() {
     CustomFilterModal.show(
       context,
       title: 'Filtrar Compras',
-      builder: (modalContext, setModalState){
+      builder: (modalContext, setModalState) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomFilterDropdown(
-              label: 'Productos', 
+              label: 'Productos',
               value: selectedProduct,
               items: products,
-              onChanged: (val){
-                if (val !=null){
-                  setModalState(() => selectedProduct = val);
-                }
-              }
+              onChanged: (val) {
+                if (val != null) setModalState(() => selectedProduct = val);
+              },
             ),
             const SizedBox(height: 16),
             CustomFilterDropdown(
-              label: 'Proveedores', 
+              label: 'Proveedores',
               value: selectedSupplier,
               items: suppliers,
-              onChanged: (val){
-                if (val !=null){
-                  setModalState(() => selectedSupplier = val);
-                }
-              }
+              onChanged: (val) {
+                if (val != null) setModalState(() => selectedSupplier = val);
+              },
             ),
           ],
         );
       },
-      onApply: (){
-        setState(() { });
-      }
+      onApply: () => setState(() {}),
     );
   }
 
-  Future<void> _selectStartDate(BuildContext context) async {
-    await showDatePicker(
+  Future<void> _selectStartDate() async {
+    final picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _startDate ?? DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
     );
+    if (picked == null || !mounted) return;
+    _startDate = picked;
+    _applyDateFilter();
   }
 
-  Future<void> _selectEndDate(BuildContext context) async {
-    await showDatePicker(
+  Future<void> _selectEndDate() async {
+    final picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _endDate ?? DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
+    );
+    if (picked == null || !mounted) return;
+    _endDate = picked;
+    _applyDateFilter();
+  }
+
+  void _applyDateFilter() {
+    final start = _startDate;
+    final end = _endDate;
+    if (start == null || end == null) return; 
+
+    if (start.isAfter(end)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('La fecha de inicio no puede ser mayor que la de fin'),
+        ),
+      );
+      return;
+    }
+    context.read<PurchaseProvider>().filterByDateRange(start, end);
+  }
+
+  void _clearFilter() {
+    setState(() {
+      _startDate = null;
+      _endDate = null;
+    });
+    context.read<PurchaseProvider>().clearFilter();
+  }
+
+  void _showDetail(int purchaseId) {
+    final provider = context.read<PurchaseProvider>();
+    provider.fetchPurchaseDetail(purchaseId);
+
+    CustomModalSheet.show(
+      context: context,
+      child: ChangeNotifierProvider.value(
+        value: provider,
+        child: const PurchaseDetailSheet(),
+      ),
+    );
+  }
+
+  Widget _buildContent(PurchaseProvider p) {
+    if (p.viewStatus == ViewStatusPurchase.error) {
+      return SizedBox(
+        height: 320,
+        child: ErrorView(
+          errorMessage: p.errorMessage ?? 'Error desconocido',
+          onRetry: p.refresh,
+        ),
+      );
+    }
+
+    if (p.viewStatus != ViewStatusPurchase.success) {
+      return const SizedBox(
+        height: 320,
+        child: LoadingView(message: 'Cargando compras...'),
+      );
+    }
+
+    if (p.purchases.isEmpty) {
+      return const SizedBox(
+        height: 200,
+        child: Center(child: Text('No hay compras')),
+      );
+    }
+
+    return Column(
+      children: [
+        for (final purchase in p.purchases) ...[
+          PurchaseCard(
+            purchase: purchase,
+            onViewDetail: () => _showDetail(purchase.purchaseId),
+          ),
+          const SizedBox(height: 12),
+        ],
+        const SizedBox(height: 4),
+        CustomPagination(currentPage: p.currentPage),
+        const SizedBox(height: 20),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<PurchaseProvider>();
+
     return Scaffold(
       backgroundColor: AppColors.bgtextColor,
-
-      appBar: const AppHeader(
-        title: 'Historial de compras',
-      ),
-
+      appBar: const AppHeader(title: 'Historial de compras'),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 14.0,
-          ),
+        child: CustomRefreshScrollView(
+          onRefresh: provider.refresh,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
           child: Column(
             children: [
               CustomDateFilter(
-                onStartDateTap: () => _selectStartDate(context),
-                onEndDateTap: () => _selectEndDate(context),
+                onStartDateTap: _selectStartDate,
+                onEndDateTap: _selectEndDate,
                 onFilterPressed: _openFilterModal,
               ),
-
+              if (provider.isFiltering)
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton.icon(
+                    onPressed: _clearFilter,
+                    icon: const Icon(Icons.close),
+                    label: const Text('Quitar filtro'),
+                  ),
+                ),
               const SizedBox(height: 16),
-
-              PurchaseCard(
-                purchase: const Purchase(
-                  supplierName: 'Distribuidora Bella',
-                  purchaseDate: '2026-09-27',
-                  totalAmount: 1000.00,
-                ),
-                onViewDetail: () {
-                  _mostrarDetalleCompra1(context);
-                },
-              ),
-
-              const SizedBox(height: 12),
-
-              PurchaseCard(
-                purchase: const Purchase(
-                  supplierName: 'Productos Salón',
-                  purchaseDate: '2026-09-25',
-                  totalAmount: 750.00,
-                ),
-                onViewDetail: () {
-                  _mostrarDetalleCompra2(context);
-                },
-              ),
-
-              const SizedBox(height: 12),
-
-              PurchaseCard(
-                purchase: const Purchase(
-                  supplierName: 'Belleza Profesional',
-                  purchaseDate: '2026-09-20',
-                  totalAmount: 1200.00,
-                ),
-                onViewDetail: () {
-                  _mostrarDetalleCompra3(context);
-                },
-              ),
-
-              const SizedBox(height: 12),
-
-              PurchaseCard(
-                purchase: const Purchase(
-                  supplierName: 'Distribuidora Central',
-                  purchaseDate: '2026-09-15',
-                  totalAmount: 625.00,
-                ),
-                onViewDetail: () {
-                  _mostrarDetalleCompra4(context);
-                },
-              ),
-
-              const SizedBox(height: 16),
-
-              const CustomPagination(
-                currentPage: 1,
-              ),
-
-              const SizedBox(height: 20),
+              _buildContent(provider),
             ],
           ),
         ),
       ),
-
-      bottomNavigationBar: const CustomBottomNavBar(
-        activeTab: 'Compras',
-      ),
-    );
-  }
-
-  void _mostrarDetalleCompra1(BuildContext context) {
-    const purchase = Purchase(
-      supplierName: 'Distribuidora Bella',
-      purchaseDate: '2026-09-27',
-      totalAmount: 1000.00,
-    );
-
-    const details = [
-      PurchaseDetail(
-        productName: 'Sérum Verb',
-        purchaseQuantity: 5,
-        unitPrice: 125.00,
-        lineTotal: 625.00,
-      ),
-      PurchaseDetail(
-        productName: 'Shampoo Revitalizante',
-        purchaseQuantity: 3,
-        unitPrice: 125.00,
-        lineTotal: 375.00,
-      ),
-    ];
-
-    CustomModalSheet.show(
-      context: context,
-      child: const PurchaseDetailModal(
-        purchase: purchase,
-        details: details,
-      ),
-    );
-  }
-
-  void _mostrarDetalleCompra2(BuildContext context) {
-    const purchase = Purchase(
-      supplierName: 'Productos Salón',
-      purchaseDate: '2026-09-25',
-      totalAmount: 750.00,
-    );
-
-    const details = [
-      PurchaseDetail(
-        productName: 'Acondicionador Profesional',
-        purchaseQuantity: 5,
-        unitPrice: 100.00,
-        lineTotal: 500.00,
-      ),
-      PurchaseDetail(
-        productName: 'Mascarilla Capilar',
-        purchaseQuantity: 2,
-        unitPrice: 125.00,
-        lineTotal: 250.00,
-      ),
-    ];
-
-    CustomModalSheet.show(
-      context: context,
-      child: const PurchaseDetailModal(
-        purchase: purchase,
-        details: details,
-      ),
-    );
-  }
-
-  void _mostrarDetalleCompra3(BuildContext context) {
-    const purchase = Purchase(
-      supplierName: 'Belleza Profesional',
-      purchaseDate: '2026-09-20',
-      totalAmount: 1200.00,
-    );
-
-    const details = [
-      PurchaseDetail(
-        productName: 'Tratamiento Capilar',
-        purchaseQuantity: 4,
-        unitPrice: 200.00,
-        lineTotal: 800.00,
-      ),
-      PurchaseDetail(
-        productName: 'Aceite para Cabello',
-        purchaseQuantity: 4,
-        unitPrice: 100.00,
-        lineTotal: 400.00,
-      ),
-    ];
-
-    CustomModalSheet.show(
-      context: context,
-      child: const PurchaseDetailModal(
-        purchase: purchase,
-        details: details,
-      ),
-    );
-  }
-
-  void _mostrarDetalleCompra4(BuildContext context) {
-    const purchase = Purchase(
-      supplierName: 'Distribuidora Central',
-      purchaseDate: '2026-09-15',
-      totalAmount: 625.00,
-    );
-
-    const details = [
-      PurchaseDetail(
-        productName: 'Sérum Verb',
-        purchaseQuantity: 5,
-        unitPrice: 125.00,
-        lineTotal: 625.00,
-      ),
-    ];
-
-    CustomModalSheet.show(
-      context: context,
-      child: const PurchaseDetailModal(
-        purchase: purchase,
-        details: details,
-      ),
+      bottomNavigationBar: const CustomBottomNavBar(activeTab: 'Compras'),
     );
   }
 }
