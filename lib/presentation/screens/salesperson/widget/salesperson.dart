@@ -39,7 +39,6 @@ class _SalesViewState extends State<_SalesView> {
   DateTime? _startDate;
   DateTime? _endDate;
 
-  // Filtros de producto/servicio: se dejan como estaban (aún no conectados)
   static const List<String> products = [
     'Todos los productos',
     'Shampoo Revitalizante',
@@ -114,7 +113,7 @@ class _SalesViewState extends State<_SalesView> {
   void _applyDateFilter() {
     final start = _startDate;
     final end = _endDate;
-    if (start == null || end == null) return; // espera a tener las dos
+    if (start == null || end == null) return; 
 
     if (start.isAfter(end)) {
       ScaffoldMessenger.of(context).showSnackBar(
