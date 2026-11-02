@@ -113,6 +113,7 @@ class _NewCustomerModalState extends State<NewCustomerModal> {
                         color: AppColors.white,
                       ),
                     )
+  
                   : const Icon(Icons.check, color: AppColors.white, size: 20),
               label: const Text(
                 'Guardar Cliente',

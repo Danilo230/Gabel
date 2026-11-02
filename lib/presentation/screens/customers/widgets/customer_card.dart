@@ -71,8 +71,6 @@ class CustomerCard extends StatelessWidget {
               color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 12),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -96,31 +94,56 @@ class CustomerCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+               const SizedBox(height: 9),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: const Icon(
-                      Icons.visibility_outlined,
-                      color: AppColors.actionIcon,
-                      size: 20,
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: customer.customerStatus ? AppColors.lightGreen : AppColors.lightPurple,
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    onPressed: () {
-                      CustomerEditModal.show(context, customer);
-                    },
-                  ),
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: const Icon(
-                      Icons.delete_outline_rounded,
-                      color: AppColors.deleteIcon,
-                      size: 20,
+                    child: Text(
+                      customer.customerStatus ? 'Activo' : 'Inactivo',
+                      style: const TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+
+                      ),
                     ),
-                    onPressed: () => _deleteCustomer(context),
                   ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        icon: const Icon(
+                          Icons.visibility_outlined,
+                          color: AppColors.actionIcon,
+                          size: 20,
+                        ),
+                        onPressed: () {
+                          CustomerEditModal.show(context, customer);
+                        },
+                      ),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        icon: const Icon(
+                          Icons.delete_outline_rounded,
+                          color: AppColors.deleteIcon,
+                          size: 20,
+                        ),
+                        onPressed: () => _deleteCustomer(context),
+                      ),
+                    ],
+                  )
+
+
                 ],
               ),
             ],

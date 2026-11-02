@@ -17,7 +17,7 @@ class ApiConstants {
   static const String inventory = '/Inventory';
   static const String purchasesHistory = '/Purchases';
   static const String salesHistory = '/Sales';
-  static const String customer = '/Customer';
+  static const String customer = '/Customers';
   static const String damagedProducts = '/DamagedProducts';
   static const String suppliers = '/Suppliers';
   static const String stylists = '/Stylists';
