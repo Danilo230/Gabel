@@ -10,10 +10,6 @@ import '../../../widgets/custom_date_filter.dart';
 import '../../../widgets/custom_modal_sheet.dart';
 import '../../../widgets/custom_pagination.dart';
 
-import '../../purchaseshistory/models/purchasesmodel.dart';
-import '../../purchaseshistory/widgets/purchaseshistory_card.dart';
-import '../../purchaseshistory/widgets/purchaseshistory_detail_modal.dart';
-
 class SalespersonScreen extends StatelessWidget {
   const SalespersonScreen({super.key});
 
