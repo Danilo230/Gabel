@@ -51,7 +51,7 @@ class CustomDeleteDialog extends StatelessWidget {
                   child: SizedBox(
                     height: 46,
                     child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => Navigator.pop(context, false),
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(color: AppColors.borderGrey),
                         shape: RoundedRectangleBorder(
@@ -79,7 +79,7 @@ class CustomDeleteDialog extends StatelessWidget {
                         if (onConfirm != null) {
                           onConfirm!();
                         }
-                        Navigator.pop(context);
+                        Navigator.pop(context, true);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.strongRed,
