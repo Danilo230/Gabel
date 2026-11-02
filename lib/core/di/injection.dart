@@ -3,18 +3,21 @@ import 'package:gabel/data/repositories/auth_repository.dart';
 import 'package:gabel/data/repositories/damaged_product_repository.dart';
 import 'package:gabel/data/repositories/inventory_repository.dart';
 import 'package:gabel/data/repositories/customer_repository.dart';
+import 'package:gabel/data/repositories/stylist_repository.dart';
 import 'package:gabel/data/repositories/token_repository.dart';
 import 'package:gabel/data/repositories/user_repository.dart';
 import 'package:gabel/presentation/providers/authenticatio_provider.dart';
 import 'package:gabel/presentation/providers/customer_provider.dart';
 import 'package:gabel/presentation/providers/damaged_product_provider.dart';
 import 'package:gabel/presentation/providers/inventory_provider.dart';
+import 'package:gabel/presentation/providers/stylist_provider.dart';
 import 'package:gabel/presentation/providers/user_provider.dart';
 import 'package:gabel/services/authentication_service.dart';
 import 'package:gabel/services/damaged_product_service.dart';
 import 'package:gabel/services/inventory_service.dart';
 import 'package:gabel/services/product_service.dart';
 import 'package:gabel/services/customer_service.dart';
+import 'package:gabel/services/stylist_service.dart';
 import 'package:gabel/services/user_service.dart';
 import 'package:get_it/get_it.dart';
 
@@ -34,6 +37,7 @@ void setupDependencies() {
   getIt.registerLazySingleton<InventoryRepository>(() => InventoryRepository(getIt<ApiClient>()));
   getIt.registerLazySingleton<DamagedProductRepository>(() => DamagedProductRepository(getIt<ApiClient>()));
   getIt.registerLazySingleton<CustomerRepository>(() => CustomerRepository(getIt<ApiClient>()));
+  getIt.registerLazySingleton<StylistRepository>(() => StylistRepository(getIt<ApiClient>()));
 
   // Register service
   getIt.registerLazySingleton<AuthenticationService>(() => AuthenticationService(getIt<AuthRepository>(), getIt<TokenRepository>()));
@@ -41,6 +45,7 @@ void setupDependencies() {
   getIt.registerLazySingleton<InventoryService>(() => InventoryService(getIt<InventoryRepository>()));
   getIt.registerLazySingleton<DamagedProductService>(() => DamagedProductService(getIt<DamagedProductRepository>()));
   getIt.registerLazySingleton<CustomerService>(() => CustomerService(getIt<CustomerRepository>()));
+  getIt.registerLazySingleton<StylistService>(() => StylistService(getIt<StylistRepository>()));
 
   //Register Provider
   getIt.registerLazySingleton<AuthenticationProvider>(() => AuthenticationProvider(getIt<AuthenticationService>()),);
@@ -48,4 +53,5 @@ void setupDependencies() {
   getIt.registerLazySingleton<InventoryProvider>(() => InventoryProvider(getIt<InventoryService>(), getIt<ProductService>()));
   getIt.registerFactory<DamagedProductProvider>(() => DamagedProductProvider(getIt<DamagedProductService>()));
   getIt.registerLazySingleton<CustomerProvider>(() => CustomerProvider(getIt<CustomerService>()));
+  getIt.registerFactory<StylistProvider>(() => StylistProvider(getIt<StylistService>()));
 }
