@@ -34,7 +34,7 @@ class PurchaseHistoryScreen extends StatelessWidget {
           create: (_) => getIt<SupplierProvider>()..fetchSuppliers(),
         ),
         ChangeNotifierProvider(
-          create: (_) => getIt<ProductProvider>()..fetchProducts(),
+          create: (_) => getIt<ProductProvider>()..fetchProducts(pageSize:100),
         ),
       ],
       child: const _PurchaseHistoryView(),
@@ -62,6 +62,10 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
   void _openFilterModal() {
     final supplierProvider = context.read<SupplierProvider>();
     final productProvider = context.read<ProductProvider>();
+
+    debugPrint('ESTADO PRODUCTOS: ${productProvider.viewStatus}');
+    debugPrint('CANTIDAD PRODUCTOS: ${productProvider.items.length}');
+    debugPrint('ERROR PRODUCTOS: ${productProvider.errorMessage}');
 
     CustomFilterModal.show(
       context,
