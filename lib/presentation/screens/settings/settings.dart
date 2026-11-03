@@ -117,7 +117,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   onPressed: () async {
                     final navigator = Navigator.of(context);
                     await context.read<AuthenticationProvider>().logout();
-                    navigator.pushNamedAndRemoveUntil('/login', (route) => false);
+                    navigator.pushNamedAndRemoveUntil('/', (route) => false);
                   },
                   icon: const Icon(
                     Icons.logout,

@@ -7,6 +7,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color surfaceAlt;
   final Color primary;
   final Color onPrimary;
+  final Color accentSoft;
   final Color textPrimary;
   final Color textSecondary;
   final Color textTertiary;
@@ -14,6 +15,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color icon;
   final Color border;
   final Color shadow;
+  final Color error;
+  final Color paginationBg;
+  final Color paginationActive;
+  final Color paginationArrow;
+  final Color onPagination;
+  final Color onPaginationActive;
 
   const AppPalette({
     required this.background,
@@ -21,6 +28,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     required this.surfaceAlt,
     required this.primary,
     required this.onPrimary,
+    required this.accentSoft,
     required this.textPrimary,
     required this.textSecondary,
     required this.textTertiary,
@@ -28,6 +36,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
     required this.icon,
     required this.border,
     required this.shadow,
+    required this.error,
+    required this.paginationBg,
+    required this.paginationActive,
+    required this.paginationArrow,
+    required this.onPagination,
+    required this.onPaginationActive,
   });
 
   static const light = AppPalette(
@@ -36,13 +50,20 @@ class AppPalette extends ThemeExtension<AppPalette> {
     surfaceAlt: Color(0xFFF6F2FA),
     primary: Color(0xFF5C2483),
     onPrimary: Colors.white,
+    accentSoft: Color(0xFFF3EAFB),
     textPrimary: Color(0xFF1A1A1A),
     textSecondary: Color(0xFF5B5B66),
     textTertiary: Color(0xFF8A8A96),
     sectionLabel: Color(0xFF8E7AA8),
     icon: Color(0xFF2C2C2C),
-    border: Color(0xFFE0E0E0),
+    border: Color(0xFFE6E0EC),
     shadow: Color(0x08000000),
+    error: Colors.red,
+    paginationBg: Color(0xFF5C2483),
+    paginationActive: Color(0xFF853BAF),
+    paginationArrow: Color(0xFF451566),
+    onPagination: Colors.white,
+    onPaginationActive: Colors.white,
   );
 
   static const dark = AppPalette(
@@ -51,6 +72,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     surfaceAlt: Color(0xFF2A2533),
     primary: Color(0xFFB98AE0),
     onPrimary: Color(0xFF2A0F40),
+    accentSoft: Color(0xFF2F2640),
     textPrimary: Color(0xFFECE6F2),
     textSecondary: Color(0xFFA9A3B4),
     textTertiary: Color(0xFF857F90),
@@ -58,6 +80,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
     icon: Color(0xFFD9D3E2),
     border: Color(0xFF3A3445),
     shadow: Color(0x00000000),
+    error: Color(0xFFFF6B6B),
+    paginationBg: Color(0xFF3A2A52),
+    paginationActive: Color(0xFFB98AE0),
+    paginationArrow: Color(0xFF2A1F3D),
+    onPagination: Color(0xFFECE6F2),
+    onPaginationActive: Color(0xFF2A0F40),
   );
 
   @override
@@ -67,6 +95,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     Color? surfaceAlt,
     Color? primary,
     Color? onPrimary,
+    Color? accentSoft,
     Color? textPrimary,
     Color? textSecondary,
     Color? textTertiary,
@@ -74,6 +103,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
     Color? icon,
     Color? border,
     Color? shadow,
+    Color? error,
+    Color? paginationBg,
+    Color? paginationActive,
+    Color? paginationArrow,
+    Color? onPagination,
+    Color? onPaginationActive,
   }) {
     return AppPalette(
       background: background ?? this.background,
@@ -81,6 +116,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
       surfaceAlt: surfaceAlt ?? this.surfaceAlt,
       primary: primary ?? this.primary,
       onPrimary: onPrimary ?? this.onPrimary,
+      accentSoft: accentSoft ?? this.accentSoft,
       textPrimary: textPrimary ?? this.textPrimary,
       textSecondary: textSecondary ?? this.textSecondary,
       textTertiary: textTertiary ?? this.textTertiary,
@@ -88,6 +124,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
       icon: icon ?? this.icon,
       border: border ?? this.border,
       shadow: shadow ?? this.shadow,
+      error: error ?? this.error,
+      paginationBg: paginationBg ?? this.paginationBg,
+      paginationActive: paginationActive ?? this.paginationActive,
+      paginationArrow: paginationArrow ?? this.paginationArrow,
+      onPagination: onPagination ?? this.onPagination,
+      onPaginationActive: onPaginationActive ?? this.onPaginationActive,
     );
   }
 
@@ -101,6 +143,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
       surfaceAlt: l(surfaceAlt, other.surfaceAlt),
       primary: l(primary, other.primary),
       onPrimary: l(onPrimary, other.onPrimary),
+      accentSoft: l(accentSoft, other.accentSoft),
       textPrimary: l(textPrimary, other.textPrimary),
       textSecondary: l(textSecondary, other.textSecondary),
       textTertiary: l(textTertiary, other.textTertiary),
@@ -108,6 +151,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
       icon: l(icon, other.icon),
       border: l(border, other.border),
       shadow: l(shadow, other.shadow),
+      error: l(error, other.error),
+      paginationBg: l(paginationBg, other.paginationBg),
+      paginationActive: l(paginationActive, other.paginationActive),
+      paginationArrow: l(paginationArrow, other.paginationArrow),
+      onPagination: l(onPagination, other.onPagination),
+      onPaginationActive: l(onPaginationActive, other.onPaginationActive),
     );
   }
 }

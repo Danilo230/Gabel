@@ -77,7 +77,7 @@ class _AuthGuard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthenticationProvider>();
-
+  debugPrint('GUARD status: ${authProvider.authStatus}');
     switch (authProvider.authStatus) {
       case AuthenticationStatus.authenticated:
         return authProvider.isSalesperson
