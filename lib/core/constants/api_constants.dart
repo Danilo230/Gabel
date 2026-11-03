@@ -23,11 +23,8 @@ class ApiConstants {
   static const String stylists = '/Stylists';
   static const String activityLogs = '/Logs';
 
-  // Catálogos, (solamente para obtener, lectura)
-
-  static const String productUnits = '/Products/Units';
-  static const String productCategories = '/Products/Categories';
-  static const String productSuppliers = '/Products/Suppliers';
+  static const String units = '/Units';
+  static const String categories = '/Categories';
 
   static const Duration timeoutDuration = Duration(seconds: 30);
 }
