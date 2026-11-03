@@ -85,49 +85,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       },
                     ),
                   ),
-
-                  SettingsOption(
-                    icon: Icons.notifications_none,
-                    qualification: 'Notificaciones',
-                    caption: 'Configura las alertas de la aplicación',
-
-                    trailing: Switch(
-                      value: notificaciones,
-                      activeThumbColor: const Color(0xFF5C2483),
-                      onChanged: (valor) {
-                        setState(() {
-                          notificaciones = valor;
-                        });
-                      },
-                    ),
-                  ),
-
-                  SettingsOption(
-                    icon: Icons.text_fields,
-                    qualification: 'Tamaño de letra',
-                    caption: 'Ajusta la escala de lectura',
-
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Text(
-                          'Mediano',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-
-                        SizedBox(width: 4),
-
-                        Icon(
-                          Icons.chevron_right,
-                          color: Colors.grey,
-                          size: 22,
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
 
@@ -161,9 +118,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 width: double.infinity,
                 height: 50,
                 child: OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-                    context.read<AuthenticationProvider>().logout();
+                  onPressed: () async {
+                    final navigator = Navigator.of(context);
+                    await context.read<AuthenticationProvider>().logout();
+                    navigator.pushNamedAndRemoveUntil('/login', (route) => false);
                   },
                   icon: const Icon(
                     Icons.logout,
