@@ -30,4 +30,11 @@ class AuthRepository {
 
     return CurrentUserModel .fromJson(json);
   }
+
+  Future<CurrentUserModel> updateProfile(UpdateProfileRequest request) async {
+    final json = await _apiClient.put(ApiConstants.me, body: request.toJson());
+    if (json is! Map<String, dynamic>) throw const ParsingException();
+
+    return CurrentUserModel.fromJson(json);
+  }
 }
