@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/core/di/injection.dart';
+import 'package:gabel/data/models/service_models.dart';
+import 'package:gabel/presentation/providers/service_provider.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_confirm_dialog.dart';
-import '../../../widgets/custom_modal_sheet.dart';
-import '../../../../data/models/service_models.dart';
 import '../../../widgets/custom_filter_dropdown.dart';
+import '../../../widgets/custom_modal_sheet.dart';
 import '../../../widgets/custom_text_field.dart';
 
 class EditServiceModal extends StatefulWidget {
   final ServiceModels service;
+
   const EditServiceModal({super.key, required this.service});
 
   static void show(BuildContext context, ServiceModels service) {
@@ -22,6 +25,11 @@ class EditServiceModal extends StatefulWidget {
 }
 
 class _EditServiceModalState extends State<EditServiceModal> {
+  final ServicesProvider _provider = getIt<ServicesProvider>();
+  late final TextEditingController _nameController;
+  late final TextEditingController _priceController;
+  late final TextEditingController _descriptionController;
+
   bool _isEditing = false;
   String? _selectedEstilist;
   late String? _selectedStatus;
@@ -29,12 +37,100 @@ class _EditServiceModalState extends State<EditServiceModal> {
   @override
   void initState() {
     super.initState();
+    _provider.ensureAllServicesLoaded();
+    _nameController = TextEditingController(text: widget.service.serviceName);
+    _priceController = TextEditingController(
+      text: widget.service.servicePrice.toStringAsFixed(2),
+    );
+    _descriptionController = TextEditingController(
+      text: widget.service.serviceDescription,
+    );
     _selectedEstilist = widget.service.stylistName;
     _selectedStatus = widget.service.serviceStatus ? 'Activo' : 'Inactivo';
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _priceController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _saveChanges() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
+    final name = _nameController.text.trim();
+    final priceStr = _priceController.text.trim();
+    final description = _descriptionController.text.trim();
+    final stylist = _selectedEstilist?.trim() ?? '';
+
+    if (name.isEmpty || priceStr.isEmpty || stylist.isEmpty) {
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Por favor completa todos los campos requeridos.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    final price = double.tryParse(priceStr.replaceAll(RegExp(r'[^0-9.]'), ''));
+    if (price == null || price <= 0) {
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Por favor ingresa un precio válido mayor a 0.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    final updatedService = await _provider.update(
+      widget.service.serviceId,
+      ServiceModels(
+        serviceId: widget.service.serviceId,
+        serviceName: name,
+        serviceDescription: description,
+        servicePrice: price,
+        stylistName: stylist,
+        serviceStatus: _selectedStatus == 'Activo',
+      ),
+    );
+
+    if (updatedService != null) {
+      await _provider.refresh();
+      if (mounted) navigator.pop();
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Cambios guardados exitosamente'),
+          backgroundColor: AppColors.primaryPurple,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } else {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            _provider.errorMessage ?? 'Error al guardar los cambios',
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final stylistSet = Set<String>.from(_provider.availableStylists);
+    if (_selectedEstilist != null && _selectedEstilist!.isNotEmpty) {
+      stylistSet.add(_selectedEstilist!);
+    }
+    final stylistOptions = stylistSet.isNotEmpty
+        ? stylistSet.toList()
+        : const ['Sin estilistas disponibles'];
+
     return CustomModalSheet(
       title: _isEditing ? 'Editar servicio' : 'Detalle de servicio',
       child: Column(
@@ -43,6 +139,7 @@ class _EditServiceModalState extends State<EditServiceModal> {
           CustomTextField(
             label: 'Nombre del servicio',
             hintText: 'Ej. Keratina',
+            controller: _nameController,
             enabled: _isEditing,
           ),
           const SizedBox(height: 14),
@@ -50,17 +147,24 @@ class _EditServiceModalState extends State<EditServiceModal> {
           CustomTextField(
             label: 'Precio',
             hintText: '0.00',
-            keyboardType: TextInputType.number,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            controller: _priceController,
             enabled: _isEditing,
           ),
           const SizedBox(height: 14),
 
           CustomFilterDropdown(
             label: 'Nombre del estilista',
-            value: _selectedEstilist,
-            items: const ['Maria', 'Nathalia', 'Martha'],
+            value: stylistOptions.contains(_selectedEstilist)
+                ? _selectedEstilist
+                : stylistOptions.first,
+            items: stylistOptions,
             enabled: _isEditing,
-            onChanged: (val) => setState(() => _selectedEstilist = val),
+            onChanged: (val) {
+              if (val != null && val != 'Sin estilistas disponibles') {
+                setState(() => _selectedEstilist = val);
+              }
+            },
           ),
           const SizedBox(height: 14),
 
@@ -68,6 +172,7 @@ class _EditServiceModalState extends State<EditServiceModal> {
             label: 'Descripción',
             hintText: 'Detalles del servicio...',
             maxLines: 3,
+            controller: _descriptionController,
             enabled: _isEditing,
           ),
           const SizedBox(height: 14),
@@ -94,9 +199,7 @@ class _EditServiceModalState extends State<EditServiceModal> {
         height: 48,
         child: ElevatedButton.icon(
           onPressed: () {
-            setState(() {
-              _isEditing = true;
-            });
+            setState(() => _isEditing = true);
           },
           icon: const Icon(
             Icons.edit_outlined,
@@ -120,51 +223,59 @@ class _EditServiceModalState extends State<EditServiceModal> {
           ),
         ),
       );
-    } else {
-      return SizedBox(
-        width: double.infinity,
-        height: 48,
-        child: ElevatedButton.icon(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (dialogContext) => CustomConfirmDialog(
-                title: '¿Deseas guardar los cambios?',
-                message: 'La información del servicio será actualizada.',
-                onConfirm: () {
-                  Navigator.of(dialogContext).pop();
-                  setState(() {
-                    _isEditing = false;
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('¡Cambios guardados exitosamente!'),
-                      backgroundColor: AppColors.primaryPurple,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                },
-              ),
-            );
-          },
-          icon: const Icon(Icons.check, color: AppColors.white, size: 20),
-          label: const Text(
-            'Guardar Cambios',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: AppColors.white,
-            ),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primaryPurple,
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-        ),
-      );
     }
+
+    return ListenableBuilder(
+      listenable: _provider,
+      builder: (context, _) {
+        return SizedBox(
+          width: double.infinity,
+          height: 48,
+          child: ElevatedButton.icon(
+            onPressed: _provider.isSaving
+                ? null
+                : () {
+                    showDialog(
+                      context: context,
+                      builder: (dialogContext) => CustomConfirmDialog(
+                        title: '¿Deseas guardar los cambios?',
+                        message:
+                            'La información del servicio será actualizada.',
+                        onConfirm: () {
+                          Navigator.of(dialogContext).pop();
+                          _saveChanges();
+                        },
+                      ),
+                    );
+                  },
+            icon: _provider.isSaving
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(
+                      color: AppColors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : const Icon(Icons.check, color: AppColors.white, size: 20),
+            label: const Text(
+              'Guardar cambios',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: AppColors.white,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryPurple,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

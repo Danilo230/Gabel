@@ -40,22 +40,20 @@ class _EditProductModalState extends State<EditProductModal> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.product.productName);
-    _descriptionController = TextEditingController(
-      text: widget.product.productDescription,
-    );
-    _brandController = TextEditingController(text: widget.product.brand);
+    final p = widget.product;
 
-    _selectedUnit = widget.product.unitName.trim().isNotEmpty
-        ? widget.product.unitName.trim()
+    _nameController = TextEditingController(text: p.productName);
+    _descriptionController = TextEditingController(text: p.productDescription);
+    _brandController = TextEditingController(text: p.brand);
+
+    _selectedUnit = p.unitName.trim().isNotEmpty ? p.unitName.trim() : null;
+    _selectedCategory = p.categoryName.trim().isNotEmpty
+        ? p.categoryName.trim()
         : null;
-    _selectedCategory = widget.product.categoryName.trim().isNotEmpty
-        ? widget.product.categoryName.trim()
+    _selectedSupplier = p.supplierName.trim().isNotEmpty
+        ? p.supplierName.trim()
         : null;
-    _selectedSupplier = widget.product.supplierName.trim().isNotEmpty
-        ? widget.product.supplierName.trim()
-        : null;
-    _selectedStatus = widget.product.productStatus ? 'Activo' : 'Inactivo';
+    _selectedStatus = p.productStatus ? 'Activo' : 'Inactivo';
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _provider.loadCatalogs();
@@ -81,26 +79,42 @@ class _EditProductModalState extends State<EditProductModal> {
     return set.toList()..sort();
   }
 
+  int _pickId(int fromCatalog, int original) =>
+      fromCatalog != 0 ? fromCatalog : original;
+
   Future<void> _saveChanges() async {
     final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
+    final original = widget.product;
+
+    final unit = _selectedUnit ?? original.unitName;
+    final category = _selectedCategory ?? original.categoryName;
+    final supplier = _selectedSupplier ?? original.supplierName;
 
     final updatedProduct = await _provider.update(
-      widget.product.productId,
+      original.productId,
       ProductModel(
-        productId: widget.product.productId,
-        productName: _nameController.text.trim(),
-        productDescription: _descriptionController.text.trim(),
-        brand: _brandController.text.trim(),
-        unitName: _selectedUnit ?? widget.product.unitName,
-        categoryName: _selectedCategory ?? widget.product.categoryName,
-        supplierName: _selectedSupplier ?? widget.product.supplierName,
+        productId: original.productId,
+        productName: _nameController.text,
+        productDescription: _descriptionController.text,
+        brand: _brandController.text,
+        unitId: _pickId(_provider.unitIdByName(unit), original.unitId),
+        unitName: unit,
+        categoryId: _pickId(
+          _provider.categoryIdByName(category),
+          original.categoryId,
+        ),
+        categoryName: category,
+        supplierId: _pickId(
+          _provider.supplierIdByName(supplier),
+          original.supplierId,
+        ),
+        supplierName: supplier,
         productStatus: _selectedStatus == 'Activo',
       ),
     );
 
     if (updatedProduct != null) {
-      await _provider.refresh();
       if (mounted) navigator.pop();
       messenger.showSnackBar(
         const SnackBar(
@@ -254,57 +268,51 @@ class _EditProductModalState extends State<EditProductModal> {
       );
     }
 
-    return ListenableBuilder(
-      listenable: _provider,
-      builder: (context, _) {
-        return SizedBox(
-          width: double.infinity,
-          height: 48,
-          child: ElevatedButton.icon(
-            onPressed: _provider.isSaving
-                ? null
-                : () {
-                    showDialog(
-                      context: context,
-                      builder: (dialogContext) => CustomConfirmDialog(
-                        title: '¿Deseas guardar los cambios?',
-                        message:
-                            'La información del producto será actualizada.',
-                        onConfirm: () {
-                          Navigator.of(dialogContext).pop();
-                          _saveChanges();
-                        },
-                      ),
-                    );
-                  },
-            icon: _provider.isSaving
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(
-                      color: AppColors.white,
-                      strokeWidth: 2,
-                    ),
-                  )
-                : const Icon(Icons.check, color: AppColors.white, size: 20),
-            label: const Text(
-              'Guardar cambios',
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: AppColors.white,
-              ),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryPurple,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
+    return SizedBox(
+      width: double.infinity,
+      height: 48,
+      child: ElevatedButton.icon(
+        onPressed: _provider.isSaving
+            ? null
+            : () {
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) => CustomConfirmDialog(
+                    title: '¿Deseas guardar los cambios?',
+                    message: 'La información del producto será actualizada.',
+                    onConfirm: () {
+                      Navigator.of(dialogContext).pop();
+                      _saveChanges();
+                    },
+                  ),
+                );
+              },
+        icon: _provider.isSaving
+            ? const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  color: AppColors.white,
+                  strokeWidth: 2,
+                ),
+              )
+            : const Icon(Icons.check, color: AppColors.white, size: 20),
+        label: const Text(
+          'Guardar cambios',
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            color: AppColors.white,
           ),
-        );
-      },
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primaryPurple,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
     );
   }
 }
