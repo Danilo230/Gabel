@@ -3,32 +3,41 @@ class ProductModel {
   final String productName;
   final String productDescription;
   final String brand;
-  final String unitName;
-  final String categoryName;
-  final String supplierName;
   final bool productStatus;
+  final int unitId;
+  final String unitName;
+  final int categoryId;
+  final String categoryName;
+  final int supplierId;
+  final String supplierName;
 
   const ProductModel({
     required this.productId,
     required this.productName,
     required this.productDescription,
     required this.brand,
+    required this.productStatus,
     required this.unitName,
     required this.categoryName,
     required this.supplierName,
-    required this.productStatus,
+    this.unitId = 0,
+    this.categoryId = 0,
+    this.supplierId = 0,
   });
 
   static ProductModel fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      productId: json['productId'] as int,
-      productName: json['productName'] as String,
-      productDescription: (json['productDescription'] ?? '') as String,
-      brand: (json['brand'] ?? '') as String,
-      unitName: (json['unitName'] ?? '') as String,
-      categoryName: (json['categoryName'] ?? '') as String,
-      supplierName: (json['supplierName'] ?? '') as String,
-      productStatus: json['productStatus'] as bool,
+      productId: json['productId'] as int? ?? 0,
+      productName: json['productName'] as String? ?? '',
+      productDescription: json['productDescription'] as String? ?? '',
+      brand: json['brand'] as String? ?? '',
+      productStatus: json['productStatus'] as bool? ?? true,
+      unitId: json['unitId'] as int? ?? 0,
+      unitName: json['unitName'] as String? ?? '',
+      categoryId: json['categoryId'] as int? ?? 0,
+      categoryName: json['categoryName'] as String? ?? '',
+      supplierId: json['supplierId'] as int? ?? 0,
+      supplierName: json['supplierName'] as String? ?? '',
     );
   }
 
@@ -38,32 +47,20 @@ class ProductModel {
       'productName': productName,
       'productDescription': productDescription,
       'brand': brand,
-      'unitName': unitName,
-      'categoryName': categoryName,
-      'supplierName': supplierName,
       'productStatus': productStatus,
+      'unitId': unitId,
+      'unitName': unitName,
+      'categoryId': categoryId,
+      'categoryName': categoryName,
+      'supplierId': supplierId,
+      'supplierName': supplierName,
     };
   }
+}
 
-  ProductModel copyWith({
-    int? productId,
-    String? productName,
-    String? productDescription,
-    String? brand,
-    String? unitName,
-    String? categoryName,
-    String? supplierName,
-    bool? productStatus,
-  }) {
-    return ProductModel(
-      productId: productId ?? this.productId,
-      productName: productName ?? this.productName,
-      productDescription: productDescription ?? this.productDescription,
-      brand: brand ?? this.brand,
-      unitName: unitName ?? this.unitName,
-      categoryName: categoryName ?? this.categoryName,
-      supplierName: supplierName ?? this.supplierName,
-      productStatus: productStatus ?? this.productStatus,
-    );
-  }
+class CatalogItem {
+  final int id;
+  final String name;
+
+  const CatalogItem({required this.id, required this.name});
 }
