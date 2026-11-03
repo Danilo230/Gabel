@@ -23,10 +23,22 @@ class ProductsScreen extends StatefulWidget {
 
 class _ProductsScreenState extends State<ProductsScreen> {
   static const List<String> statuses = ['Activo', 'Inactivo'];
+  late final ProductProvider _provider;
 
   String selectedStatus = statuses.first;
 
   final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _provider = getIt<ProductProvider>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _provider.clearFilters();
+      _provider.fetchProducts();
+    });
+  }
 
   @override
   void dispose() {
@@ -41,7 +53,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
     final ProductModel? result = await NewProductModal.show(context, provider);
 
     if (result == null || !context.mounted) return;
-    provider.refresh();
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -79,7 +90,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
-      value: getIt<ProductProvider>()..fetchProducts(),
+      value: _provider,
       child: Consumer<ProductProvider>(
         builder: (context, provider, _) {
           final displayedProducts = provider.filteredProducts;

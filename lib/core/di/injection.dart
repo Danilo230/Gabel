@@ -10,6 +10,8 @@ import 'package:gabel/data/repositories/service_repository.dart';
 import 'package:gabel/data/repositories/supplier_repository.dart';
 import 'package:gabel/data/repositories/token_repository.dart';
 import 'package:gabel/data/repositories/user_repository.dart';
+import 'package:gabel/data/repositories/stylist_repository.dart';
+import 'package:gabel/data/repositories/activity_log_repository.dart';
 import 'package:gabel/presentation/providers/authenticatio_provider.dart';
 import 'package:gabel/presentation/providers/customer_provider.dart';
 import 'package:gabel/presentation/providers/damaged_product_provider.dart';
@@ -20,6 +22,8 @@ import 'package:gabel/presentation/providers/supplier_provider.dart';
 import 'package:gabel/presentation/providers/user_provider.dart';
 import 'package:gabel/presentation/providers/product_provider.dart';
 import 'package:gabel/presentation/providers/service_provider.dart';
+import 'package:gabel/presentation/providers/stylist_provider.dart';
+import 'package:gabel/presentation/providers/activity_log_provider.dart';
 import 'package:gabel/services/authentication_service.dart';
 import 'package:gabel/services/damaged_product_service.dart';
 import 'package:gabel/services/inventory_service.dart';
@@ -30,6 +34,8 @@ import 'package:gabel/services/sale_service.dart';
 import 'package:gabel/services/services_service.dart';
 import 'package:gabel/services/supplier_service.dart';
 import 'package:gabel/services/user_service.dart';
+import 'package:gabel/services/stylist_service.dart';
+import 'package:gabel/services/activity_log_service.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
@@ -73,6 +79,12 @@ void setupDependencies() {
   getIt.registerLazySingleton<SupplierRepository>(
     () => SupplierRepository(getIt<ApiClient>()),
   );
+  getIt.registerLazySingleton<StylistRepository>(
+    () => StylistRepository(getIt<ApiClient>()),
+  );
+  getIt.registerLazySingleton<ActivityLogRepository>(
+    () => ActivityLogRepository(getIt<ApiClient>()),
+  );
 
   // Register service
   getIt.registerLazySingleton<AuthenticationService>(
@@ -108,6 +120,12 @@ void setupDependencies() {
   getIt.registerLazySingleton<SupplierService>(
     () => SupplierService(getIt<SupplierRepository>()),
   );
+  getIt.registerLazySingleton<StylistService>(
+    () => StylistService(getIt<StylistRepository>()),
+  );
+  getIt.registerLazySingleton<ActivityLogService>(
+    () => ActivityLogService(getIt<ActivityLogRepository>()),
+  );
 
   //Register Provider
   getIt.registerLazySingleton<AuthenticationProvider>(
@@ -135,5 +153,11 @@ void setupDependencies() {
   );
   getIt.registerFactory<SupplierProvider>(
     () => SupplierProvider(getIt<SupplierService>()),
+  );
+  getIt.registerFactory<StylistProvider>(
+    () => StylistProvider(getIt<StylistService>()),
+  );
+  getIt.registerFactory<ActivityLogProvider>(
+    () => ActivityLogProvider(getIt<ActivityLogService>()),
   );
 }
