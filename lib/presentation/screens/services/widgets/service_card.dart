@@ -11,38 +11,32 @@ class ServiceCard extends StatelessWidget {
 
   const ServiceCard({super.key, required this.service});
 
-  Future<void> _deleteService(BuildContext context) async {
+  void _deleteService(BuildContext context) {
     final provider = context.read<ServicesProvider>();
     final messenger = ScaffoldMessenger.of(context);
+    final id = service.serviceId;
 
-    final confirmed = await showDialog<bool>(
+    showDialog(
       context: context,
-      builder: (context) => const CustomDeleteDialog(
+      builder: (_) => CustomDeleteDialog(
         message: '¿Estás seguro de que deseas eliminar este servicio?',
+        onConfirm: () async {
+          final message = await provider.delete(id);
+
+          messenger.showSnackBar(
+            SnackBar(
+              content: Text(
+                message ??
+                    provider.errorMessage ??
+                    'Error al eliminar el servicio.',
+              ),
+              backgroundColor: message != null ? AppColors.deleteIcon : null,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        },
       ),
     );
-    if (confirmed != true) return;
-    final message = await provider.delete(service.serviceId);
-
-    if (message != null) {
-      await provider.refresh();
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: AppColors.deleteIcon,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    } else {
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            provider.errorMessage ?? 'Error al eliminar el servicio.',
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    }
   }
 
   @override
