@@ -11,39 +11,32 @@ class ProductCard extends StatelessWidget {
 
   const ProductCard({super.key, required this.product});
 
-  Future<void> _deleteProduct(BuildContext context) async {
+  void _deleteProduct(BuildContext context) {
     final provider = context.read<ProductProvider>();
     final messenger = ScaffoldMessenger.of(context);
+    final id = product.productId;
 
-    final confirmed = await showDialog<bool>(
+    showDialog(
       context: context,
-      builder: (context) => const CustomDeleteDialog(
+      builder: (_) => CustomDeleteDialog(
         message: '¿Estás seguro de que deseas eliminar este producto?',
+        onConfirm: () async {
+          final message = await provider.delete(id);
+
+          messenger.showSnackBar(
+            SnackBar(
+              content: Text(
+                message ??
+                    provider.errorMessage ??
+                    'Error al eliminar el producto.',
+              ),
+              backgroundColor: message != null ? AppColors.deleteIcon : null,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        },
       ),
     );
-    if (confirmed != true) return;
-
-    final message = await provider.delete(product.productId);
-
-    if (message != null) {
-      await provider.refresh();
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: AppColors.deleteIcon,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    } else {
-      messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            provider.errorMessage ?? 'Error al eliminar el producto.',
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-    }
   }
 
   @override
