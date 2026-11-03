@@ -1,4 +1,5 @@
 import 'package:gabel/core/constants/api_constants.dart';
+import 'package:gabel/data/models/paged_result_model.dart';
 import 'package:gabel/data/models/product_model.dart';
 import 'package:gabel/data/repositories/product_repository.dart';
 
@@ -11,7 +12,7 @@ class ProductService {
     return await _productRepository.getById(productId);
   }
 
-  Future<List<ProductModel>> getAll({
+  Future<PagedResultModel<ProductModel>> getAll({
     int pageNumber = 1,
     int pageSize = 10,
   }) async {
@@ -26,90 +27,76 @@ class ProductService {
     });
   }
 
-  Future<ProductModel> create(ProductModel product) async {
+  ProductModel _clean(int productId, ProductModel product, bool status) {
     final name = product.productName.trim();
-    final description = product.productDescription.trim(); // Opcional
     final brand = product.brand.trim();
     final unit = product.unitName.trim();
     final category = product.categoryName.trim();
     final supplier = product.supplierName.trim();
 
-    // Todos los campos son obligatorios excepto la descripción
     if (name.isEmpty ||
         brand.isEmpty ||
         unit.isEmpty ||
         category.isEmpty ||
         supplier.isEmpty) {
-      throw Exception('Los parámetros no pueden estar vacios');
+      throw const FormatException('Todos los campos son obligatorios.');
     }
 
-    return await _productRepository.createProduct(
-      ProductModel(
-        productId: product.productId,
-        productName: name,
-        productDescription: description,
-        brand: brand,
-        unitName: unit,
-        categoryName: category,
-        supplierName: supplier,
-        productStatus: true,
-      ),
+    return ProductModel(
+      productId: productId,
+      productName: name,
+      productDescription: product.productDescription.trim(),
+      brand: brand,
+      productStatus: status,
+      unitId: product.unitId,
+      unitName: unit,
+      categoryId: product.categoryId,
+      categoryName: category,
+      supplierId: product.supplierId,
+      supplierName: supplier,
     );
   }
 
-  Future<ProductModel> update(int productId, ProductModel product) async {
-    final name = product.productName.trim();
-    final description = product.productDescription.trim(); // Opcional
-    final brand = product.brand.trim();
-    final unit = product.unitName.trim();
-    final category = product.categoryName.trim();
-    final supplier = product.supplierName.trim();
+  Future<ProductModel> createProduct(ProductModel product) async {
+    return await _productRepository.create(
+      _clean(product.productId, product, true),
+    );
+  }
 
-    // Todos los campos son obligatorios excepto la descripción
-    if (name.isEmpty ||
-        brand.isEmpty ||
-        unit.isEmpty ||
-        category.isEmpty ||
-        supplier.isEmpty) {
-      throw Exception('Los parámetros no pueden estar vacios');
-    }
-
+  Future<ProductModel> updateProduct(
+    int productId,
+    ProductModel product,
+  ) async {
     return await _productRepository.updateProduct(
       productId,
-      ProductModel(
-        productId: productId,
-        productName: name,
-        productDescription: description,
-        brand: brand,
-        unitName: unit,
-        categoryName: category,
-        supplierName: supplier,
-        productStatus: product.productStatus,
-      ),
+      _clean(productId, product, product.productStatus),
     );
   }
 
   Future<String> delete(int productId, bool productStatus) async {
     if (productId <= 0) {
-      throw Exception('Id de producto no es válido');
+      throw const FormatException('Id de producto no es válido');
     }
-    return await _productRepository.deleteProduct(productId, productStatus);
+    return await _productRepository.delete(productId, productStatus);
   }
 
-  Future<ProductModel> createProduct(ProductModel product) => create(product);
-  Future<String> deleteProduct(int productId, bool productStatus) =>
-      delete(productId, productStatus);
-
-  Future<List<String>> getAllUnits() =>
-      _productRepository.getAllCatalog(ApiConstants.productUnits, 'unitName');
-
-  Future<List<String>> getAllCategories() => _productRepository.getAllCatalog(
-    ApiConstants.productCategories,
-    'categoryName',
+  Future<List<CatalogItem>> getAllUnits() => _productRepository.getAllCatalog(
+    ApiConstants.units,
+    idKey: 'unitId',
+    nameKey: 'unitName',
   );
 
-  Future<List<String>> getAllSuppliers() => _productRepository.getAllCatalog(
-    ApiConstants.productSuppliers,
-    'supplierName',
-  );
+  Future<List<CatalogItem>> getAllCategories() =>
+      _productRepository.getAllCatalog(
+        ApiConstants.categories,
+        idKey: 'categoryId',
+        nameKey: 'categoryName',
+      );
+
+  Future<List<CatalogItem>> getAllSuppliers() =>
+      _productRepository.getAllCatalog(
+        ApiConstants.suppliers,
+        idKey: 'supplierId',
+        nameKey: 'supplierName',
+      );
 }

@@ -55,31 +55,28 @@ class _NewProductModalState extends State<NewProductModal> {
   }
 
   Future<void> _saveProduct() async {
-    final name = _nameController.text.trim();
-    if (name.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('El nombre del producto es obligatorio.'),
-          backgroundColor: AppColors.strongRed,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-      return;
-    }
-
     final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
+    final provider = widget.provider;
+
+    final unit = _selectedUnit ?? '';
+    final category = _selectedCategory ?? '';
+    final supplier = _selectedSupplier ?? '';
 
     setState(() => _isSaving = true);
-    final created = await widget.provider.register(
+
+    final created = await provider.register(
       ProductModel(
         productId: 0,
-        productName: name,
-        productDescription: _descriptionController.text.trim(),
-        brand: _brandController.text.trim(),
-        unitName: _selectedUnit ?? '',
-        categoryName: _selectedCategory ?? '',
-        supplierName: _selectedSupplier ?? '',
+        productName: _nameController.text,
+        productDescription: _descriptionController.text,
+        brand: _brandController.text,
+        unitId: provider.unitIdByName(unit),
+        unitName: unit,
+        categoryId: provider.categoryIdByName(category),
+        categoryName: category,
+        supplierId: provider.supplierIdByName(supplier),
+        supplierName: supplier,
         productStatus: true,
       ),
     );
@@ -89,18 +86,11 @@ class _NewProductModalState extends State<NewProductModal> {
 
     if (created != null) {
       navigator.pop(created);
-      messenger.showSnackBar(
-        const SnackBar(
-          content: Text('Producto guardado exitosamente'),
-          backgroundColor: AppColors.primaryPurple,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
     } else {
       messenger.showSnackBar(
         SnackBar(
           content: Text(
-            widget.provider.errorMessage ?? 'Error al registrar el producto',
+            provider.errorMessage ?? 'Error al registrar el producto',
           ),
           backgroundColor: AppColors.strongRed,
           behavior: SnackBarBehavior.floating,
@@ -117,12 +107,24 @@ class _NewProductModalState extends State<NewProductModal> {
         final units = widget.provider.availableUnits;
         final categories = widget.provider.availableCategories;
         final suppliers = widget.provider.availableSuppliers;
+        final catalogError = widget.provider.catalogError;
 
         return CustomModalSheet(
           title: 'Nuevo producto',
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (catalogError != null) ...[
+                Text(
+                  catalogError,
+                  style: const TextStyle(
+                    color: AppColors.strongRed,
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(height: 10),
+              ],
+
               CustomTextField(
                 label: 'Nombre del producto',
                 hintText: 'Ej. Shampoo Keratina',
