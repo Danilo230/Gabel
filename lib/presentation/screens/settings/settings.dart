@@ -6,7 +6,6 @@ import 'widgets/settings_option.dart';
 import 'widgets/settings_section.dart';
 import 'package:gabel/presentation/screens/profile/profile.dart';
 import 'package:gabel/presentation/screens/logs/logs.dart';
-import '../../widgets/app_routes.dart';
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 

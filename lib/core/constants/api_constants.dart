@@ -23,8 +23,8 @@ class ApiConstants {
   static const String stylists = '/Stylists';
   static const String activityLogs = '/Logs';
 
-  // Catálogos, (solamente lectura)
-  static const String productBrands = '/Products/Brands';
+  // Catálogos, (solamente para obtener, lectura)
+
   static const String productUnits = '/Products/Units';
   static const String productCategories = '/Products/Categories';
   static const String productSuppliers = '/Products/Suppliers';

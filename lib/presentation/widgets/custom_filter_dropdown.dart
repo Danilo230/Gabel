@@ -5,7 +5,7 @@ import '../theme/app_colors.dart';
 class CustomFilterDropdown extends StatelessWidget {
   final String label;
   final String? value;
-  final String? hint;
+  final String hintText;
   final List<String> items;
   final ValueChanged<String?>? onChanged;
   final bool enabled;
@@ -16,7 +16,7 @@ class CustomFilterDropdown extends StatelessWidget {
     this.value,
     required this.items,
     this.onChanged,
-    this.hint,
+    this.hintText = 'Seleccionar',
     this.enabled = true,
   });
 

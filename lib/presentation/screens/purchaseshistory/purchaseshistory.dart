@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:gabel/core/di/injection.dart';
 import 'package:gabel/core/utils/format_date.dart';
@@ -35,9 +34,7 @@ class PurchaseHistoryScreen extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => getIt<SupplierProvider>()..fetchSuppliers(),
         ),
-        ChangeNotifierProvider.value(
-          value: getIt<ProductProvider>(),
-        ),
+        ChangeNotifierProvider.value(value: getIt<ProductProvider>()),
       ],
       child: const _PurchaseHistoryView(),
     );
@@ -65,7 +62,7 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
 
-      context.read<ProductProvider>().fetchProducts(pageSize: 100);
+      //context.read<ProductProvider>().fetchProducts(pageSize: 100);
     });
   }
 
@@ -89,9 +86,7 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
               value: selectedProduct,
               items: [
                 'Todos los productos',
-                ...productProvider.items.map(
-                  (product) => product.productName,
-                ),
+                ...productProvider.items.map((product) => product.productName),
               ],
               onChanged: (val) {
                 if (val != null) {
@@ -186,9 +181,7 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
     if (start.isAfter(end)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-            'La fecha de inicio no puede ser mayor que la de fin',
-          ),
+          content: Text('La fecha de inicio no puede ser mayor que la de fin'),
         ),
       );
       return;
@@ -276,10 +269,7 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
       body: SafeArea(
         child: CustomRefreshScrollView(
           onRefresh: provider.refresh,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-            vertical: 14.0,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
           child: Column(
             children: [
               CustomDateFilter(
@@ -308,9 +298,7 @@ class _PurchaseHistoryViewState extends State<_PurchaseHistoryView> {
           ),
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavBar(
-        activeTab: 'Compras',
-      ),
+      bottomNavigationBar: const CustomBottomNavBar(activeTab: 'Compras'),
     );
   }
 }
