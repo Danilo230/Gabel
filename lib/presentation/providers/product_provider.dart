@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:gabel/core/errors/app_exception.dart';
 import 'package:gabel/data/models/product_model.dart';
-import 'package:gabel/presentation/providers/user_provider.dart'
-    show ViewStatus;
 import 'package:gabel/services/product_service.dart';
+
+enum ViewStatusProduct { initial, loading, success, error }
 
 class ProductProvider extends ChangeNotifier {
   static const int _pageSize = 10;
+  static const int _searchPageSize = 10;
 
   final ProductService _productService;
   ProductProvider(this._productService);
 
-  List<ProductModel> _items = [];
-  List<ProductModel> get items => _items;
+  List<ProductModel> _products = [];
+  List<ProductModel> get products => _products;
+  List<ProductModel> get items =>
+      filteredProducts; // Compatibilidad con la vista
 
-  ViewStatus _viewStatus = ViewStatus.initial;
-  ViewStatus get viewStatus => _viewStatus;
+  ViewStatusProduct _viewStatus = ViewStatusProduct.initial;
+  ViewStatusProduct get viewStatus => _viewStatus;
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
@@ -23,186 +26,316 @@ class ProductProvider extends ChangeNotifier {
   int _currentPage = 1;
   int get currentPage => _currentPage;
 
-  int _totalPages = 1;
-  int get totalPages => _totalPages;
+  int _totalPage = 7;
+  int get totalPage => _totalPage;
+  int get totalPages => _totalPage;
 
-  final Map<int, ProductModel> _productCache = {};
+  String _query = '';
+  bool get isSearching => _query.isNotEmpty;
 
-  String? _productErrorMessage;
-  String? get productErrorMessage => _productErrorMessage;
+  bool? _selectedStatus;
+  bool? get selectedStatus => _selectedStatus;
 
-  List<String> brands = [];
+  bool _isSaving = false;
+  bool get isSaving => _isSaving;
+
+  List<ProductModel> _allProducts = [];
+  bool _hasAllProducts = false;
+  Future<void>? _allProductsRequest;
+
+  bool _isSearchLoading = false;
+  bool get isSearchLoading => _isSearchLoading;
+
+  String? _searchErrorMessage;
+  String? get searchErrorMessage => _searchErrorMessage;
+
+  List<ProductModel> get filteredProducts {
+    if (_query.isNotEmpty) {
+      return _allProducts.where((product) {
+        return product.productName.toLowerCase().contains(_query) ||
+            product.brand.toLowerCase().contains(_query);
+      }).toList();
+    }
+    if (_selectedStatus != null) {
+      return _allProducts.where((product) {
+        return product.productStatus == _selectedStatus;
+      }).toList();
+    }
+    return _products;
+  }
+
   List<String> units = [];
   List<String> categories = [];
   List<String> suppliers = [];
   bool _catalogsLoaded = false;
 
+  List<String> get availableUnits {
+    final set = <String>{};
+    set.addAll(units.where((u) => u.trim().isNotEmpty));
+    set.addAll(
+      _allProducts.map((p) => p.unitName.trim()).where((u) => u.isNotEmpty),
+    );
+    set.addAll(
+      _products.map((p) => p.unitName.trim()).where((u) => u.isNotEmpty),
+    );
+    return set.toList()..sort();
+  }
+
+  List<String> get availableCategories {
+    final set = <String>{};
+    set.addAll(categories.where((c) => c.trim().isNotEmpty));
+    set.addAll(
+      _allProducts.map((p) => p.categoryName.trim()).where((c) => c.isNotEmpty),
+    );
+    set.addAll(
+      _products.map((p) => p.categoryName.trim()).where((c) => c.isNotEmpty),
+    );
+    return set.toList()..sort();
+  }
+
+  List<String> get availableSuppliers {
+    final set = <String>{};
+    set.addAll(suppliers.where((s) => s.trim().isNotEmpty));
+    set.addAll(
+      _allProducts.map((p) => p.supplierName.trim()).where((s) => s.isNotEmpty),
+    );
+    set.addAll(
+      _products.map((p) => p.supplierName.trim()).where((s) => s.isNotEmpty),
+    );
+    return set.toList()..sort();
+  }
+
   Future<void> loadCatalogs() async {
     if (_catalogsLoaded) return;
     try {
-      final results = await Future.wait([
-        _productService.getBrands(),
-        _productService.getUnits(),
-        _productService.getCategories(),
-        _productService.getSuppliers(),
-      ]);
+      units = await _productService.getAllUnits().catchError((e) {
+        debugPrint('Error cargando unidades: $e');
+        return <String>[];
+      });
 
-      brands = results[0];
-      units = results[1];
-      categories = results[2];
-      suppliers = results[3];
-      _catalogsLoaded = true;
-    } on AppException catch (e) {
-      _errorMessage = e.message;
+      categories = await _productService.getAllCategories().catchError((e) {
+        debugPrint('Error cargando categorías: $e');
+        return <String>[];
+      });
+
+      suppliers = await _productService.getAllSuppliers().catchError((e) {
+        debugPrint('Error cargando proveedores: $e');
+        return <String>[];
+      });
+
+      if (units.isNotEmpty || categories.isNotEmpty || suppliers.isNotEmpty) {
+        _catalogsLoaded = true;
+      }
     } catch (e, stack) {
       debugPrint('ERROR CATALOGS: $e');
       debugPrint('$stack');
-      _errorMessage = 'No se pudieron cargar las opciones.';
     }
     notifyListeners();
   }
 
-  Future<void> fetchProducts({int pageNumber = 1, int pageSize = _pageSize,}) async {
-    if (_viewStatus == ViewStatus.loading) return;
+  Future<void> loadCatalog() => loadCatalogs();
 
-    _viewStatus = ViewStatus.loading;
+  Future<void> fetchProducts({int pageNumber = 1}) async {
+    if (_viewStatus == ViewStatusProduct.loading) return;
+    _viewStatus = ViewStatusProduct.loading;
     _errorMessage = null;
-    _productCache.clear();
-    notifyListeners();
 
+    notifyListeners();
     try {
-      final result = await _productService.getAll(
+      final dynamic result = await _productService.getAll(
         pageNumber: pageNumber,
-        pageSize: pageSize,
+        pageSize: _pageSize,
       );
 
-      _items = result;
-      _currentPage = pageNumber;
-      _totalPages = totalPages;
-      _viewStatus = ViewStatus.success;
+      if (result is List<ProductModel>) {
+        _products = result;
+        _currentPage = pageNumber;
+        if (result.length < _pageSize) {
+          _totalPage = pageNumber > 1 ? pageNumber : 1;
+        } else {
+          _totalPage = pageNumber >= 7 ? pageNumber + 1 : 7;
+        }
+      } else {
+        _products = result.items;
+        _currentPage = result.pageNumber;
+        _totalPage = result.totalPages;
+      }
+
+      _viewStatus = ViewStatusProduct.success;
     } on AppException catch (e) {
       _errorMessage = e.message;
-      _viewStatus = ViewStatus.error;
+      _viewStatus = ViewStatusProduct.error;
     } on FormatException catch (e) {
       _errorMessage = e.message;
-      _viewStatus = ViewStatus.error;
+      _viewStatus = ViewStatusProduct.error;
     } catch (e, stack) {
-      debugPrint('ERROR FETCH PRODUCTS: $e');
+      debugPrint('Error al obtener los productos: $e');
       debugPrint('$stack');
-      _errorMessage =
-          'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.';
-      _viewStatus = ViewStatus.error;
+      _errorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
+      _viewStatus = ViewStatusProduct.error;
     }
-
     notifyListeners();
   }
 
-  Future<void> refresh() => fetchProducts(pageNumber: _currentPage);
-
-  Future<ProductModel?> fetchProduct(int productId) async {
-    final cached = _productCache[productId];
-    if (cached != null) return cached;
-
-    _productErrorMessage = null;
-
-    try {
-      final product = await _productService.getById(productId);
-      _productCache[productId] = product;
-      return product;
-    } on AppException catch (e) {
-      _productErrorMessage = e.message;
-    } on FormatException catch (e) {
-      _productErrorMessage = e.message;
-    } catch (e, stack) {
-      debugPrint('ERROR FETCH PRODUCT: $e');
-      debugPrint('$stack');
-      _productErrorMessage =
-          'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.';
+  Future<void> refresh() async {
+    _hasAllProducts = false;
+    await fetchProducts(pageNumber: _currentPage);
+    if (_query.isNotEmpty || _selectedStatus != null) {
+      await _loadAllItems();
     }
-
-    return null;
   }
 
+  Future<void> search(String query) async {
+    _query = query.trim().toLowerCase();
+    _selectedStatus = null;
+    notifyListeners();
+    if (_query.isNotEmpty) await _loadAllItems();
+  }
+
+  Future<void> setStatusFilter(bool? status) async {
+    _selectedStatus = status;
+    _query = '';
+    notifyListeners();
+    if (_selectedStatus != null) await _loadAllItems();
+  }
+
+  Future<void> retrySearch() {
+    _hasAllProducts = false;
+    _allProductsRequest = null;
+    return _loadAllItems();
+  }
+
+  Future<void> _loadAllItems() {
+    if (_hasAllProducts) return Future.value();
+    return _allProductsRequest ??= _fetchAllItems();
+  }
+
+  Future<void> _fetchAllItems() async {
+    _isSearchLoading = true;
+    _searchErrorMessage = null;
+    notifyListeners();
+
+    try {
+      final List<ProductModel> all = [];
+      int page = 1;
+      int totalPages = 1;
+      do {
+        final dynamic result = await _productService.getAll(
+          pageNumber: page,
+          pageSize: _searchPageSize,
+        );
+        if (result is List<ProductModel>) {
+          all.addAll(result);
+          if (result.length < _searchPageSize) break;
+          totalPages = page + 1;
+        } else {
+          all.addAll(result.items);
+          totalPages = result.totalPages;
+        }
+        page++;
+      } while (page <= totalPages);
+      _allProducts = all;
+      _hasAllProducts = true;
+    } catch (e, stack) {
+      debugPrint('Error al cargar todos los productos: $e');
+      debugPrint('$stack');
+      _searchErrorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
+    }
+    _allProductsRequest = null;
+    _isSearchLoading = false;
+    notifyListeners();
+  }
+
+  Future<ProductModel?> register(ProductModel product) async {
+    if (_isSaving) return null;
+
+    _isSaving = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    ProductModel? result;
+    try {
+      result = await _productService.createProduct(product);
+      await refresh();
+    } on AppException catch (e) {
+      _errorMessage = e.message;
+    } on FormatException catch (e) {
+      _errorMessage = e.message;
+    } catch (e, stack) {
+      debugPrint('Error al registrar el producto: $e');
+      debugPrint('$stack');
+      _errorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
+      _viewStatus = ViewStatusProduct.error;
+    }
+
+    _isSaving = false;
+    notifyListeners();
+    return result;
+  }
+
+  Future<ProductModel?> update(int productId, ProductModel product) async {
+    if (_isSaving) return null;
+
+    _isSaving = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    ProductModel? result;
+    try {
+      result = await _productService.update(productId, product);
+      await refresh();
+    } on AppException catch (e) {
+      _errorMessage = e.message;
+    } on FormatException catch (e) {
+      _errorMessage = e.message;
+    } catch (e, stack) {
+      debugPrint('Error al actualizar el producto: $e');
+      debugPrint('$stack');
+      _errorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
+    }
+
+    _isSaving = false;
+    notifyListeners();
+    return result;
+  }
+
+  Future<String?> delete(int productId) async {
+    if (_isSaving) return null;
+    _isSaving = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    String? message;
+    try {
+      message = await _productService.deleteProduct(productId, false);
+      await refresh();
+    } on AppException catch (e) {
+      _errorMessage = e.message;
+    } on FormatException catch (e) {
+      _errorMessage = e.message;
+    } catch (e, stack) {
+      debugPrint('Error al eliminar el producto: $e');
+      debugPrint('$stack');
+      _errorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
+    }
+    _isSaving = false;
+    notifyListeners();
+    return message;
+  }
+
+  // Compatibilidad
   Future<bool> createProduct(ProductModel product) async {
-    _viewStatus = ViewStatus.loading;
-    _errorMessage = null;
-    notifyListeners();
-
-    try {
-      final newProduct = await _productService.createProduct(product);
-      _items.insert(0, newProduct);
-      if (newProduct.productId != null) {
-        _productCache[newProduct.productId!] = newProduct;
-      }
-      _viewStatus = ViewStatus.success;
-      notifyListeners();
-      return true;
-    } on AppException catch (e) {
-      _errorMessage = e.message;
-      _viewStatus = ViewStatus.error;
-    } on FormatException catch (e) {
-      _errorMessage = e.message;
-      _viewStatus = ViewStatus.error;
-    } catch (e, stack) {
-      debugPrint('ERROR CREATE PRODUCT: $e');
-      debugPrint('$stack');
-      _errorMessage = 'Ocurrió un error al crear el producto.';
-      _viewStatus = ViewStatus.error;
-    }
-
-    notifyListeners();
-    return false;
+    final result = await register(product);
+    return result != null;
   }
 
-  Future<bool> updateProduct(int productId, ProductModel product) async {
-    _viewStatus = ViewStatus.loading;
-    _errorMessage = null;
-    notifyListeners();
-
-    try {
-      final updated = await _productService.update(productId, product);
-      final index = _items.indexWhere((p) => p.productId == productId);
-      if (index != -1) {
-        _items[index] = updated;
-      }
-      _productCache[productId] = updated;
-      _viewStatus = ViewStatus.success;
-      notifyListeners();
-      return true;
-    } on AppException catch (e) {
-      _errorMessage = e.message;
-      _viewStatus = ViewStatus.error;
-    } on FormatException catch (e) {
-      _errorMessage = e.message;
-      _viewStatus = ViewStatus.error;
-    } catch (e, stack) {
-      debugPrint('ERROR UPDATE PRODUCT: $e');
-      debugPrint('$stack');
-      _errorMessage = 'Ocurrió un error al actualizar el producto.';
-      _viewStatus = ViewStatus.error;
-    }
-
-    notifyListeners();
-    return false;
+  Future<bool> updateProduct(ProductModel product, [int? id]) async {
+    final result = await update(id ?? product.productId, product);
+    return result != null;
   }
 
   Future<bool> deleteProduct(int productId) async {
-    _errorMessage = null;
-    try {
-      await _productService.deleteProduct(productId, false);
-      _productCache.remove(productId);
-      await fetchProducts(pageNumber: _currentPage);
-      return true;
-    } on AppException catch (e) {
-      _errorMessage = e.message;
-    } on FormatException catch (e) {
-      _errorMessage = e.message;
-    } catch (e, stack) {
-      debugPrint('ERROR DEACTIVATE PRODUCT: $e');
-      debugPrint('$stack');
-      _errorMessage = 'Ocurrió un error al eliminar el producto.';
-    }
-    notifyListeners();
-    return false;
+    final result = await delete(productId);
+    return result != null;
   }
 }
