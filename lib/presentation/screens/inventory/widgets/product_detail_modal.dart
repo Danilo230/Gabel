@@ -61,7 +61,7 @@ class ProductDetailModal extends StatelessWidget {
               return Row(
                 children: [
                   _chip(
-                    data.productCategory,
+                    data.categoryName,
                     background: AppColors.mediumPurple,
                     textColor: Colors.white,
                   ),
@@ -203,10 +203,7 @@ class ProductDetailModal extends StatelessWidget {
               const SizedBox(width: 6),
               const Text(
                 'uds',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: AppColors.textSecondary,
-                ),
+                style: TextStyle(fontSize: 13, color: AppColors.textSecondary),
               ),
             ],
           ),

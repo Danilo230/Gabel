@@ -1,6 +1,6 @@
-import 'package:gabel/data/repositories/product_repository.dart';
-import 'package:gabel/data/models/product_model.dart';
 import 'package:gabel/core/constants/api_constants.dart';
+import 'package:gabel/data/models/product_model.dart';
+import 'package:gabel/data/repositories/product_repository.dart';
 
 class ProductService {
   final ProductRepository _productRepository;
@@ -26,20 +26,21 @@ class ProductService {
     });
   }
 
-  Future<ProductModel> createProduct(ProductModel product) async {
+  Future<ProductModel> create(ProductModel product) async {
     final name = product.productName.trim();
-    final description = product.productDescription.trim();
-    final brand = product.productBrand.trim();
-    final unit = product.productUnit.trim();
-    final category = product.productCategory.trim();
-    final supplier = product.productSupplier.trim();
+    final description = product.productDescription.trim(); // Opcional
+    final brand = product.brand.trim();
+    final unit = product.unitName.trim();
+    final category = product.categoryName.trim();
+    final supplier = product.supplierName.trim();
 
+    // Todos los campos son obligatorios excepto la descripción
     if (name.isEmpty ||
         brand.isEmpty ||
         unit.isEmpty ||
         category.isEmpty ||
         supplier.isEmpty) {
-      throw Exception('Todos los campos son obligatorios.');
+      throw Exception('Los parámetros no pueden estar vacios');
     }
 
     return await _productRepository.createProduct(
@@ -47,10 +48,10 @@ class ProductService {
         productId: product.productId,
         productName: name,
         productDescription: description,
-        productBrand: brand,
-        productUnit: unit,
-        productCategory: category,
-        productSupplier: supplier,
+        brand: brand,
+        unitName: unit,
+        categoryName: category,
+        supplierName: supplier,
         productStatus: true,
       ),
     );
@@ -58,18 +59,19 @@ class ProductService {
 
   Future<ProductModel> update(int productId, ProductModel product) async {
     final name = product.productName.trim();
-    final description = product.productDescription.trim();
-    final brand = product.productBrand.trim();
-    final unit = product.productUnit.trim();
-    final category = product.productCategory.trim();
-    final supplier = product.productSupplier.trim();
+    final description = product.productDescription.trim(); // Opcional
+    final brand = product.brand.trim();
+    final unit = product.unitName.trim();
+    final category = product.categoryName.trim();
+    final supplier = product.supplierName.trim();
 
+    // Todos los campos son obligatorios excepto la descripción
     if (name.isEmpty ||
         brand.isEmpty ||
         unit.isEmpty ||
         category.isEmpty ||
         supplier.isEmpty) {
-      throw Exception('Todos los campos son obligatorios.');
+      throw Exception('Los parámetros no pueden estar vacios');
     }
 
     return await _productRepository.updateProduct(
@@ -78,31 +80,36 @@ class ProductService {
         productId: productId,
         productName: name,
         productDescription: description,
-        productBrand: brand,
-        productUnit: unit,
-        productCategory: category,
-        productSupplier: supplier,
+        brand: brand,
+        unitName: unit,
+        categoryName: category,
+        supplierName: supplier,
         productStatus: product.productStatus,
       ),
     );
   }
 
-  Future<String> deleteProduct(int productId, bool productStatus) async {
+  Future<String> delete(int productId, bool productStatus) async {
     if (productId <= 0) {
       throw Exception('Id de producto no es válido');
     }
     return await _productRepository.deleteProduct(productId, productStatus);
   }
 
-  Future<List<String>> getBrands() =>
-      _productRepository.getCatalog(ApiConstants.productBrands, '');
+  Future<ProductModel> createProduct(ProductModel product) => create(product);
+  Future<String> deleteProduct(int productId, bool productStatus) =>
+      delete(productId, productStatus);
 
-  Future<List<String>> getUnits() =>
-      _productRepository.getCatalog(ApiConstants.productUnits, '');
+  Future<List<String>> getAllUnits() =>
+      _productRepository.getAllCatalog(ApiConstants.productUnits, 'unitName');
 
-  Future<List<String>> getCategories() =>
-      _productRepository.getCatalog(ApiConstants.productCategories, '');
+  Future<List<String>> getAllCategories() => _productRepository.getAllCatalog(
+    ApiConstants.productCategories,
+    'categoryName',
+  );
 
-  Future<List<String>> getSuppliers() =>
-      _productRepository.getCatalog(ApiConstants.productSuppliers, '');
+  Future<List<String>> getAllSuppliers() => _productRepository.getAllCatalog(
+    ApiConstants.productSuppliers,
+    'supplierName',
+  );
 }

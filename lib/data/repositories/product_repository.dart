@@ -1,7 +1,7 @@
+import 'package:gabel/core/constants/api_constants.dart';
+import 'package:gabel/core/errors/app_exception.dart';
 import 'package:gabel/core/network/api_client.dart';
 import 'package:gabel/data/models/product_model.dart';
-import 'package:gabel/core/errors/app_exception.dart';
-import 'package:gabel/core/constants/api_constants.dart';
 
 class ProductRepository {
   final ApiClient _apiClient;
@@ -16,47 +16,57 @@ class ProductRepository {
     return ProductModel.fromJson(json);
   }
 
-  Future<List<ProductModel>> getAll(Map<String, String>? params) async {
+  Future<List<ProductModel>> getAll([Map<String, String>? params]) async {
     final data = await _apiClient.get(ApiConstants.products, query: params);
-    if (data is! Map<String, dynamic>) throw ParsingException();
+    if (data == null) return [];
 
-    final items = data['items'];
-    if (items is! List) throw ParsingException();
+    List<dynamic> items = [];
+
+    if (data is List) {
+      items = data;
+    } else if (data is Map<String, dynamic>) {
+      final list = data['items'] ?? data['data'] ?? data['result'];
+      if (list is List) {
+        items = list;
+      } else {
+        throw ParsingException();
+      }
+    } else {
+      throw ParsingException();
+    }
 
     return items
         .map((json) => ProductModel.fromJson(json as Map<String, dynamic>))
         .toList();
   }
 
-  Future<ProductModel> createProduct(ProductModel product) async {
+  Future<ProductModel> create(ProductModel product) async {
     final json = await _apiClient.post(
       ApiConstants.products,
       body: {
         'productName': product.productName,
         'productDescription': product.productDescription,
-        'productBrand': product.productBrand,
-        'productUnit': product.productUnit,
-        'productCategory': product.productCategory,
-        'productSupplier': product.productSupplier,
+        'brand': product.brand,
+        'unitName': product.unitName,
+        'categoryName': product.categoryName,
+        'supplierName': product.supplierName,
       },
     );
     if (json is! Map<String, dynamic>) throw ParsingException();
     return ProductModel.fromJson(json);
   }
 
-  Future<ProductModel> updateProduct(
-    int productId,
-    ProductModel product,
-  ) async {
+  Future<ProductModel> update(int productId, ProductModel product) async {
     final json = await _apiClient.put(
       '${ApiConstants.products}/$productId',
       body: {
+        'productId': productId,
         'productName': product.productName,
         'productDescription': product.productDescription,
-        'productBrand': product.productBrand,
-        'productUnit': product.productUnit,
-        'productCategory': product.productCategory,
-        'productSupplier': product.productSupplier,
+        'brand': product.brand,
+        'unitName': product.unitName,
+        'categoryName': product.categoryName,
+        'supplierName': product.supplierName,
         'productStatus': product.productStatus,
       },
     );
@@ -66,28 +76,47 @@ class ProductRepository {
     return ProductModel.fromJson(json);
   }
 
-  Future<String> deleteProduct(int productId, bool productStatus) async {
+  Future<String> delete(int productId, bool productStatus) async {
     final json = await _apiClient.delete(
       '${ApiConstants.products}/DeleteProduct/$productId',
       body: {'productStatus': productStatus},
     );
     if (json is! Map<String, dynamic>) throw ParsingException();
-    return json['message'] as String;
+    return (json['message'] ?? 'Producto eliminado exitosamente').toString();
   }
 
-  // para obtener las listas en inputs de seleccion
-  Future<List<String>> getCatalog(String endpoint, String nameField) async {
+  Future<List<String>> getAllCatalog(String endpoint, String nameField) async {
     final data = await _apiClient.get(endpoint);
-    final list = data is Map<String, dynamic> ? data['items'] : data;
-    if (list is! List) throw ParsingException();
+    if (data == null) return [];
+
+    List<dynamic> list = [];
+    if (data is List) {
+      list = data;
+    } else if (data is Map<String, dynamic>) {
+      final items = data['items'] ?? data['data'] ?? data['result'];
+      if (items is List) {
+        list = items;
+      } else {
+        throw ParsingException();
+      }
+    } else {
+      throw ParsingException();
+    }
 
     return list
         .map(
           (e) => e is Map<String, dynamic>
-              ? (e[nameField] ?? '').toString()
+              ? (e[nameField] ?? e['name'] ?? e['nombre'] ?? '').toString()
               : e.toString(),
         )
         .where((name) => name.trim().isNotEmpty)
         .toList();
   }
+
+  Future<ProductModel> createProduct(ProductModel product) => create(product);
+  Future<ProductModel> updateProduct(int id, ProductModel product) =>
+      update(id, product);
+  Future<String> deleteProduct(int id, bool status) => delete(id, status);
+  Future<List<String>> getCatalog(String endpoint, String nameField) =>
+      getAllCatalog(endpoint, nameField);
 }
