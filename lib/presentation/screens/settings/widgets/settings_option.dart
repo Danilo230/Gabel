@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/presentation/theme/app_palette.dart';
 
 class SettingsOption extends StatelessWidget {
   final IconData icon;
@@ -29,48 +30,39 @@ class SettingsOption extends StatelessWidget {
               width: 42,
               height: 42,
               decoration: BoxDecoration(
-                color: const Color( 0xFFF6F2FA),
+                color: context.colors.surfaceAlt,
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
-                icon,
-                color: const Color(0xFF5C2483),
-                size: 22,
-              ),
+              child: Icon(icon, color: context.colors.primary, size: 22),
             ),
-
             const SizedBox(width: 12),
-
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     qualification,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF212121),
+                      color: context.colors.textPrimary,
                     ),
                   ),
-
                   const SizedBox(height: 3),
-
                   Text(
                     caption,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: Colors.grey,
+                      color: context.colors.textSecondary,
                     ),
                   ),
                 ],
               ),
             ),
-
             trailing ??
-                const Icon(
+                Icon(
                   Icons.chevron_right,
-                  color: Colors.grey,
+                  color: context.colors.textSecondary,
                   size: 22,
                 ),
           ],

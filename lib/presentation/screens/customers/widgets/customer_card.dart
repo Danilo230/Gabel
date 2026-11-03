@@ -1,19 +1,53 @@
 import 'package:flutter/material.dart';
 import '../../../theme/app_colors.dart';
-import '../models/customer.dart';
-import '../../customers/widgets/customer_modal.dart';
+import 'package:provider/provider.dart';
+import 'package:gabel/presentation/providers/customer_provider.dart';
+import 'package:gabel/data/models/customer_model.dart';
 import '../../customers/widgets/customer_edit_modal.dart';
+import '../../../widgets/custom_delete.dart';
 
 class CustomerCard extends StatelessWidget {
-  final Customer customer;
+  final CustomerModel customer;
 
   const CustomerCard({super.key, required this.customer});
+
+  Future<void> _deleteCustomer(BuildContext context) async {
+    final provider = context.read<CustomerProvider>();
+    final messenger = ScaffoldMessenger.of(context);
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => const CustomDeleteDialog(
+        message: '¿Estás seguro de que deseas eliminar este cliente?',
+      ),
+    );
+    if (confirmed != true) return;
+    final message = await provider.delete(customer.customerId);
+
+    if (message != null) {
+      await provider.refresh();
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: AppColors.deleteIcon,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } else {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            provider.errorMessage ?? 'Error al eliminar el cliente.',
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: 135.0,
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -37,53 +71,80 @@ class CustomerCard extends StatelessWidget {
               color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 7.0),
-          Text(
-            customer.customerPhone,
-            style: const TextStyle(
-              fontSize: 14.0,
-              color: AppColors.textPrimary,
-            ),
-          ),
-          const SizedBox(height: 2.0),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                icon: const Icon(
-                  Icons.visibility_outlined,
-                  color: AppColors.actionIcon,
-                  size: 20,
-                ),
-                onPressed: () {
-                  CustomerDetailModal.show(context, customer);
-                },
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Teléfono',
+                    style: TextStyle(
+                      color: AppColors.cardTextSecondary,
+                      fontSize: 12,
+                    ),
+                  ),
+                  Text(
+                    customer.customerPhone,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.primaryPurple,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                icon: const Icon(
-                  Icons.edit_outlined,
-                  color: AppColors.actionIcon,
-                  size: 20,
-                ),
-                onPressed: () {
-                  CustomerEditModal.show(context, customer);
-                },
-              ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                icon: const Icon(
-                  Icons.delete_outline_rounded,
-                  color: AppColors.deleteIcon,
-                  size: 20,
-                ),
-                onPressed: () {
-                  // Aquí se conecta el aviso de eliminar.
-                },
+               const SizedBox(height: 9),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: customer.customerStatus ? AppColors.lightGreen : AppColors.lightPurple,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      customer.customerStatus ? 'Activo' : 'Inactivo',
+                      style: const TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        icon: const Icon(
+                          Icons.visibility_outlined,
+                          color: AppColors.actionIcon,
+                          size: 20,
+                        ),
+                        onPressed: () {
+                          CustomerEditModal.show(context, customer);
+                        },
+                      ),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        icon: const Icon(
+                          Icons.delete_outline_rounded,
+                          color: AppColors.deleteIcon,
+                          size: 20,
+                        ),
+                        onPressed: () => _deleteCustomer(context),
+                      ),
+                    ],
+                  )
+
+
+                ],
               ),
             ],
           ),

@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/core/utils/num_extensions.dart';
+import 'package:gabel/data/models/inventory_model.dart';
 
 import '../../../theme/app_colors.dart';
-import '../models/product.dart';
 
 class ProductInventoryCard extends StatelessWidget {
-  final Product product;
+  static const int _lowStockThreshold = 5;
+
+  final InventoryModel item;
   final VoidCallback? onViewDetail;
   final VoidCallback? onRegisterDamage;
 
   const ProductInventoryCard({
     super.key,
-    required this.product,
+    required this.item,
     this.onViewDetail,
     this.onRegisterDamage,
   });
 
   @override
   Widget build(BuildContext context) {
-    final bool lowStock = product.isLowStock;
+    final bool lowStock = item.stock <= _lowStockThreshold;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
@@ -34,58 +37,79 @@ class ProductInventoryCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  product.name,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      Icons.inventory_2_outlined,
-                      size: 15,
-                      color:
-                          lowStock ? AppColors.red : AppColors.textTertiary,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      'Stock: ${product.stock} uds',
+                    const Text(
+                      'Producto',
                       style: TextStyle(
-                        fontSize: 14,
-                        color:
-                            lowStock ? AppColors.red : AppColors.textSecondary,
-                        fontWeight:
-                            lowStock ? FontWeight.w600 : FontWeight.normal,
+                        fontSize: 12,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      item.productName,
+                      style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const Text(
+                    'Total',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '\$${item.salePrice.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primaryPurple,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          const SizedBox(height: 16),
+          const Divider(height: 1, color: AppColors.borderGrey),
+
+          const SizedBox(height: 12),
+          Row(
             children: [
+              Icon(
+                Icons.inventory_2_outlined,
+                size: 15,
+                color: lowStock ? AppColors.red : AppColors.textTertiary,
+              ),
+              const SizedBox(width: 6),
               Text(
-                '\$${product.salePrice.toStringAsFixed(2)}',
-                style: const TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primaryPurple,
+                'Stock: ${item.stock.toQuantityString()} uds',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: lowStock ? AppColors.red : AppColors.textSecondary,
+                  fontWeight: lowStock ? FontWeight.w600 : FontWeight.normal,
                 ),
               ),
-              const SizedBox(height: 8),
+              const Spacer(),
               Row(
                 children: [
                   IconButton(

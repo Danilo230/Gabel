@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/core/utils/format_date.dart';
+import 'package:gabel/data/models/sale_detail_model.dart';
+import 'package:gabel/data/models/sale_with_details_model.dart';
+import 'package:gabel/presentation/providers/sale_provider.dart';
+import 'package:gabel/presentation/widgets/error_view.dart';
+import 'package:gabel/presentation/widgets/loading_view.dart';
+import 'package:provider/provider.dart';
 
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_modal_sheet.dart';
-import '../models/salesmodel.dart';
-import '../models/salesdetailmodel.dart';
 
 class SalesDetailModal extends StatelessWidget {
-  final Sales sale;
-  final List<SaleDetail> details;
+  final SaleWithDetailsModel sale;
 
   const SalesDetailModal({
     super.key,
     required this.sale,
-    required this.details,
   });
 
   @override
@@ -48,7 +51,6 @@ class SalesDetailModal extends StatelessWidget {
                   ],
                 ),
               ),
-
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -61,7 +63,7 @@ class SalesDetailModal extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    sale.totalPrice,
+                    'C\$${sale.totalPrice.toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -76,7 +78,7 @@ class SalesDetailModal extends StatelessWidget {
           const SizedBox(height: 12),
 
           Text(
-            sale.saleDate,
+            formatDate(sale.saleDate),
             style: const TextStyle(
               fontSize: 14,
               color: AppColors.textSecondary,
@@ -86,9 +88,7 @@ class SalesDetailModal extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          const Divider(
-            color: AppColors.borderGrey,
-          ),
+          const Divider(color: AppColors.borderGrey),
 
           const SizedBox(height: 14),
 
@@ -103,15 +103,11 @@ class SalesDetailModal extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          ...details.map(
-            (detail) => _detalleItem(detail),
-          ),
+          ...sale.details.map((detail) => _detalleItem(detail)),
 
           const SizedBox(height: 12),
 
-          const Divider(
-            color: AppColors.borderGrey,
-          ),
+          const Divider(color: AppColors.borderGrey),
 
           const SizedBox(height: 12),
 
@@ -127,7 +123,7 @@ class SalesDetailModal extends StatelessWidget {
                 ),
               ),
               Text(
-                sale.totalPrice,
+                'C\$${sale.totalPrice.toStringAsFixed(2)}',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -143,8 +139,9 @@ class SalesDetailModal extends StatelessWidget {
     );
   }
 
-  Widget _detalleItem(SaleDetail detail) {
-    final bool esProducto = detail.itemType == 'PRODUCT';
+  Widget _detalleItem(SaleDetailModel detail) {
+    final bool esProducto = detail.productName != null;
+    final String name = detail.productName ?? detail.serviceName ?? 'Sin nombre';
 
     return Container(
       width: double.infinity,
@@ -153,15 +150,13 @@ class SalesDetailModal extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.borderGrey,
-        ),
+        border: Border.all(color: AppColors.borderGrey),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            detail.itemName,
+            name,
             style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
@@ -184,10 +179,7 @@ class SalesDetailModal extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _datoDetalle(
-                'Cantidad',
-                '${detail.saleQuantity}',
-              ),
+              _datoDetalle('Cantidad', '${detail.saleQuantity}'),
               _datoDetalle(
                 'Precio',
                 'C\$${detail.salePrice.toStringAsFixed(2)}',
@@ -219,9 +211,7 @@ class SalesDetailModal extends StatelessWidget {
             color: AppColors.textSecondary,
           ),
         ),
-
         const SizedBox(height: 3),
-
         Text(
           valor,
           style: TextStyle(
@@ -233,6 +223,40 @@ class SalesDetailModal extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class SalesDetailSheet extends StatelessWidget {
+  const SalesDetailSheet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.watch<SaleProvider>();
+    final sale = p.selectedSale;
+
+    if (p.detailStatus == ViewStatusSale.success && sale != null) {
+      return SalesDetailModal(sale: sale);
+    }
+
+    if (p.detailStatus == ViewStatusSale.error) {
+      return CustomModalSheet(
+        title: 'Detalle de venta',
+        child: SizedBox(
+          height: 220,
+          child: ErrorView(
+            errorMessage: p.detailErrorMessage ?? 'Error desconocido',
+          ),
+        ),
+      );
+    }
+
+    return const CustomModalSheet(
+      title: 'Detalle de venta',
+      child: SizedBox(
+        height: 220,
+        child: LoadingView(message: 'Cargando detalle...'),
+      ),
     );
   }
 }

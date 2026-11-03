@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 import '../screens/settings/settings.dart';
-import '../theme/app_colors.dart';
+import '../theme/app_palette.dart';
 
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   const AppHeader({
     super.key,
     required this.title,
-    this.backgroundColor = AppColors.white,
+    this.backgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bg = backgroundColor ?? context.colors.surface;
+
     return AppBar(
-      backgroundColor: backgroundColor,
-      surfaceTintColor: backgroundColor,
+      backgroundColor: bg,
+      surfaceTintColor: bg,
       elevation: 0.5,
       centerTitle: false,
       title: Text(
         title,
-        style: const TextStyle(
-          color: AppColors.primaryPurple,
+        style: TextStyle(
+          color: context.colors.primary,
           fontWeight: FontWeight.bold,
           fontSize: 18,
         ),
@@ -37,9 +39,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                 MaterialPageRoute(builder: (context) => const SettingsScreen()),
               );
             },
-            child: const Icon(
+            child: Icon(
               Icons.account_circle_outlined,
-              color: AppColors.textPrimary,
+              color: context.colors.textPrimary,
               size: 28,
             ),
           ),

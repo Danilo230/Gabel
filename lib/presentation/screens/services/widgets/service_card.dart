@@ -1,50 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/data/models/service_models.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_delete.dart';
 import 'edit_service_modal.dart';
+import 'package:provider/provider.dart';
+import 'package:gabel/presentation/providers/service_provider.dart';
 
 class ServiceCard extends StatelessWidget {
-  final String name;
-  final String price;
+  final ServiceModels service;
 
-  const ServiceCard({super.key, required this.name, required this.price});
+  const ServiceCard({super.key, required this.service});
+
+  void _deleteService(BuildContext context) {
+    final provider = context.read<ServicesProvider>();
+    final messenger = ScaffoldMessenger.of(context);
+    final id = service.serviceId;
+
+    showDialog(
+      context: context,
+      builder: (_) => CustomDeleteDialog(
+        message: '¿Estás seguro de que deseas eliminar este servicio?',
+        onConfirm: () async {
+          final message = await provider.delete(id);
+
+          messenger.showSnackBar(
+            SnackBar(
+              content: Text(
+                message ??
+                    provider.errorMessage ??
+                    'Error al eliminar el servicio.',
+              ),
+              backgroundColor: message != null ? AppColors.deleteIcon : null,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.borderGrey),
         boxShadow: const [
           BoxShadow(
             color: AppColors.boxShadowColor,
-            blurRadius: 10,
-            offset: Offset(0, 4),
+            blurRadius: 8,
+            offset: Offset(0, 2),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(
-                  name,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ),
-            ],
+          Text(
+            service.serviceName,
+            style: const TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
           ),
-          const SizedBox(height: 12),
-
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -59,49 +80,66 @@ class ServiceCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    price,
+                    'C\$ ${service.servicePrice.toStringAsFixed(2)}',
                     style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
                       color: AppColors.primaryPurple,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
-
-              Row(
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: const Icon(
-                      Icons.visibility_outlined,
-                      color: AppColors.actionIcon,
-                      size: 20,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
                     ),
-                    onPressed: () {
-                      EditServiceModal.show(context);
-                    },
+                    decoration: BoxDecoration(
+                      color: service.serviceStatus
+                          ? AppColors.lightGreen
+                          : AppColors.lightPurple,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      service.serviceStatus ? 'Activo' : 'Inactivo',
+                      style: const TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 16),
-
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: const Icon(
-                      Icons.delete_outline_rounded,
-                      color: AppColors.deleteIcon,
-                      size: 20,
-                    ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => const CustomDeleteDialog(
-                          title: 'Eliminar',
-                          message: '¿Deseas eliminar este servicio?',
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        icon: const Icon(
+                          Icons.visibility_outlined,
+                          color: AppColors.actionIcon,
+                          size: 20,
                         ),
-                      );
-                    },
+                        onPressed: () {
+                          EditServiceModal.show(context, service);
+                        },
+                      ),
+                      const SizedBox(width: 14),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        icon: const Icon(
+                          Icons.delete_outline_rounded,
+                          color: AppColors.deleteIcon,
+                          size: 20,
+                        ),
+                        onPressed: () => _deleteService(context),
+                      ),
+                    ],
                   ),
                 ],
               ),

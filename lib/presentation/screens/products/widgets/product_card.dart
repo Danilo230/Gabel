@@ -1,50 +1,72 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:gabel/data/models/product_model.dart';
+import 'package:gabel/presentation/providers/product_provider.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_delete.dart';
 import 'edit_product_modal.dart';
 
 class ProductCard extends StatelessWidget {
-  final String name;
-  final String price;
+  final ProductModel product;
 
-  const ProductCard({super.key, required this.name, required this.price});
+  const ProductCard({super.key, required this.product});
+
+  void _deleteProduct(BuildContext context) {
+    final provider = context.read<ProductProvider>();
+    final messenger = ScaffoldMessenger.of(context);
+    final id = product.productId;
+
+    showDialog(
+      context: context,
+      builder: (_) => CustomDeleteDialog(
+        message: '¿Estás seguro de que deseas eliminar este producto?',
+        onConfirm: () async {
+          final message = await provider.delete(id);
+
+          messenger.showSnackBar(
+            SnackBar(
+              content: Text(
+                message ??
+                    provider.errorMessage ??
+                    'Error al eliminar el producto.',
+              ),
+              backgroundColor: message != null ? AppColors.deleteIcon : null,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      margin: const EdgeInsets.only(bottom: 12.0),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.borderGrey),
         boxShadow: const [
           BoxShadow(
             color: AppColors.boxShadowColor,
-            blurRadius: 10,
-            offset: Offset(0, 4),
+            blurRadius: 8,
+            offset: Offset(0, 2),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
-              ),
-            ],
+          Text(
+            product.productName,
+            style: const TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
           ),
-          const SizedBox(height: 12),
-
+          const SizedBox(height: 6),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -52,56 +74,74 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'Precio',
+                    'Marca',
                     style: TextStyle(
                       color: AppColors.cardTextSecondary,
                       fontSize: 12,
                     ),
                   ),
                   Text(
-                    price,
+                    product.brand.isNotEmpty ? product.brand : 'Sin marca',
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 13,
+                      color: AppColors.primaryPurple,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.actionIcon,
                     ),
                   ),
                 ],
               ),
-
-              Row(
+              const SizedBox(height: 9),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: const Icon(
-                      Icons.visibility_outlined,
-                      color: AppColors.actionIcon,
-                      size: 20,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
                     ),
-                    onPressed: () {
-                      EditProductModal.show(context);
-                    },
+                    decoration: BoxDecoration(
+                      color: product.productStatus
+                          ? AppColors.lightGreen
+                          : AppColors.lightPurple,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      product.productStatus ? 'Activo' : 'Inactivo',
+                      style: const TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 16),
-
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    icon: const Icon(
-                      Icons.delete_outline_rounded,
-                      color: AppColors.deleteIcon,
-                      size: 20,
-                    ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => const CustomDeleteDialog(
-                          title: 'Eliminar',
-                          message: '¿Deseas eliminar este producto?',
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        icon: const Icon(
+                          Icons.visibility_outlined,
+                          color: AppColors.actionIcon,
+                          size: 20,
                         ),
-                      );
-                    },
+                        onPressed: () {
+                          EditProductModal.show(context, product);
+                        },
+                      ),
+                      const SizedBox(width: 4),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        icon: const Icon(
+                          Icons.delete_outline_rounded,
+                          color: AppColors.deleteIcon,
+                          size: 20,
+                        ),
+                        onPressed: () => _deleteProduct(context),
+                      ),
+                    ],
                   ),
                 ],
               ),

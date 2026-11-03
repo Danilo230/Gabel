@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-
+import '../theme/app_typography.dart';
 import '../theme/app_colors.dart';
 
 class CustomFilterDropdown extends StatelessWidget {
   final String label;
   final String? value;
-  final String? hint;
+  final String hintText;
   final List<String> items;
   final ValueChanged<String?>? onChanged;
   final bool enabled;
@@ -16,7 +16,7 @@ class CustomFilterDropdown extends StatelessWidget {
     this.value,
     required this.items,
     this.onChanged,
-    this.hint,
+    this.hintText = 'Seleccionar',
     this.enabled = true,
   });
 
@@ -28,6 +28,7 @@ class CustomFilterDropdown extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
+            fontFamily: AppTypography.fontFamily,
             fontSize: 14,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
@@ -53,7 +54,8 @@ class CustomFilterDropdown extends StatelessWidget {
                 color: AppColors.primaryPurple,
               ),
               style: const TextStyle(
-                fontSize: 13,
+                fontFamily: AppTypography.fontFamily,
+                fontSize: 15,
                 color: AppColors.textSecondary,
               ),
               items: items.map((String item) {

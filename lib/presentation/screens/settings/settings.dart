@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/presentation/providers/authenticatio_provider.dart';
+import 'package:provider/provider.dart';
 import '../../widgets/app_header.dart';
 import 'widgets/settings_option.dart';
 import 'widgets/settings_section.dart';
 import 'package:gabel/presentation/screens/profile/profile.dart';
-import '../../widgets/app_routes.dart';
+import 'package:gabel/presentation/screens/logs/logs.dart';
+import 'package:gabel/presentation/providers/theme_provider.dart';
+import 'package:gabel/presentation/theme/app_palette.dart';
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -12,13 +16,15 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool modoOscuro = false;
-  bool notificaciones = true;
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+    final bool isSalesperson =
+        context.watch<AuthenticationProvider>().isSalesperson;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F2FA),
+      backgroundColor: context.colors.background,
       appBar: const AppHeader(title: 'Configuración'),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -70,71 +76,49 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     caption: 'Ajusta la apariencia visual',
 
                     trailing: Switch(
-                      value: modoOscuro,
-                      activeThumbColor: const Color(0xFF5C2483),
-                      onChanged: (valor) {
-                        setState(() {
-                          modoOscuro = valor;
-                        });
-                      },
-                    ),
-                  ),
-
-                  SettingsOption(
-                    icon: Icons.notifications_none,
-                    qualification: 'Notificaciones',
-                    caption: 'Configura las alertas de la aplicación',
-
-                    trailing: Switch(
-                      value: notificaciones,
-                      activeThumbColor: const Color(0xFF5C2483),
-                      onChanged: (valor) {
-                        setState(() {
-                          notificaciones = valor;
-                        });
-                      },
-                    ),
-                  ),
-
-                  SettingsOption(
-                    icon: Icons.text_fields,
-                    qualification: 'Tamaño de letra',
-                    caption: 'Ajusta la escala de lectura',
-
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Text(
-                          'Mediano',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
-                          ),
-                        ),
-
-                        SizedBox(width: 4),
-
-                        Icon(
-                          Icons.chevron_right,
-                          color: Colors.grey,
-                          size: 22,
-                        ),
-                      ],
+                      value: themeProvider.isDark,
+                      activeThumbColor: context.colors.primary,
+                      onChanged: (valor) => context.read<ThemeProvider>().toggle(valor),
                     ),
                   ),
                 ],
               ),
 
+              if (!isSalesperson) ...[
+                const SizedBox(height: 24),
+
+                SettingsSection(
+                  qualification: 'SISTEMA',
+                  options: [
+                    SettingsOption(
+                      icon: Icons.history,
+                      qualification: 'Registro de Actividades',
+                      caption: 'Consulta la actividad del sistema',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ActivityLogsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
+
               const SizedBox(height: 24),
 
+              // CERRAR SESIÓN
               SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login.toString(), (route) => false);
+                  onPressed: () async {
+                    final navigator = Navigator.of(context);
+                    await context.read<AuthenticationProvider>().logout();
+                    navigator.pushNamedAndRemoveUntil('/', (route) => false);
                   },
-
                   icon: const Icon(
                     Icons.logout,
                     color: Color(0xFFD3455B),

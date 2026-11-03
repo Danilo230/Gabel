@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gabel/presentation/theme/app_palette.dart';
 
 class SettingsSection extends StatelessWidget {
   final String qualification;
@@ -17,47 +18,41 @@ class SettingsSection extends StatelessWidget {
       children: [
         Text(
           qualification,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF8E7AA8),
+            color: context.colors.sectionLabel,
           ),
         ),
-
         const SizedBox(height: 8),
-
         Container(
           width: double.infinity,
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: context.colors.surface,
             borderRadius: BorderRadius.circular(16),
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
-                color: Color(0x08000000),
+                color: context.colors.shadow,
                 blurRadius: 8,
-                offset: Offset(0, 2),
+                offset: const Offset(0, 2),
               ),
             ],
           ),
-          child: Column(
-            children: _crearOpcionesConDivisores(),
-          ),
+          child: Column(children: _crearOpcionesConDivisores()),
         ),
       ],
     );
   }
 
   List<Widget> _crearOpcionesConDivisores() {
-    List<Widget> elementos = [];
+    final List<Widget> elementos = [];
 
     for (int i = 0; i < options.length; i++) {
       elementos.add(options[i]);
 
       if (i < options.length - 1) {
-        elementos.add(
-          const Divider(height: 24),
-        );
+        elementos.add(const Divider(height: 24));
       }
     }
 
