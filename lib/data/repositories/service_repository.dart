@@ -32,8 +32,10 @@ class ServiceRepository {
       body: {
         'serviceName': service.serviceName,
         'servicePrice': service.servicePrice,
-        'stylistName': service.stylistName,
         'serviceDescription': service.serviceDescription,
+        'serviceStatus': true,
+        'stylistId': service.stylistId,
+        'stylistName': service.stylistName,
       },
     );
     if (json is! Map<String, dynamic>) throw ParsingException();
@@ -44,11 +46,13 @@ class ServiceRepository {
     final json = await _apiClient.put(
       '${ApiConstants.services}/$serviceId',
       body: {
+        'serviceId': serviceId,
         'serviceName': service.serviceName,
         'servicePrice': service.servicePrice,
-        'stylistName': service.stylistName,
         'serviceDescription': service.serviceDescription,
         'serviceStatus': service.serviceStatus,
+        'stylistId': service.stylistId,
+        'stylistName': service.stylistName,
       },
     );
     if (json == null) throw const NotFoundException();
@@ -56,9 +60,6 @@ class ServiceRepository {
 
     return ServiceModels.fromJson(json);
   }
-
-  Future<ServiceModels> updateService(int serviceId, ServiceModels service) =>
-      update(serviceId, service);
 
   Future<String> delete(int serviceId, bool serviceStatus) async {
     final json = await _apiClient.delete(
@@ -69,33 +70,21 @@ class ServiceRepository {
     return json['message'] as String;
   }
 
-  Future<List<String>> getAllCatalog(String endpoint, String keyName) async {
-    final data = await _apiClient.get(endpoint);
-    if (data is List) {
-      return data
-          .map((item) {
-            if (item is Map<String, dynamic>) {
-              return item[keyName]?.toString() ?? '';
-            }
-            return item.toString();
-          })
-          .where((name) => name.isNotEmpty)
-          .toSet()
-          .toList();
-    }
-    if (data is Map<String, dynamic> && data['items'] is List) {
-      final items = data['items'] as List;
-      return items
-          .map((item) {
-            if (item is Map<String, dynamic>) {
-              return item[keyName]?.toString() ?? '';
-            }
-            return item.toString();
-          })
-          .where((name) => name.isNotEmpty)
-          .toSet()
-          .toList();
-    }
-    return <String>[];
+  Future<List<StylistItem>> getAllStylists() async {
+    final data = await _apiClient.get(ApiConstants.stylists);
+    final list = data is Map<String, dynamic> ? data['items'] : data;
+    if (list is! List) throw ParsingException();
+
+    return list
+        .map((e) {
+          final map = e as Map<String, dynamic>;
+          return StylistItem(
+            id: map['stylistId'] as int? ?? 0,
+            name: map['stylistName'] as String? ?? '',
+          );
+        })
+        .where((item) => item.name.isNotEmpty)
+        .toList()
+      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
   }
 }

@@ -25,11 +25,24 @@ class _ServicesScreenState extends State<ServicesScreen> {
   static const List<String> filterTypes = ['Estado', 'Estilista'];
   static const List<String> statuses = ['Activo', 'Inactivo'];
 
+  late final ServicesProvider _provider;
+
   String selectedFilterType = 'Estado';
   String selectedStatus = 'Activo';
   String? selectedStylist;
 
   final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _provider = getIt<ServicesProvider>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _provider.clearFilters();
+      _provider.fetchServices();
+    });
+  }
 
   @override
   void dispose() {
@@ -44,7 +57,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
     final ServiceModels? result = await NewServiceModal.show(context, provider);
 
     if (result == null || !context.mounted) return;
-    provider.refresh();
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -55,7 +67,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
   }
 
   void _openFilterModal(BuildContext context, ServicesProvider provider) {
-    provider.ensureAllServicesLoaded();
+    provider.loadStylistsCatalog();
 
     final stylists = provider.availableStylists;
     if (selectedStylist == null && stylists.isNotEmpty) {
@@ -142,8 +154,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => getIt<ServicesProvider>()..fetchServices(),
+    return ChangeNotifierProvider.value(
+      value: _provider,
       child: Consumer<ServicesProvider>(
         builder: (context, provider, _) {
           final displayedServices = provider.filteredServices;

@@ -7,7 +7,6 @@ enum ViewStatusService { initial, loading, success, error }
 
 class ServicesProvider extends ChangeNotifier {
   static const int _pageSize = 10;
-  static const int _searchPageSize = 10;
 
   final ServicesService _service;
   ServicesProvider(this._service);
@@ -25,9 +24,11 @@ class ServicesProvider extends ChangeNotifier {
   int _currentPage = 1;
   int get currentPage => _currentPage;
 
-  int _totalPage = 7;
+  int _totalPage = 1;
   int get totalPage => _totalPage;
-  int get totalPages => _totalPage;
+
+  bool _isSaving = false;
+  bool get isSaving => _isSaving;
 
   String _query = '';
   bool get isSearching => _query.isNotEmpty;
@@ -38,9 +39,6 @@ class ServicesProvider extends ChangeNotifier {
   String? _selectedStylistFilter;
   String? get selectedStylistFilter => _selectedStylistFilter;
 
-  bool _isSaving = false;
-  bool get isSaving => _isSaving;
-
   List<ServiceModels> _allServices = [];
   bool _hasAllServices = false;
   Future<void>? _allServicesRequest;
@@ -50,8 +48,6 @@ class ServicesProvider extends ChangeNotifier {
 
   String? _searchErrorMessage;
   String? get searchErrorMessage => _searchErrorMessage;
-
-  List<String> _stylistsCatalog = [];
 
   List<ServiceModels> get filteredServices {
     if (_query.isNotEmpty) {
@@ -74,66 +70,57 @@ class ServicesProvider extends ChangeNotifier {
     return _services;
   }
 
-  List<String> get availableStylists {
-    final set = <String>{};
-    set.addAll(_stylistsCatalog.where((s) => s.trim().isNotEmpty));
-    set.addAll(
-      _allServices.map((s) => s.stylistName.trim()).where((s) => s.isNotEmpty),
-    );
-    set.addAll(
-      _services.map((s) => s.stylistName.trim()).where((s) => s.isNotEmpty),
-    );
-    return set.toList()..sort();
+  List<StylistItem> stylists = [];
+  bool _stylistsLoaded = false;
+
+  String? _stylistError;
+  String? get stylistError => _stylistError;
+
+  List<String> get availableStylists => stylists.map((e) => e.name).toList();
+
+  int stylistIdByName(String name) {
+    final target = name.trim().toLowerCase();
+    for (final item in stylists) {
+      if (item.name.trim().toLowerCase() == target) return item.id;
+    }
+    return 0;
   }
 
   Future<void> loadStylistsCatalog() async {
+    if (_stylistsLoaded) return;
     try {
-      final list = await _service.getAllStylists();
-      if (list.isNotEmpty) {
-        _stylistsCatalog = list;
-        notifyListeners();
-      }
-    } catch (_) {}
+      stylists = await _service.getAllStylists();
+      _stylistsLoaded = stylists.isNotEmpty;
+      _stylistError = _stylistsLoaded
+          ? null
+          : 'No se encontraron estilistas registrados.';
+    } catch (e) {
+      debugPrint('Error al cargar los estilistas: $e');
+      _stylistError = e is AppException
+          ? e.message
+          : 'No se pudieron cargar los estilistas.';
+    }
+    notifyListeners();
   }
 
   Future<void> fetchServices({int pageNumber = 1}) async {
     if (_viewStatus == ViewStatusService.loading) return;
     _viewStatus = ViewStatusService.loading;
     _errorMessage = null;
-
     notifyListeners();
+
     try {
-      final dynamic result = await _service.getAll(
+      final result = await _service.getAll(
         pageNumber: pageNumber,
         pageSize: _pageSize,
       );
-
-      if (result is List<ServiceModels>) {
-        _services = result;
-        _currentPage = pageNumber;
-        if (result.length < _pageSize) {
-          _totalPage = pageNumber > 1 ? pageNumber : 1;
-        } else {
-          _totalPage = pageNumber >= 7 ? pageNumber + 1 : 7;
-        }
-      } else {
-        _services = result.items;
-        _currentPage = result.pageNumber;
-        _totalPage = result.totalPages;
-      }
-
+      _services = result.items;
+      _currentPage = result.pageNumber;
+      _totalPage = result.totalPages;
       _viewStatus = ViewStatusService.success;
       loadStylistsCatalog();
-    } on AppException catch (e) {
-      _errorMessage = e.message;
-      _viewStatus = ViewStatusService.error;
-    } on FormatException catch (e) {
-      _errorMessage = e.message;
-      _viewStatus = ViewStatusService.error;
-    } catch (e, stack) {
-      debugPrint('Error al obtener los servicios: $e');
-      debugPrint('$stack');
-      _errorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
+    } catch (e) {
+      _errorMessage = _messageFrom(e);
       _viewStatus = ViewStatusService.error;
     }
     notifyListeners();
@@ -182,11 +169,6 @@ class ServicesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> ensureAllServicesLoaded() async {
-    await _loadAllItems();
-    await loadStylistsCatalog();
-  }
-
   Future<void> retrySearch() {
     _hasAllServices = false;
     _allServicesRequest = null;
@@ -208,122 +190,72 @@ class ServicesProvider extends ChangeNotifier {
       int page = 1;
       int totalPages = 1;
       do {
-        final dynamic result = await _service.getAll(
+        final result = await _service.getAll(
           pageNumber: page,
-          pageSize: _searchPageSize,
+          pageSize: _pageSize,
         );
-        if (result is List<ServiceModels>) {
-          all.addAll(result);
-          if (result.length < _searchPageSize) break;
-          totalPages = page + 1;
-        } else {
-          all.addAll(result.items);
-          totalPages = result.totalPages;
-        }
+        all.addAll(result.items);
+        totalPages = result.totalPages;
         page++;
       } while (page <= totalPages);
+
       _allServices = all;
       _hasAllServices = true;
-    } catch (e, stack) {
-      debugPrint('Error al cargar todos los servicios: $e');
-      debugPrint('$stack');
-      _searchErrorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
+    } catch (e) {
+      _searchErrorMessage = _messageFrom(e);
     }
     _allServicesRequest = null;
     _isSearchLoading = false;
     notifyListeners();
   }
 
-  Future<ServiceModels?> register(ServiceModels service) async {
-    if (_isSaving) return null;
-
-    _isSaving = true;
-    _errorMessage = null;
-    notifyListeners();
-
-    ServiceModels? result;
-    try {
-      result = await _service.create(service);
+  Future<ServiceModels?> register(ServiceModels service) {
+    return _save(() async {
+      final created = await _service.create(service);
+      _currentPage = 1;
       await refresh();
-    } on AppException catch (e) {
-      _errorMessage = e.message;
-    } on FormatException catch (e) {
-      _errorMessage = e.message;
-    } catch (e, stack) {
-      debugPrint('Error al registrar el servicio: $e');
-      debugPrint('$stack');
-      _errorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
-      _viewStatus = ViewStatusService.error;
-    }
-
-    _isSaving = false;
-    notifyListeners();
-    return result;
+      return created;
+    });
   }
 
-  Future<ServiceModels?> update(int serviceId, ServiceModels service) async {
-    if (_isSaving) return null;
-
-    _isSaving = true;
-    _errorMessage = null;
-    notifyListeners();
-
-    ServiceModels? result;
-    try {
-      result = await _service.update(serviceId, service);
+  Future<ServiceModels?> update(int serviceId, ServiceModels service) {
+    return _save(() async {
+      final updated = await _service.update(serviceId, service);
       await refresh();
-    } on AppException catch (e) {
-      _errorMessage = e.message;
-    } on FormatException catch (e) {
-      _errorMessage = e.message;
-    } catch (e, stack) {
-      debugPrint('Error al actualizar el servicio: $e');
-      debugPrint('$stack');
-      _errorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
-    }
-
-    _isSaving = false;
-    notifyListeners();
-    return result;
+      return updated;
+    });
   }
 
-  Future<String?> delete(int serviceId) async {
+  Future<String?> delete(int serviceId) {
+    return _save(() async {
+      final message = await _service.delete(serviceId, false);
+      await refresh();
+      return message;
+    });
+  }
+
+  Future<T?> _save<T>(Future<T> Function() action) async {
     if (_isSaving) return null;
     _isSaving = true;
     _errorMessage = null;
     notifyListeners();
 
-    String? message;
     try {
-      message = await _service.delete(serviceId, false);
-      await refresh();
-    } on AppException catch (e) {
-      _errorMessage = e.message;
-    } on FormatException catch (e) {
-      _errorMessage = e.message;
-    } catch (e, stack) {
-      debugPrint('Error al eliminar el servicio: $e');
-      debugPrint('$stack');
-      _errorMessage = 'Ocurrio un error inesperado: Intentalo de nuevo';
+      return await action();
+    } catch (e) {
+      _errorMessage = _messageFrom(e);
+      return null;
+    } finally {
+      _isSaving = false;
+      notifyListeners();
     }
-    _isSaving = false;
-    notifyListeners();
-    return message;
   }
 
-  Future<bool> createService(ServiceModels service) async {
-    final result = await register(service);
-    return result != null;
-  }
-
-  Future<bool> updateService(ServiceModels service, [int? id]) async {
-    final result = await update(id ?? service.serviceId, service);
-    return result != null;
-  }
-
-  Future<bool> deleteService(int serviceId) async {
-    final result = await delete(serviceId);
-    return result != null;
+  String _messageFrom(Object e) {
+    if (e is AppException) return e.message;
+    if (e is FormatException) return e.message;
+    debugPrint('Error inesperado: $e');
+    return 'Ocurrio un error inesperado: Intentalo de nuevo';
   }
 }
 
