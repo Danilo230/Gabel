@@ -60,21 +60,6 @@ class MoreOptionsModal extends StatelessWidget {
           ),
 
           const SizedBox(height: 10),
-
-          _option(
-            icon: Icons.show_chart_rounded,
-            title: 'Reportes',
-            subtitle: 'Reportes y estadísticas',
-            onTap: () {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                AppRoutes.reports.toString(),
-                (route) => false,
-              );
-            },
-          ),
-
-          const SizedBox(height: 8),
         ],
       ),
     );
