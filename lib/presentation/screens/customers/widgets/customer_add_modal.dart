@@ -99,6 +99,7 @@ class _NewCustomerModalState extends State<NewCustomerModal> {
             hintText: '58273212',
             controller: _phoneController,
           ),
+          const SizedBox(height: 24),
           SizedBox(
             width: double.infinity,
             height: 48,
