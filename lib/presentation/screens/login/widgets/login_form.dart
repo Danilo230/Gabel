@@ -24,15 +24,19 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
   }
 
-  Future<void> _login () async {
+  Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
     String usuario = _usuarioController.text.trim();
     String password = _passwordController.text.trim();
 
-    await context.read<AuthenticationProvider>().login(
-      username: usuario,
-      password: password,
-    );
+    final auth = context.read<AuthenticationProvider>();
+    final navigator = Navigator.of(context);
+
+    await auth.login(username: usuario, password: password);
+
+    if (auth.isAuthenticated) {
+      navigator.pushNamedAndRemoveUntil('/', (route) => false);
+    }
   }
 
   @override

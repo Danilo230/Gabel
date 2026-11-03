@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gabel/core/di/injection.dart';
 import 'package:gabel/core/utils/format_date.dart';
+import 'package:gabel/presentation/providers/product_provider.dart';
 import 'package:gabel/presentation/providers/sale_provider.dart';
+import 'package:gabel/presentation/providers/service_provider.dart';
 import 'package:gabel/presentation/screens/saleshistory/widgets/saleshistory_card.dart';
 import 'package:gabel/presentation/screens/saleshistory/widgets/saleshistory_detail_modal.dart';
 import 'package:gabel/presentation/theme/app_colors.dart';
@@ -11,18 +13,56 @@ import 'package:gabel/presentation/widgets/custom_filter_dropdown.dart';
 import 'package:gabel/presentation/widgets/custom_filter_modal.dart';
 import 'package:gabel/presentation/widgets/custom_modal_sheet.dart';
 import 'package:gabel/presentation/widgets/custom_pagination.dart';
-import 'package:gabel/presentation/widgets/custom_refresh_scroll_view.dart'; // ajusta al nombre real
+import 'package:gabel/presentation/widgets/custom_refresh_scroll_view.dart';
 import 'package:gabel/presentation/widgets/error_view.dart';
 import 'package:gabel/presentation/widgets/loading_view.dart';
 import 'package:provider/provider.dart';
 
-class SalesPersonScreen extends StatelessWidget {
+class SalesPersonScreen extends StatefulWidget {
   const SalesPersonScreen({super.key});
 
   @override
+  State<SalesPersonScreen> createState() => _SalesPersonScreenState();
+}
+
+class _SalesPersonScreenState extends State<SalesPersonScreen> {
+  late final SaleProvider _saleProvider;
+  late final ProductProvider _productProvider;
+  late final ServicesProvider _servicesProvider;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _saleProvider = getIt<SaleProvider>();
+    _productProvider = getIt<ProductProvider>();
+    _servicesProvider = getIt<ServicesProvider>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      _saleProvider.fetchSales();
+      _productProvider.fetchProducts();
+      _servicesProvider.fetchServices();
+    });
+  }
+
+  @override
+  void dispose() {
+    _saleProvider.dispose();
+    _productProvider.dispose();
+    _servicesProvider.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => getIt<SaleProvider>()..fetchSales(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: _saleProvider),
+        ChangeNotifierProvider.value(value: _productProvider),
+        ChangeNotifierProvider.value(value: _servicesProvider),
+      ],
       child: const _SalesView(),
     );
   }
@@ -39,22 +79,26 @@ class _SalesViewState extends State<_SalesView> {
   DateTime? _startDate;
   DateTime? _endDate;
 
-  static const List<String> products = [
-    'Todos los productos',
-    'Shampoo Revitalizante',
-    'Acondicionador',
-  ];
-  String selectedProduct = products.first;
+  static const String _allProducts = 'Todos los productos';
+  static const String _allServices = 'Todos los servicios';
 
-  static const List<String> services = [
-    'Todos los servicios',
-    'Corte de cabello',
-    'Lavado de cabello',
-    'Tratamiento capilar',
-  ];
-  String selectedService = services.first;
+  String selectedProduct = _allProducts;
+  String selectedService = _allServices;
 
   void _openFilterModal() {
+    final productProvider = context.read<ProductProvider>();
+    final servicesProvider = context.read<ServicesProvider>();
+
+    final productItems = [
+      _allProducts,
+      ...productProvider.items.map((product) => product.productName),
+    ];
+
+    final serviceItems = [
+      _allServices,
+      ...servicesProvider.items.map((service) => service.serviceName),
+    ];
+
     CustomFilterModal.show(
       context,
       title: 'Filtrar Ventas',
@@ -65,24 +109,70 @@ class _SalesViewState extends State<_SalesView> {
             CustomFilterDropdown(
               label: 'Productos',
               value: selectedProduct,
-              items: products,
+              items: productItems,
               onChanged: (val) {
-                if (val != null) setModalState(() => selectedProduct = val);
+                if (val == null) return;
+
+                setModalState(() {
+                  selectedProduct = val;
+
+                  if (val != _allProducts) {
+                    selectedService = _allServices;
+                  }
+                });
               },
             ),
             const SizedBox(height: 16),
             CustomFilterDropdown(
               label: 'Servicios',
               value: selectedService,
-              items: services,
+              items: serviceItems,
               onChanged: (val) {
-                if (val != null) setModalState(() => selectedService = val);
+                if (val == null) return;
+
+                setModalState(() {
+                  selectedService = val;
+
+                  if (val != _allServices) {
+                    selectedProduct = _allProducts;
+                  }
+                });
               },
             ),
           ],
         );
       },
-      onApply: () => setState(() {}),
+      onApply: () {
+        if (selectedProduct != _allProducts) {
+          for (final product in productProvider.items) {
+            if (product.productName == selectedProduct) {
+              setState(() {
+                _startDate = null;
+                _endDate = null;
+              });
+
+              context.read<SaleProvider>().filterByProduct(product.productId);
+              return;
+            }
+          }
+        }
+
+        if (selectedService != _allServices) {
+          for (final service in servicesProvider.items) {
+            if (service.serviceName == selectedService) {
+              setState(() {
+                _startDate = null;
+                _endDate = null;
+              });
+
+              context.read<SaleProvider>().filterByService(service.serviceId);
+              return;
+            }
+          }
+        }
+
+        context.read<SaleProvider>().clearFilter();
+      },
     );
   }
 
@@ -93,7 +183,9 @@ class _SalesViewState extends State<_SalesView> {
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
     );
+
     if (picked == null || !mounted) return;
+
     setState(() => _startDate = picked);
     _applyDateFilter();
   }
@@ -105,7 +197,9 @@ class _SalesViewState extends State<_SalesView> {
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
     );
+
     if (picked == null || !mounted) return;
+
     setState(() => _endDate = picked);
     _applyDateFilter();
   }
@@ -113,7 +207,8 @@ class _SalesViewState extends State<_SalesView> {
   void _applyDateFilter() {
     final start = _startDate;
     final end = _endDate;
-    if (start == null || end == null) return; 
+
+    if (start == null || end == null) return;
 
     if (start.isAfter(end)) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -123,6 +218,10 @@ class _SalesViewState extends State<_SalesView> {
       );
       return;
     }
+
+    selectedProduct = _allProducts;
+    selectedService = _allServices;
+
     context.read<SaleProvider>().filterByDateRange(start, end);
   }
 
@@ -130,7 +229,10 @@ class _SalesViewState extends State<_SalesView> {
     setState(() {
       _startDate = null;
       _endDate = null;
+      selectedProduct = _allProducts;
+      selectedService = _allServices;
     });
+
     context.read<SaleProvider>().clearFilter();
   }
 

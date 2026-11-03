@@ -1,5 +1,5 @@
+import 'package:gabel/data/models/current_user_model.dart';
 import 'package:gabel/data/models/token_model.dart';
-import 'package:gabel/data/models/user_model.dart';
 import 'package:gabel/data/repositories/auth_repository.dart';
 import 'package:gabel/data/repositories/token_repository.dart';
 
@@ -24,8 +24,8 @@ class AuthenticationService {
 
   Future<TokenModel?> getStoredToken() => _tokenRepository.getToken();
 
-  Future<UserModel> getCurrentUser() async {
-    return await _authRepository.currentUser();
+  Future<CurrentUserModel> getCurrentUser() async {
+    return await _authRepository.getCurrentUser();
   }
 
   Future<bool> isLoggedIn() => _tokenRepository.hasValidToken();
@@ -33,4 +33,38 @@ class AuthenticationService {
   Future<void> logout() async {
     await _tokenRepository.removeToken();
   }
+
+  Future<CurrentUserModel> updateProfile({
+  required String userName,
+  String? currentPassword,
+  String? newPassword,
+  String? confirmPassword,
+}) async {
+  final name = userName.trim();
+  if (name.length < 4) {
+    throw const FormatException('El usuario debe tener al menos 4 caracteres');
+  }
+
+  final wantsPassword = (newPassword ?? '').isNotEmpty;
+  if (wantsPassword) {
+    if ((currentPassword ?? '').isEmpty) {
+      throw const FormatException('Ingresa tu contraseña actual');
+    }
+    if (newPassword!.length < 6) {
+      throw const FormatException('La nueva contraseña debe tener al menos 6 caracteres');
+    }
+    if (newPassword != confirmPassword) {
+      throw const FormatException('Las contraseñas no coinciden');
+    }
+  }
+
+  return _authRepository.updateProfile(
+    UpdateProfileRequest(
+      userName: name,
+      currentPassword: wantsPassword ? currentPassword : null,
+      newPassword: wantsPassword ? newPassword : null,
+      confirmPassword: wantsPassword ? confirmPassword : null,
+    ),
+  );
+}
 }

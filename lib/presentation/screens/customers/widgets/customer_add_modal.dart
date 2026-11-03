@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gabel/core/di/injection.dart';
 import 'package:gabel/data/models/customer_model.dart';
 import 'package:gabel/presentation/providers/customer_provider.dart';
-import 'package:gabel/presentation/widgets/custom_confirm_dialog.dart';
 import '../../../theme/app_colors.dart';
 import '../../../widgets/custom_text_field.dart';
 import '../../../widgets/custom_modal_sheet.dart';

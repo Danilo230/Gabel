@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'app_colors.dart';
+import 'app_palette.dart';
 
 class AppTypography {
   AppTypography._();
@@ -93,4 +94,18 @@ class AppTypography {
     labelLarge: button,
     labelSmall: sectionHeader,
   );
+
+  static TextTheme textThemeFor(AppPalette p) {
+    return TextTheme(
+      displayLarge: displayLarge.copyWith(color: p.primary),
+      titleLarge: titleLarge.copyWith(color: p.textPrimary),
+      titleMedium: titleMedium.copyWith(color: p.primary),
+      titleSmall: subtitle.copyWith(color: p.textPrimary),
+      bodyLarge: bodyRegular.copyWith(color: p.textPrimary),
+      bodyMedium: bodySecondary.copyWith(color: p.textSecondary),
+      bodySmall: caption.copyWith(color: p.textTertiary),
+      labelLarge: button.copyWith(color: p.onPrimary),
+      labelSmall: sectionHeader.copyWith(color: p.textSecondary),
+    );
+  }
 }

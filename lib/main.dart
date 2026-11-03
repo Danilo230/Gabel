@@ -2,7 +2,8 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gabel/core/di/injection.dart';
 import 'package:gabel/presentation/providers/authenticatio_provider.dart';
-import 'package:gabel/presentation/theme/app_typography.dart';
+import 'package:gabel/presentation/providers/theme_provider.dart';
+import 'package:gabel/presentation/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'presentation/widgets/app_routes.dart';
 
@@ -25,9 +26,15 @@ Future<void> main() async {
 
   getIt<AuthenticationProvider>().checkSession();
 
+  final themeProvider = ThemeProvider();
+  await themeProvider.load();
+
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => getIt<AuthenticationProvider>(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => getIt<AuthenticationProvider>()),
+        ChangeNotifierProvider.value(value: themeProvider),
+      ],
       child: const MainApp(),
     ),
   );
@@ -38,36 +45,26 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode =
+        context.select<ThemeProvider, ThemeMode>((p) => p.themeMode);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: AppTypography.fontFamily,
-        textTheme: AppTypography.textTheme,
-      ),
-
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: themeMode,
       home: const _AuthGuard(),
-
       routes: {
         AppRoutes.dashboard: (context) => const DashboardScreen(),
-
         AppRoutes.inventory: (context) => const InventoryScreen(),
-
         AppRoutes.purchaseHistory: (context) => const PurchaseHistoryScreen(),
-
         AppRoutes.saleHistory: (context) => const SalesScreen(),
-
         AppRoutes.products: (context) => const ProductsScreen(),
-
         AppRoutes.services: (context) => const ServicesScreen(),
-
         AppRoutes.customers: (context) => const CustomersScreen(),
-
         AppRoutes.reports: (context) => const ReportScreen(),
-
         AppRoutes.settings: (context) => const SettingsScreen(),
-
         AppRoutes.login: (context) => const LoginScreen(),
-
         AppRoutes.salesperson: (context) => const SalesPersonScreen(),
       },
     );
@@ -80,7 +77,7 @@ class _AuthGuard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthenticationProvider>();
-
+  debugPrint('GUARD status: ${authProvider.authStatus}');
     switch (authProvider.authStatus) {
       case AuthenticationStatus.authenticated:
         return authProvider.isSalesperson

@@ -16,6 +16,7 @@ import 'package:gabel/presentation/providers/authenticatio_provider.dart';
 import 'package:gabel/presentation/providers/customer_provider.dart';
 import 'package:gabel/presentation/providers/damaged_product_provider.dart';
 import 'package:gabel/presentation/providers/inventory_provider.dart';
+import 'package:gabel/presentation/providers/profile_provider.dart';
 import 'package:gabel/presentation/providers/purchase_provider.dart';
 import 'package:gabel/presentation/providers/sale_provider.dart';
 import 'package:gabel/presentation/providers/supplier_provider.dart';
@@ -132,7 +133,8 @@ void setupDependencies() {
     () => AuthenticationProvider(getIt<AuthenticationService>()),
   );
   getIt.registerFactory<UserProvider>(() => UserProvider(getIt<UserService>()));
-  getIt.registerLazySingleton<InventoryProvider>(
+
+  getIt.registerFactory<InventoryProvider>(
     () => InventoryProvider(getIt<InventoryService>(), getIt<ProductService>()),
   );
   getIt.registerFactory<DamagedProductProvider>(
@@ -145,10 +147,11 @@ void setupDependencies() {
     () => PurchaseProvider(getIt<PurchaseService>()),
   );
   getIt.registerFactory<SaleProvider>(() => SaleProvider(getIt<SaleService>()));
-  getIt.registerLazySingleton<ProductProvider>(
+
+  getIt.registerFactory<ProductProvider>(
     () => ProductProvider(getIt<ProductService>()),
   );
-  getIt.registerLazySingleton<ServicesProvider>(
+  getIt.registerFactory<ServicesProvider>(
     () => ServicesProvider(getIt<ServicesService>()),
   );
   getIt.registerFactory<SupplierProvider>(
@@ -160,4 +163,7 @@ void setupDependencies() {
   getIt.registerFactory<ActivityLogProvider>(
     () => ActivityLogProvider(getIt<ActivityLogService>()),
   );
+  getIt.registerFactory<ProfileProvider>(
+  () => ProfileProvider(getIt<AuthenticationService>()),
+);
 }
