@@ -1,4 +1,3 @@
-
 class ServiceModels {
   final int serviceId;
   final String serviceName;
@@ -8,7 +7,7 @@ class ServiceModels {
   final int? stylistId;
   final String stylistName;
 
-  ServiceModels({
+  const ServiceModels({
     required this.serviceId,
     required this.serviceName,
     required this.servicePrice,
@@ -41,4 +40,26 @@ class ServiceModels {
       'stylistName': stylistName,
     };
   }
+
+  ServiceModels copyWith({
+    int? serviceId,
+    String? serviceName,
+    double? servicePrice,
+    bool? serviceStatus,
+    String? serviceDescription,
+    int? stylistId,
+    String? stylistName,
+  }) {
+    return ServiceModels(
+      serviceId: serviceId ?? this.serviceId,
+      serviceName: serviceName ?? this.serviceName,
+      servicePrice: servicePrice ?? this.servicePrice,
+      serviceStatus: serviceStatus ?? this.serviceStatus,
+      serviceDescription: serviceDescription ?? this.serviceDescription,
+      stylistId: stylistId ?? this.stylistId,
+      stylistName: stylistName ?? this.stylistName,
+    );
+  }
 }
+
+typedef ServiceModel = ServiceModels;
