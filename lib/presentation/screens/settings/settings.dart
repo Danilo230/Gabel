@@ -5,6 +5,7 @@ import '../../widgets/app_header.dart';
 import 'widgets/settings_option.dart';
 import 'widgets/settings_section.dart';
 import 'package:gabel/presentation/screens/profile/profile.dart';
+import 'package:gabel/presentation/screens/logs/logs.dart';
 import '../../widgets/app_routes.dart';
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -19,6 +20,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isSalesperson =
+        context.watch<AuthenticationProvider>().isSalesperson;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF6F2FA),
       appBar: const AppHeader(title: 'Configuración'),
@@ -126,6 +130,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ],
               ),
+
+              if (!isSalesperson) ...[
+                const SizedBox(height: 24),
+
+                SettingsSection(
+                  qualification: 'SISTEMA',
+                  options: [
+                    SettingsOption(
+                      icon: Icons.history,
+                      qualification: 'Registro de Actividades',
+                      caption: 'Consulta la actividad del sistema',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ActivityLogsScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
 
               const SizedBox(height: 24),
 
