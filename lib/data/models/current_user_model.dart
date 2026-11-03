@@ -20,3 +20,26 @@ class CurrentUserModel {
     );
   }
 }
+
+class UpdateProfileRequest {
+  final String userName;
+  final String? currentPassword;
+  final String? newPassword;
+  final String? confirmPassword;
+
+  const UpdateProfileRequest({
+    required this.userName,
+    this.currentPassword,
+    this.newPassword,
+    this.confirmPassword,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'userName': userName,
+        if (newPassword != null) ...{
+          'currentPassword': currentPassword,
+          'newPassword': newPassword,
+          'confirmPassword': confirmPassword,
+        },
+      };
+}
