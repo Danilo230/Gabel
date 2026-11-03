@@ -1,6 +1,5 @@
 import 'package:gabel/data/models/current_user_model.dart';
 import 'package:gabel/data/models/token_model.dart';
-import 'package:gabel/data/models/user_model.dart';
 import 'package:gabel/data/repositories/auth_repository.dart';
 import 'package:gabel/data/repositories/token_repository.dart';
 

@@ -16,6 +16,7 @@ import 'package:gabel/presentation/providers/authenticatio_provider.dart';
 import 'package:gabel/presentation/providers/customer_provider.dart';
 import 'package:gabel/presentation/providers/damaged_product_provider.dart';
 import 'package:gabel/presentation/providers/inventory_provider.dart';
+import 'package:gabel/presentation/providers/profile_provider.dart';
 import 'package:gabel/presentation/providers/purchase_provider.dart';
 import 'package:gabel/presentation/providers/sale_provider.dart';
 import 'package:gabel/presentation/providers/supplier_provider.dart';
@@ -160,4 +161,7 @@ void setupDependencies() {
   getIt.registerFactory<ActivityLogProvider>(
     () => ActivityLogProvider(getIt<ActivityLogService>()),
   );
+  getIt.registerFactory<ProfileProvider>(
+  () => ProfileProvider(getIt<AuthenticationService>()),
+);
 }
