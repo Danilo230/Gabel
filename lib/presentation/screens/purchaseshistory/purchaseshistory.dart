@@ -34,7 +34,9 @@ class PurchaseHistoryScreen extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => getIt<SupplierProvider>()..fetchSuppliers(),
         ),
-        ChangeNotifierProvider.value(value: getIt<ProductProvider>()),
+        ChangeNotifierProvider(
+          create: (_) => getIt<ProductProvider>()..fetchProducts(),
+        ),
       ],
       child: const _PurchaseHistoryView(),
     );
