@@ -21,6 +21,7 @@ class ApiConstants {
   static const String damagedProducts = '/DamagedProducts';
   static const String suppliers = '/Suppliers';
   static const String stylists = '/Stylists';
+  static const String activityLogs = '/Logs';
 
   // Catálogos, (solamente lectura)
   static const String productBrands = '/Products/Brands';
