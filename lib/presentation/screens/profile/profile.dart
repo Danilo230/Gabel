@@ -139,7 +139,7 @@ class _ProfileView extends StatelessWidget {
         CustomButton(
           text: 'Editar perfil',
           icon: Icons.edit_outlined,
-          onPressed: () => EditProfileModal.show(context),
+          onPressed: () => EditProfileModal.show(context, user),
         ),
       ],
     );
