@@ -52,33 +52,35 @@ class AuthenticationProvider extends ChangeNotifier {
   }
 
   Future<void> checkSession() async {
-    try {
-      final bool isAuthenticated = await _authenticationService.isLoggedIn();
-      if (isAuthenticated) {
-        final token = await _authenticationService.getStoredToken();
-        _roles = token?.roles.toList() ?? [];
+      try {
+        final bool isAuthenticated = await _authenticationService.isLoggedIn();
+        if (isAuthenticated) {
+          final token = await _authenticationService.getStoredToken();
+          _roles = token?.roles.toList() ?? [];
+        }
+        _authStatus = isAuthenticated
+            ? AuthenticationStatus.authenticated
+            : AuthenticationStatus.unauthenticated;
+      } catch (e) {
+        _errorMessage = 'Se ha producido un error inesperado. Por favor, inténtalo de nuevo.';
+        _authStatus = AuthenticationStatus.unauthenticated;
+      } finally {
+        notifyListeners();
       }
-      _authStatus = isAuthenticated
-          ? AuthenticationStatus.authenticated
-          : AuthenticationStatus.unauthenticated;
+    }
+
+    Future<void> logout() async {
+    try {
+      await _authenticationService.logout();
     } catch (e) {
-      _errorMessage = 'Se ha producido un error inesperado. Por favor, inténtalo de nuevo.';
-      _authStatus = AuthenticationStatus.unauthenticated;
+      debugPrint('ERROR LOGOUT: $e');
     } finally {
+      _roles = [];
+      _errorMessage = null;
+      _authStatus = AuthenticationStatus.unauthenticated;
       notifyListeners();
     }
   }
 
-  Future<void> logout() async {
-  try {
-    await _authenticationService.logout();
-  } catch (e) {
-    debugPrint('ERROR LOGOUT: $e');
-  } finally {
-    _roles = [];
-    _errorMessage = null;
-    _authStatus = AuthenticationStatus.unauthenticated;
-    notifyListeners();
-  }
-}
+  
 }
