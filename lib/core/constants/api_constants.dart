@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class ApiConstants {
   String get baseUrl => dotenv.env['BASE_API_URL'] ?? '';
   String get environment => dotenv.env['ENVIRONMENT'] ?? '';
+  String get powerBiReportUrl => dotenv.env['POWER_BI_REPORT_URL'] ?? '';
 
   ApiConstants._privateConstructor();
   static final ApiConstants _instance = ApiConstants._privateConstructor();
