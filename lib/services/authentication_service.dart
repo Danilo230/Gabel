@@ -1,3 +1,4 @@
+import 'package:gabel/data/models/current_user_model.dart';
 import 'package:gabel/data/models/token_model.dart';
 import 'package:gabel/data/models/user_model.dart';
 import 'package:gabel/data/repositories/auth_repository.dart';
@@ -24,8 +25,8 @@ class AuthenticationService {
 
   Future<TokenModel?> getStoredToken() => _tokenRepository.getToken();
 
-  Future<UserModel> getCurrentUser() async {
-    return await _authRepository.currentUser();
+  Future<CurrentUserModel> getCurrentUser() async {
+    return await _authRepository.getCurrentUser();
   }
 
   Future<bool> isLoggedIn() => _tokenRepository.hasValidToken();
