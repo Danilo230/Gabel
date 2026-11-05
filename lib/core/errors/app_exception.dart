@@ -25,7 +25,7 @@ class ParsingException extends AppException {
 }
 
 class UnauthorizedException extends AppException {
-  const UnauthorizedException([super.message = 'Tu sesión ha caducado. Por favor, vuelve a iniciar sesión..']);
+  const UnauthorizedException([super.message = 'Credenciales inválidas.']);
 }
 
 class NotFoundException extends AppException {
